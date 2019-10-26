@@ -41,11 +41,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView = findViewById(R.id.text);
+        /*textView = findViewById(R.id.text);
         textView2 = findViewById(R.id.text2);
         button = findViewById(R.id.button);
         buttonRecibir = findViewById(R.id.button2);
-        textViewRecibir = findViewById(R.id.textViewDatoServer);
+        textViewRecibir = findViewById(R.id.textViewDatoServer);*/
 
         // Creamos el receptorBLE indicando la actividad y el uuid que buscamos
         receptorBLE = new ReceptorBLE(this, nuestroUUID);
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Para los botones de enviar y recibir
-        button.setClickable(false);
+        /*button.setClickable(false);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 recibirMedicionesDelServidor();
             }
-        });
+        });*/
 
     }
 
@@ -78,9 +78,9 @@ public class MainActivity extends AppCompatActivity {
     // Mostrar las lecturas del BLE por la pantalla del movil
     // -----------------------------------------------------------------------
     public void mostrarUUID (String uuid, String major) {
-        button.setClickable(true);
+        /*button.setClickable(true);
         textView.setText("UUID del device: " + uuid);
-        textView2.setText("Major: " + major);
+        textView2.setText("Major: " + major);*/
     }
 
     // -----------------------------------------------------------------------
