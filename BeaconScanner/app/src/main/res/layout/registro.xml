@@ -23,8 +23,8 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center|center_horizontal|center_vertical"
             android:elevation="20dp"
             android:scaleType="fitXY"
@@ -114,11 +114,15 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout2"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:hint="@string/hint_text_user"
-                app:layout_constraintTop_toTopOf="@+id/textInputLayout">
+                app:boxBackgroundColor="#00FFFFFF"
+                app:boxStrokeColor="@color/colorAccent"
+                app:layout_constraintTop_toTopOf="@+id/textInputLayout"
+                app:startIconDrawable="@drawable/ic_email_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -129,14 +133,19 @@
                     android:singleLine="true"
                     app:layout_constraintTop_toBottomOf="@+id/textInputEditText" />
 
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="@string/hint_text_pass">
+                android:hint="@string/hint_text_pass"
+                app:boxStrokeColor="@color/colorAccent"
+                app:endIconMode="password_toggle"
+                app:startIconDrawable="@drawable/ic_lock_24px">
 
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -152,10 +161,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout3"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="@string/hint_text_pass_rep">
+                android:hint="@string/hint_text_pass_rep"
+                app:boxStrokeColor="@color/colorAccent"
+                app:endIconMode="password_toggle"
+                app:startIconDrawable="@drawable/ic_lock_24px">
 
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -171,10 +184,13 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout4"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="@string/hint_text_tlf">
+                android:hint="@string/hint_text_tlf"
+                app:boxStrokeColor="@color/colorAccent"
+                app:startIconDrawable="@drawable/ic_phone_24px">
 
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -182,7 +198,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito"
-                    android:inputType="textPassword"
+                    android:inputType="phone"
                     android:maxLines="1"
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 

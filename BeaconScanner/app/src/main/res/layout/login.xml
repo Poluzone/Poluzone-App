@@ -12,8 +12,8 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="40dp"
         android:elevation="20dp"
@@ -109,7 +109,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:hint="@string/hint_text_user"
-                app:layout_constraintTop_toTopOf="@+id/textInputLayout">
+                app:boxStrokeColor="@color/colorAccent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:layout_constraintTop_toTopOf="@+id/textInputLayout"
+                app:startIconDrawable="@drawable/ic_email_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -127,7 +130,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="@string/hint_text_pass">
+                android:hint="@string/hint_text_pass"
+                app:endIconMode="password_toggle"
+                app:boxStrokeColor="@color/colorAccent"
+                app:startIconDrawable="@drawable/ic_lock_24px"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
 
                 <com.google.android.material.textfield.TextInputEditText
