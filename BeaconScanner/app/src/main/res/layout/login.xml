@@ -9,25 +9,14 @@
     android:elevation="0dp"
     >
 
-  <!--  <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/materialCardView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/materialCardViewBg"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon" /> -->
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
-        android:elevation="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
+        android:elevation="20dp"
         app:layout_constraintBottom_toTopOf="@+id/materialCardView"
         app:layout_constraintEnd_toEndOf="@+id/materialCardViewBg"
         app:layout_constraintStart_toStartOf="@+id/materialCardViewBg"
@@ -45,6 +34,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:cardCornerRadius="0dp"
+        android:elevation="0dp"
         />
 
     <com.google.android.material.button.MaterialButton
@@ -53,15 +43,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="20dp"
+        android:fontFamily="@font/nunito"
         android:text="@string/login"
+        app:backgroundTint="@color/colorAccent"
         app:elevation="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/materialCardView"
         app:layout_constraintEnd_toEndOf="@+id/materialCardView"
         app:layout_constraintStart_toStartOf="@+id/materialCardView"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView"
-        android:layout_marginVertical="20dp"
-        android:layout_marginHorizontal="20dp"
-        app:backgroundTint="@color/colorAccent"/>
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"
@@ -76,7 +67,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:clipToPadding="false"
-
+        android:elevation="30dp"
         >
 
         <LinearLayout
@@ -94,6 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:fontFamily="@font/nunito_semibold"
                 android:text="@string/app_name"
                 android:textSize="30sp" />
 
@@ -108,8 +100,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputEditText"
-                    tools:layout_editor_absoluteX="-2dp" />
+                    android:fontFamily="@font/nunito"
+                    android:maxLines="1"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputEditText" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,22 +112,43 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:hint="@string/hint_text_pass"
-                tools:layout_editor_absoluteY="266dp">
+                >
 
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito"
                     android:inputType="textPassword"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-                    tools:layout_editor_absoluteX="0dp" />
+                    android:maxLines="1"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:fontFamily="@font/nunito"
+                android:gravity="right"
+                android:text="@string/contrasenya" />
 
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunito"
+        android:text="@string/regsitrate"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/materialCardView"
+        app:layout_constraintStart_toStartOf="@+id/materialCardView"
+        app:layout_constraintTop_toBottomOf="@+id/button_login" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

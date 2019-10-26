@@ -3,4 +3,6 @@
     <string name="hint_text_user">E-mail</string>
     <string name="hint_text_pass">Contraseña</string>
     <string name="login">Iniciar sesión</string>
+    <string name="contrasenya">¿Has olvidado la contraseña?</string>
+    <string name="regsitrate">¿No tienes cuenta? Regístrate aquí</string>
 </resources>
