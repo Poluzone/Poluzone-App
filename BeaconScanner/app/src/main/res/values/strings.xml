@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BeaconScanner</string>
+    <string name="app_name">Poluzone</string>
     <string name="hint_text_user">E-mail</string>
     <string name="hint_text_pass">Contraseña</string>
     <string name="login">Iniciar sesión</string>
