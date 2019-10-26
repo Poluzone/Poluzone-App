@@ -2,7 +2,16 @@
     <string name="app_name">Poluzone</string>
     <string name="hint_text_user">E-mail</string>
     <string name="hint_text_pass">Contraseña</string>
+    <string name="hint_text_pass_rep">Repite la contraseña</string>
+
+    <string name="hint_text_tlf">Teléfono</string>
+
     <string name="login">Iniciar sesión</string>
     <string name="contrasenya">¿Has olvidado la contraseña?</string>
     <string name="regsitrate">¿No tienes cuenta? Regístrate aquí</string>
+    <string name="logeate">¿Ya tienes cuenta? Inicia sesión aquí</string>
+
+    <string name="siguiente">Siguiente</string>
+    <string name="registrarse">Registrarse</string>
+
 </resources>
