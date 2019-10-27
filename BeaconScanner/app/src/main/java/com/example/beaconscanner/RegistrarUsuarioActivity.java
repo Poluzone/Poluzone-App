@@ -47,6 +47,9 @@ public class RegistrarUsuarioActivity extends Activity {
         TextInputEditText inputPhone = findViewById(R.id.texto_telefono_registrar);
         String phone = inputPhone.getText().toString();
 
+
+        // TODO: COMPROBAR QUE NO EXISTA EL EMAIL YA
+
         if (validarSiEstanVacios(email, pass, pass2, phone) && validarEmail(email) && validarContrasenya(pass, pass2)) {
             servidorFake.insertarUsuario(email, pass, Integer.parseInt(phone));
         }

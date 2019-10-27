@@ -2,6 +2,7 @@ package com.example.beaconscanner;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.util.Log;
 
@@ -158,6 +159,9 @@ public class ServidorFake {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("pruebas",response.toString());
+                        Intent i = new Intent(activity, MainActivity.class);
+                        Log.d("pruebas", "intent main");
+                        activity.startActivity(i);
                     }
                 },
                 new Response.ErrorListener() {
