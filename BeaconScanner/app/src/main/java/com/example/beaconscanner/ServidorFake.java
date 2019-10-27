@@ -1,5 +1,7 @@
 package com.example.beaconscanner;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.location.Location;
 import android.util.Log;
 
@@ -24,22 +26,21 @@ import org.json.JSONObject;
 
 public class ServidorFake {
 
-    MainActivity activity;
+    Activity activity;
     RequestQueue queue;
-    String IP;
-    int puerto;
+
+    String IP = "192.168.1.21";
+    int puerto = 8080;
 
     // ---------------------------------------------------------------------------
     // Constructor
     // IP, puerto -> ServidorFake() ->
     // ---------------------------------------------------------------------------
-    public ServidorFake(MainActivity activity, String ip, int puerto) {
+    public ServidorFake(Activity activity) {
 
         Log.d("pruebas", "constructor ServidorFake()");
 
         this.activity = activity;
-        this.IP = ip;
-        this.puerto = puerto;
 
         // Instantiate the RequestQueue.
         queue = Volley.newRequestQueue(activity);
@@ -110,7 +111,7 @@ public class ServidorFake {
                             posicion.setLongitude(longi);
                             posicion.setLatitude(lati);
                             medida.setPosicion(posicion);
-                            activity.mostrarDelServidor(medida);
+                          //  activity.mostrarDelServidor(medida);
 
                         }catch (JSONException e) {
                             Log.e("pruebas", e.toString());
@@ -126,6 +127,48 @@ public class ServidorFake {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+
+
+    // ---------------------------------------------------------------------------
+    // mail:texto, password:texto, telefono:N -> insertarUsuario() ->
+    // ---------------------------------------------------------------------------
+    public void insertarUsuario(String email, String password, int telefono) {
+        Log.d("pruebas", "insertarUsuario()");
+        String url = "http://"+IP+":"+puerto+"/insertarUsuario/";
+
+        JSONObject datos = new JSONObject();
+
+
+        // Anyadimos los datos al json
+        try {
+            datos.put("IdUsuario", null);
+            datos.put("email", email);
+            datos.put("password", password);
+            datos.put("telefono", telefono);
+            Log.d("pruebas json", datos.toString());
+        } catch (JSONException e) {
+            Log.d("pruebas", e.toString());
+        }
+
+        // Hacemos la peticion
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url,datos,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("pruebas",response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("pruebas",error.toString());
+                    }
+                }
+        );
+
+        queue.add(jsonobj);
     }
 
     // ---------------------------------------------------------------------------
