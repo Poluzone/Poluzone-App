@@ -12,6 +12,7 @@ public class LoginActivity extends AppCompatActivity {
     // Servidor
     ServidorFake servidorFake;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,8 +23,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // TODO: PRIMERO COMPROBAR SI YA SE HABÍA LOGEADO ANTERIORMENTE
 
-
-
         registrateaqui.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,7 +32,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+
     public void logearse(String email, String pass) {
         
     }
+
 }
