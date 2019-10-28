@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
         receptorBLE = new ReceptorBLE(this, nuestroUUID);
         Log.d("pruebas", "receptor creado");
 
-        // Creamos el servidorFake indicando la direccion ip y el puerto
-        servidorFake = new ServidorFake(this, IP, puerto);
+        // Creamos el servidorFake
+        servidorFake = new ServidorFake(this);
 
 
         // Para los botones de enviar y recibir
