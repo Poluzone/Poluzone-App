@@ -1,16 +1,16 @@
-package com.example.beaconscanner.ui.share;
+package com.example.beaconscanner.ui.ajustes;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ShareViewModel extends ViewModel {
+public class ToolsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ShareViewModel() {
+    public ToolsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is share fragment");
+        mText.setValue("This is tools fragment");
     }
 
     public LiveData<String> getText() {

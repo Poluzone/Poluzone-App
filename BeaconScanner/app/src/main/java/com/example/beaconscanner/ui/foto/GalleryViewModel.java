@@ -1,4 +1,4 @@
-package com.example.beaconscanner.ui.gallery;
+package com.example.beaconscanner.ui.foto;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -1,4 +1,4 @@
-package com.example.beaconscanner.ui.send;
+package com.example.beaconscanner.ui.foto;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.beaconscanner.R;
 
-public class SendFragment extends Fragment {
+public class FotoFragment extends Fragment {
 
-    private SendViewModel sendViewModel;
+    private GalleryViewModel galleryViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        sendViewModel =
-                ViewModelProviders.of(this).get(SendViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_send, container, false);
-        final TextView textView = root.findViewById(R.id.text_send);
-        sendViewModel.getText().observe(this, new Observer<String>() {
+        galleryViewModel =
+                ViewModelProviders.of(this).get(GalleryViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_foto, container, false);
+        final TextView textView = root.findViewById(R.id.text_foto);
+        galleryViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

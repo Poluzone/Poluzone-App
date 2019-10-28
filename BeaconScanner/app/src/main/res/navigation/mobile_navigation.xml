@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.beaconscanner.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_foto"
+        android:name="com.example.beaconscanner.ui.foto.FotoFragment"
+        android:label="@string/menu_foto"
+        tools:layout="@layout/fragment_foto" />
 
     <fragment
         android:id="@+id/nav_slideshow"
@@ -24,20 +24,21 @@
         tools:layout="@layout/fragment_slideshow" />
 
     <fragment
-        android:id="@+id/nav_tools"
-        android:name="com.example.beaconscanner.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        android:id="@+id/nav_ajustes"
+        android:name="com.example.beaconscanner.ui.ajustes.AjustesFragment"
+        android:label="@string/menu_ajustes"
+        tools:layout="@layout/fragment_ajustes" />
 
     <fragment
         android:id="@+id/nav_share"
         android:name="com.example.beaconscanner.ui.share.ShareFragment"
-        android:label="@string/menu_share"
+        android:label="@string/menu_sesion"
         tools:layout="@layout/fragment_share" />
 
     <fragment
         android:id="@+id/nav_send"
-        android:name="com.example.beaconscanner.ui.send.SendFragment"
+        android:name="com.example.beaconscanner.ui.sesion.SesionFragment"
         android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
+        tools:layout="@layout/fragment_sesion" />
+
 </navigation>
