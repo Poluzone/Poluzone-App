@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Servidor
     ServidorFake servidorFake;
-    String IP = "172.20.10.5";
+    //String IP = "172.20.10.5";
+    String IP = "192.168.1.82";
     int puerto = 8080;
 
     @Override
