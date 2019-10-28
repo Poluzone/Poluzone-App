@@ -16,15 +16,19 @@ import com.example.beaconscanner.R;
 
 public class SesionFragment extends Fragment {
 
-    private SendViewModel sendViewModel;
+    //---------------------------------------------------------------------------
+    //Clase relacionada con el botón Cerrar sesion
+    //---------------------------------------------------------------------------
+
+    private SesionViewModel sesionViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        sendViewModel =
-                ViewModelProviders.of(this).get(SendViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_sesion, container, false);
+        sesionViewModel =
+                ViewModelProviders.of(this).get(SesionViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_sesion, container, false);//CAMBIAR A LOGIN CUANDO ESTÉ
         final TextView textView = root.findViewById(R.id.text_send);
-        sendViewModel.getText().observe(this, new Observer<String>() {
+        sesionViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

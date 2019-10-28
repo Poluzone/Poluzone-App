@@ -15,7 +15,9 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.beaconscanner.R;
 
 public class AjustesFragment extends Fragment {
-
+    //---------------------------------------------------------------------------
+    //Clase relacionada con el botón Ajustes
+    //---------------------------------------------------------------------------
     private ToolsViewModel toolsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -23,7 +25,7 @@ public class AjustesFragment extends Fragment {
         toolsViewModel =
                 ViewModelProviders.of(this).get(ToolsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_ajustes, container, false);
-        final TextView textView = root.findViewById(R.id.text_tools);
+        final TextView textView = root.findViewById(R.id.text_ajustes);
         toolsViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {

@@ -15,16 +15,18 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.beaconscanner.R;
 
 public class FotoFragment extends Fragment {
-
-    private GalleryViewModel galleryViewModel;
+    //---------------------------------------------------------------------------
+    //Clase relacionada con el botón Polufoto
+    //---------------------------------------------------------------------------
+    private FotoViewModel fotoViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                ViewModelProviders.of(this).get(GalleryViewModel.class);
+        fotoViewModel =
+                ViewModelProviders.of(this).get(FotoViewModel.class);
         View root = inflater.inflate(R.layout.fragment_foto, container, false);
         final TextView textView = root.findViewById(R.id.text_foto);
-        galleryViewModel.getText().observe(this, new Observer<String>() {
+        fotoViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
