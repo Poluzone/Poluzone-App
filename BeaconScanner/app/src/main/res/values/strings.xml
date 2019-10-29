@@ -17,6 +17,7 @@
     <string name="errorContrasenyaNoCoincide">Las contraseñas no coinciden</string>
     <string name="errorEmail">Formato incorrecto</string>
     <string name="completar">Complete todos los campos</string>
+    <string name="errorLogin">Contraseña y/o e-mail incorrectos</string>
 
 
 </resources>
