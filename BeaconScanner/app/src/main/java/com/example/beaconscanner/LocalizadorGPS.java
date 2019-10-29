@@ -22,7 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 public class LocalizadorGPS extends AsyncTask<Void, Void, Location> {
     private Location ultimaPosicionMedida;
     private FusedLocationProviderClient fusedLocationClient;
-    private MainActivity activity;
+    private NavigationDrawerActivity activity;
 
     // -----------------------------------------------------------------------
     // -> getUltimaPosicionMedida -> Location
@@ -34,7 +34,7 @@ public class LocalizadorGPS extends AsyncTask<Void, Void, Location> {
     // -----------------------------------------------------------------------
     // -> Constructor ->
     // -----------------------------------------------------------------------
-    public LocalizadorGPS(MainActivity activity) {
+    public LocalizadorGPS(NavigationDrawerActivity activity) {
         this.activity = activity;
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         ultimaPosicionMedida = new Location("");

@@ -103,12 +103,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         // Backend
         //.............................................................................
 
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
-
 
             // Creamos el receptorBLE indicando la actividad y el uuid que buscamos
-            receptorBLE = new ReceptorBLE(MainActivity, nuestroUUID);
+            receptorBLE = new ReceptorBLE(this, nuestroUUID);
             Log.d("pruebas", "receptor creado");
 
             // Creamos el servidorFake indicando la direccion ip y el puerto
@@ -136,6 +133,43 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    // -----------------------------------------------------------------------
+    // uuid, major -> mostrarUUID ->
+    // Mostrar las lecturas del BLE por la pantalla del movil
+    // -----------------------------------------------------------------------
+    public void mostrarUUID (String uuid, String major) {
+        /*button.setClickable(true);
+        textView.setText("UUID del device: " + uuid);
+        textView2.setText("Major: " + major);*/
+    }
+
+    // -----------------------------------------------------------------------
+    // -> hayQueActualizarMedicionesYEnviarlasAlServidor ->
+    // Enviar las mediciones al servidor
+    // -----------------------------------------------------------------------
+    public void hayQueActualizarMedicionesYEnviarlasAlServidor() {
+        Medida medida = receptorBLE.obtenerContaminacion();
+        Log.d ("pruebas", "valor: " + medida.getMedida() + " tiempo: " + medida.getTiempo() + " lati: " + medida.getPosicion().getLatitude());
+        servidorFake.guardarContaminacion(medida);
+    }
+
+    // -----------------------------------------------------------------------
+    // -> recibirMedicionesDelServidor ->
+    // Recibir las mediciones del servidor
+    // -----------------------------------------------------------------------
+    public void recibirMedicionesDelServidor () {
+        servidorFake.getContaminacion();
+    }
+
+
+    // -----------------------------------------------------------------------
+    // Medida -> mostrarDelServidor ->
+    // Mostrar las lecturas del servidor por la pantalla del movil
+    // -----------------------------------------------------------------------
+    public void mostrarDelServidor(Medida medida) {
+        textViewRecibir.setText("Dato del servidor: \n" + "Valor: "+ medida.getMedida() + "\nPosicion: " + medida.getPosicion().getLatitude() + " " + medida.getPosicion().getLongitude() + "\nTiempo: " + medida.getTiempo() );
     }
 
     //--------------------------------------------------------------------------

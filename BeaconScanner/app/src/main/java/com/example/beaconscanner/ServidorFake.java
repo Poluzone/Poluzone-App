@@ -24,7 +24,7 @@ import org.json.JSONObject;
 
 public class ServidorFake {
 
-    MainActivity activity;
+    NavigationDrawerActivity activity;
     RequestQueue queue;
     String IP;
     int puerto;
@@ -33,7 +33,7 @@ public class ServidorFake {
     // Constructor
     // IP, puerto -> ServidorFake() ->
     // ---------------------------------------------------------------------------
-    public ServidorFake(MainActivity activity, String ip, int puerto) {
+    public ServidorFake(NavigationDrawerActivity activity, String ip, int puerto) {
 
         Log.d("pruebas", "constructor ServidorFake()");
 

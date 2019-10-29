@@ -1,4 +1,4 @@
-package com.example.beaconscanner;
+/*package com.example.beaconscanner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         textViewRecibir = findViewById(R.id.textViewDatoServer);*/
 
         // Creamos el receptorBLE indicando la actividad y el uuid que buscamos
-        receptorBLE = new ReceptorBLE(this, nuestroUUID);
+/*        receptorBLE = new ReceptorBLE(this, nuestroUUID);
         Log.d("pruebas", "receptor creado");
 
         // Creamos el servidorFake indicando la direccion ip y el puerto
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 recibirMedicionesDelServidor();
             }
         });*/
-
+/*
     }
 
     // -----------------------------------------------------------------------
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         /*button.setClickable(true);
         textView.setText("UUID del device: " + uuid);
         textView2.setText("Major: " + major);*/
-    }
+/*    }
 
     // -----------------------------------------------------------------------
     // -> hayQueActualizarMedicionesYEnviarlasAlServidor ->
@@ -113,3 +113,4 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
+*/

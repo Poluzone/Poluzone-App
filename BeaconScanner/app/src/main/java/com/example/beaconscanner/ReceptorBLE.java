@@ -26,7 +26,7 @@ import java.util.Date;
 
 public class ReceptorBLE {
 
-    private MainActivity nuestroActivity;
+    private NavigationDrawerActivity nuestroActivity;
     public LocalizadorGPS localizadorGPS;
 
     // Bluetooth variables
@@ -47,7 +47,7 @@ public class ReceptorBLE {
     // -----------------------------------------------------------------------
     // Constructor
     // -----------------------------------------------------------------------
-    public ReceptorBLE(MainActivity activity, String uuid) {
+    public ReceptorBLE(NavigationDrawerActivity activity, String uuid) {
         // Check if phone uses bluetooth
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
 

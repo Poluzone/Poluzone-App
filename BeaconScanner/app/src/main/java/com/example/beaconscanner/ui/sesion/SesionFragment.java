@@ -27,13 +27,13 @@ public class SesionFragment extends Fragment {
         sesionViewModel =
                 ViewModelProviders.of(this).get(SesionViewModel.class);
         View root = inflater.inflate(R.layout.fragment_sesion, container, false);//CAMBIAR A LOGIN CUANDO ESTÉ
-        final TextView textView = root.findViewById(R.id.text_send);
+        /*final TextView textView = root.findViewById(R.id.text_sesion);
         sesionViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
-        });
+        });*/
         return root;
     }
 }
