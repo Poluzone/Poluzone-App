@@ -1,6 +1,7 @@
 package com.example.beaconscanner;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,10 +18,15 @@ public class LoginActivity extends AppCompatActivity {
 
     // Servidor
     ServidorFake servidorFake;
+
     Button botonLogearse;
 
     TextInputLayout inputEmailLayout;
     TextInputLayout inputPassLayout;
+
+    // Para recordar que se ha logeado
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +113,10 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
+    // ---------------------------------------------------------------------------
+    // -> logearse() ->
+    // ---------------------------------------------------------------------------
     public void logearse() {
         inputPassLayout.setError(null);
         inputEmailLayout.setError(null);
@@ -117,6 +127,9 @@ public class LoginActivity extends AppCompatActivity {
         if (validarSiEstanVacios(email, pass)) servidorFake.comprobarUsuarioPorEmail(email, pass);
     }
 
+    // ---------------------------------------------------------------------------
+    // -> errorLogin() ->
+    // ---------------------------------------------------------------------------
     public void errorLogin() {
         TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_layout);
         inputEmailLayout.setError("Contraseña y/o e-mail incorrectos");
@@ -125,6 +138,9 @@ public class LoginActivity extends AppCompatActivity {
         inputPassLayout.setError("Contraseña y/o e-mail incorrectos");
     }
 
+    // ---------------------------------------------------------------------------
+    // email, pass -> validarSiEstanVacios() -> boolean
+    // ---------------------------------------------------------------------------
     private boolean validarSiEstanVacios(String email, String pass) {
         if (email.equals("")) {
             inputEmailLayout.setError(getString(R.string.completar));

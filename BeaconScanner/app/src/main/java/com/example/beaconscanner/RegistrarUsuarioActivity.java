@@ -33,6 +33,9 @@ public class RegistrarUsuarioActivity extends Activity {
         });
     }
 
+    // ---------------------------------------------------------------------------
+    // -> registrar() ->
+    // ---------------------------------------------------------------------------
     public void registrar() {
         TextInputEditText inputEmail = findViewById(R.id.texto_email_registrar);
 
@@ -55,6 +58,9 @@ public class RegistrarUsuarioActivity extends Activity {
         }
     }
 
+    // ---------------------------------------------------------------------------
+    // email: texto -> validarEmail() -> boolean
+    // ---------------------------------------------------------------------------
     private boolean validarEmail(String email) {
         TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
         if (!email.contains("@") || !email.contains(".") || email.contains(" ")) {
@@ -64,6 +70,9 @@ public class RegistrarUsuarioActivity extends Activity {
         else return true;
     }
 
+    // ---------------------------------------------------------------------------
+    // pass1, pass2: texto -> validarContrasenya() -> boolean
+    // ---------------------------------------------------------------------------
     private boolean validarContrasenya(String pass1, String pass2) {
         TextInputLayout inputPassLayout = findViewById(R.id.texto_contrasenya_registrar_layout);
 
@@ -77,6 +86,9 @@ public class RegistrarUsuarioActivity extends Activity {
         else return true;
     }
 
+    // ---------------------------------------------------------------------------
+    // email, pass1, pass2, telefono: texto-> validarSiEstanVacios() -> boolean
+    // ---------------------------------------------------------------------------
     private boolean validarSiEstanVacios(String email, String pass1, String pass2, String telefono) {
         TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
         TextInputLayout texto_contrasenya_registrar_layout = findViewById(R.id.texto_contrasenya_registrar_layout);
