@@ -74,7 +74,7 @@
         app:layout_constraintTop_toBottomOf="@+id/materialCardView">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_login"
+            android:id="@+id/button_register"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -113,7 +113,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout2"
+                android:id="@+id/texto_email_registrar_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -125,6 +125,7 @@
                 app:startIconDrawable="@drawable/ic_email_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/texto_email_registrar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito"
@@ -137,7 +138,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout4"
+                android:id="@+id/texto_telefono_registrar_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -148,18 +149,18 @@
 
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditText4"
+                    android:id="@+id/texto_telefono_registrar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito"
                     android:inputType="phone"
                     android:maxLines="1"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+                    app:layout_constraintTop_toBottomOf="@+id/texto_telefono_registrar" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout"
+                android:id="@+id/texto_contrasenya_registrar_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -171,18 +172,18 @@
 
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditText"
+                    android:id="@+id/texto_contrasenya_registrar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+                    app:layout_constraintTop_toBottomOf="@+id/texto_contrasenya_registrar_layout" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout3"
+                android:id="@+id/texto_contrasenyaotravez_registrar_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -194,27 +195,27 @@
 
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditText3"
+                    android:id="@+id/texto_contrasenyaotravez_registrar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+                    app:layout_constraintTop_toBottomOf="@+id/texto_contrasenyaotravez_registrar_layout" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
 
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/registrateaqui"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/nunito"
         android:text="@string/logeate"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/materialCardView"
         app:layout_constraintStart_toStartOf="@+id/materialCardView"

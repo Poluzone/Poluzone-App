@@ -33,10 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Servidor
     ServidorFake servidorFake;
-    //String IP = "172.20.10.5";
-    String IP = "192.168.1.82";
-    int puerto = 8080;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         receptorBLE = new ReceptorBLE(this, nuestroUUID);
         Log.d("pruebas", "receptor creado");
 
-        // Creamos el servidorFake indicando la direccion ip y el puerto
-        servidorFake = new ServidorFake(this, IP, puerto);
+        // Creamos el servidorFake
+        servidorFake = new ServidorFake(this);
 
 
         // Para los botones de enviar y recibir
@@ -71,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 recibirMedicionesDelServidor();
             }
         });
+
 
     }
 

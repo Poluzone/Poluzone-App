@@ -54,7 +54,7 @@
         app:cardElevation="5dp">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_login"
+            android:id="@+id/botonLogin"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -104,7 +104,7 @@
                 android:textSize="30sp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout2"
+                android:id="@+id/texto_email_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -115,6 +115,7 @@
                 app:startIconDrawable="@drawable/ic_email_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/texto_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito"
@@ -126,7 +127,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout"
+                android:id="@+id/texto_password_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -138,7 +139,7 @@
 
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditText"
+                    android:id="@+id/texto_pass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito"
@@ -162,9 +163,10 @@
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/registrateaqui"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:fontFamily="@font/nunito"
         android:text="@string/regsitrate"
         app:layout_constraintBottom_toBottomOf="parent"

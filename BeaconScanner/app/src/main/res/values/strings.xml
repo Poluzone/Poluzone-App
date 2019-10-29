@@ -8,10 +8,16 @@
 
     <string name="login">Iniciar sesión</string>
     <string name="contrasenya">¿Has olvidado la contraseña?</string>
-    <string name="regsitrate">¿No tienes cuenta? Regístrate aquí</string>
-    <string name="logeate">¿Ya tienes cuenta? Inicia sesión aquí</string>
+    <string name="regsitrate">¿No tienes cuenta? <b><u>Regístrate</u></b></string>
+    <string name="logeate">¿Ya tienes cuenta? <b><u>Inicia sesión</u></b></string>
 
     <string name="siguiente">Siguiente</string>
     <string name="registrarse">Registrarse</string>
+
+    <string name="errorContrasenyaNoCoincide">Las contraseñas no coinciden</string>
+    <string name="errorEmail">Formato incorrecto</string>
+    <string name="completar">Complete todos los campos</string>
+    <string name="errorLogin">Contraseña y/o e-mail incorrectos</string>
+
 
 </resources>
