@@ -18,20 +18,20 @@ public class AjustesFragment extends Fragment {
     //---------------------------------------------------------------------------
     //Clase relacionada con el botón Ajustes
     //---------------------------------------------------------------------------
-    private ToolsViewModel toolsViewModel;
+    private AjustesViewModel ajustesViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        toolsViewModel =
-                ViewModelProviders.of(this).get(ToolsViewModel.class);
+        ajustesViewModel =
+                ViewModelProviders.of(this).get(AjustesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_ajustes, container, false);
-        final TextView textView = root.findViewById(R.id.text_ajustes);
-        toolsViewModel.getText().observe(this, new Observer<String>() {
+        /*final TextView textView = root.findViewById(R.id.text_ajustes);
+        ajustesViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
-        });
+        });*/ // Esto era para cambiar un texto que tenia por defecto la navigation Activity que te decia en que fragmento estabas
         return root;
     }
 }

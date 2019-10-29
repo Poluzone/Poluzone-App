@@ -3,7 +3,7 @@
     <string name="hint_text_user">E-mail</string>
     <string name="hint_text_pass">Contraseña</string>
     <string name="login">Iniciar sesión</string>
-    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+    <string name="title_activity_navigation_drawer">Poluzone</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Pepito Gutierrez</string>
@@ -13,8 +13,6 @@
 
     <string name="menu_home">Mapa</string>
     <string name="menu_foto">Polufoto</string>
-    <string name="menu_slideshow">Slideshow</string>
     <string name="menu_ajustes">Ajustes</string>
     <string name="menu_sesion">Cerrar sesión</string>
-    <string name="menu_send">Send</string>
 </resources>

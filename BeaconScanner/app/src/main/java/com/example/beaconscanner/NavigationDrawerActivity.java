@@ -11,6 +11,7 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
@@ -28,11 +29,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class NavigationDrawerActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+
+    // Bluetooth
+    public String nuestroUUID = "EQUIPO-3XURODIMI";
+    ReceptorBLE receptorBLE;
+
+    // Mostrar por pantalla
+    public TextView textView;
+    public TextView textView2;
+    public TextView textViewRecibir;
+
+    // Interfaz
+    public Button button;
+    public Button buttonRecibir;
+
+    // Servidor
+    ServidorFake servidorFake;
+    String IP = "172.20.10.5";
+    int puerto = 8080;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +64,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         //Funcion que redondea la imagen del menú
         //redondearImagen();
 
+        // Codigo relacionado con el navigation drawer
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -74,6 +97,29 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        // /Codigo relacionado con el navigation drawer
+
+        //.............................................................................
+        // Backend
+        //.............................................................................
+
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+
+
+            // Creamos el receptorBLE indicando la actividad y el uuid que buscamos
+            receptorBLE = new ReceptorBLE(MainActivity, nuestroUUID);
+            Log.d("pruebas", "receptor creado");
+
+            // Creamos el servidorFake indicando la direccion ip y el puerto
+            servidorFake = new ServidorFake(this, IP, puerto);
+
+        //.............................................................................
+        // /Backend
+        //.............................................................................
+
+
+
     }
 
     //------------------------------------------------------------------------------

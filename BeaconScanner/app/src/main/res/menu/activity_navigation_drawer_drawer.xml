@@ -9,7 +9,7 @@
             android:icon="@drawable/brujula"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_foto"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_foto" />
         <item

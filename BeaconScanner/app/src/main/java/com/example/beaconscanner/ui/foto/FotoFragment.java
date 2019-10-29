@@ -25,13 +25,13 @@ public class FotoFragment extends Fragment {
         fotoViewModel =
                 ViewModelProviders.of(this).get(FotoViewModel.class);
         View root = inflater.inflate(R.layout.fragment_foto, container, false);
-        final TextView textView = root.findViewById(R.id.text_foto);
+        /*final TextView textView = root.findViewById(R.id.text_foto);
         fotoViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
-        });
+        });*/ // Esto era para cambiar un texto que tenia por defecto la navigation Activity que te decia en que fragmento estabas
         return root;
     }
 }
