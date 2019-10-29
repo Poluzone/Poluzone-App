@@ -91,7 +91,6 @@ public class LocalizadorGPS extends AsyncTask<Void, Void, Location> {
         obtenerMiPosicionGPS();
         // Log.d("pruebas", "" + ultimaPosicionMedida);
         while (ultimaPosicionMedida.getLatitude()==0) { }
-        Log.d("pruebas", "doinbackground terminado");
         return ultimaPosicionMedida;
     }
 

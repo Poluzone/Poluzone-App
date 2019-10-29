@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -39,7 +40,25 @@ public class LoginActivity extends AppCompatActivity {
         inputEmailLayout = findViewById(R.id.texto_email_layout);
         botonLogearse = findViewById(R.id.botonLogin);
 
-        // TODO: PRIMERO COMPROBAR SI YA SE HABÍA LOGEADO ANTERIORMENTE
+        final TextInputLayout inputPassLayout = findViewById(R.id.texto_password_layout);
+        final TextInputEditText inputEmail = findViewById(R.id.texto_email);
+        final TextInputEditText inputPass = findViewById(R.id.texto_pass);
+
+        // Primero comprobamos si ya hizo login anteriormente
+        // Recogemos las preferencias de la app
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+
+        String email = loginPreferences.getString("email", "");
+                String pass = loginPreferences.getString("pass", "");
+
+        Log.d("pruebas", " preferencias: " + email);
+        Log.d("pruebas", " preferencias: " + pass);
+
+        // Si se ha rellenado hacemos el login
+        if (validarSiEstanVacios(email, pass)) {
+            servidorFake.comprobarUsuarioPorEmail(email, pass);
+        }
 
         registrateaqui.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,9 +76,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        final TextInputLayout inputPassLayout = findViewById(R.id.texto_password_layout);
-        final TextInputEditText inputEmail = findViewById(R.id.texto_email);
-        final TextInputEditText inputPass = findViewById(R.id.texto_pass);
 
         inputEmail.addTextChangedListener(new TextWatcher() {
             @Override
@@ -124,7 +140,12 @@ public class LoginActivity extends AppCompatActivity {
         TextInputEditText inputPass = findViewById(R.id.texto_pass);
         String email = inputEmail.getText().toString();
         String pass = inputPass.getText().toString();
-        if (validarSiEstanVacios(email, pass)) servidorFake.comprobarUsuarioPorEmail(email, pass);
+        if (validarSiEstanVacios(email, pass)) {
+            loginPrefsEditor.putString("email", email);
+            loginPrefsEditor.putString("pass", pass);
+            loginPrefsEditor.commit();
+            servidorFake.comprobarUsuarioPorEmail(email, pass);
+        }
     }
 
     // ---------------------------------------------------------------------------
