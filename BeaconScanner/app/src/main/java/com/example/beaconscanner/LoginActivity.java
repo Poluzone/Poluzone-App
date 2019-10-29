@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         loginPrefsEditor = loginPreferences.edit();
 
         String email = loginPreferences.getString("email", "");
-                String pass = loginPreferences.getString("pass", "");
+        String pass = loginPreferences.getString("pass", "");
 
         Log.d("pruebas", " preferencias: " + email);
         Log.d("pruebas", " preferencias: " + pass);

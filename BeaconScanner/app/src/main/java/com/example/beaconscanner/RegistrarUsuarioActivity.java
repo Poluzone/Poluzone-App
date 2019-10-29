@@ -1,6 +1,7 @@
 package com.example.beaconscanner;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,15 +13,21 @@ import com.google.android.material.textfield.TextInputLayout;
 public class RegistrarUsuarioActivity extends Activity {
 
     ServidorFake servidorFake;
+    // Para recordar que se ha registrado
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Indicamos dónde se guardarán las preferencias
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+
         setContentView(R.layout.registro);
 
         servidorFake = new ServidorFake(this);
-
 
         Button buttonRegistrarse = findViewById(R.id.button_register);
 
@@ -54,6 +61,10 @@ public class RegistrarUsuarioActivity extends Activity {
         // TODO: COMPROBAR QUE NO EXISTA EL EMAIL YA
 
         if (validarSiEstanVacios(email, pass, pass2, phone) && validarEmail(email) && validarContrasenya(pass, pass2)) {
+            // Guardamos los datos en las preferencias
+            loginPrefsEditor.putString("email", email);
+            loginPrefsEditor.putString("pass", pass);
+            loginPrefsEditor.commit();
             servidorFake.insertarUsuario(email, pass, Integer.parseInt(phone));
         }
     }

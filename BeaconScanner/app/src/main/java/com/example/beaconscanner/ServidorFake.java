@@ -157,10 +157,9 @@ public class ServidorFake {
 
         // Anyadimos los datos al json
         try {
-            datos.put("IdUsuario", null);
-            datos.put("email", email);
-            datos.put("password", password);
-            datos.put("telefono", telefono);
+            datos.put("Email", email);
+            datos.put("Password", password);
+            datos.put("Telefono", telefono);
             Log.d("pruebas json", datos.toString());
         } catch (JSONException e) {
             Log.d("pruebas", e.toString());
