@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.util.Log;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -43,6 +45,8 @@ public class ReceptorBLE {
     public long instante;
     public Location posicion;
 
+    //Auxiliares
+    private boolean haSalidoYaElToast=false;//para que el Toast de cuando se conecta el sensor no salga todo el rato
 
     // -----------------------------------------------------------------------
     // Constructor
@@ -67,6 +71,7 @@ public class ReceptorBLE {
     // -> actualizarMediciones ->
     // -----------------------------------------------------------------------
     private void actualizarMediciones() {
+
         Log.d("pruebas", "actualizarmediciones()");
         callbackLeScan = new BluetoothAdapter.LeScanCallback() {
             @Override
@@ -76,6 +81,11 @@ public class ReceptorBLE {
 
                 if (buscarEsteDispositivoBTLE(Utilidades.bytesToString(tramaIBeacon.getUUID()))) {
                     Log.d("pruebas", "device found: " + nuestroUUID + " " + Utilidades.bytesToInt(tramaIBeacon.getMajor()));
+
+                    if(!haSalidoYaElToast){
+                        Toast.makeText(nuestroActivity, "CONECTADO AL SENSOR Y RECIBIENDO DATOS", Toast.LENGTH_SHORT).show();
+                        haSalidoYaElToast=true;
+                    }
 
                     // asignamos los datos de nuestro device encontrado
                     ultimaTramaEncontrada = new TramaIBeacon(bytesTrama);
