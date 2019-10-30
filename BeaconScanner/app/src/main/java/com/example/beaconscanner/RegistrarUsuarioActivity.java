@@ -11,6 +11,9 @@ import android.widget.Button;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class RegistrarUsuarioActivity extends Activity implements CallbackRegistro {
 
     ServidorFake servidorFake;
@@ -58,9 +61,6 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         TextInputEditText inputPhone = findViewById(R.id.texto_telefono_registrar);
         String phone = inputPhone.getText().toString();
 
-
-        // TODO: COMPROBAR QUE NO EXISTA EL EMAIL YA
-
         if (validarSiEstanVacios(email, pass, pass2, phone) && validarEmail(email) && validarContrasenya(pass, pass2)) {
             // Guardamos los datos en las preferencias
             servidorFake.insertarUsuario(email, pass, Integer.parseInt(phone));
@@ -84,15 +84,27 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
     // ---------------------------------------------------------------------------
     private boolean validarContrasenya(String pass1, String pass2) {
         TextInputLayout inputPassLayout = findViewById(R.id.texto_contrasenya_registrar_layout);
-
         TextInputLayout inputPassAgainLayout = findViewById(R.id.texto_contrasenyaotravez_registrar_layout);
 
-
-        if (!pass1.equals(pass2)) {
-            inputPassAgainLayout.setError(getString(R.string.errorContrasenyaNoCoincide));
+        Log.d("pruebas", pass1);
+        // Comprobar que tenga al menos una mayúscula, un número y una minúscula
+        Pattern p = Pattern.compile("^(?=.*[0-9])(?=.*[A-Z])");
+        Matcher m = p.matcher(pass1);
+        boolean regextrue = m.find();
+        if (regextrue) {
+            // Comprobar que las dos contraseñas coincidan
+            if (!pass1.equals(pass2)) {
+                inputPassAgainLayout.setError(getString(R.string.errorContrasenyaNoCoincide));
+                return false;
+            }
+            else return true;
+        }
+        else {
+            // Mostrar error si no coincide
+            inputPassLayout.setError(getString(R.string.falloFormatoPass));
             return false;
         }
-        else return true;
+
     }
 
     // ---------------------------------------------------------------------------

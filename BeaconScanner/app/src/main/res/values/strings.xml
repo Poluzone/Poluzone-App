@@ -19,6 +19,7 @@
     <string name="completar">Complete todos los campos</string>
     <string name="errorLogin">Contraseña y/o e-mail incorrectos</string>
     <string name="yaExiste">El e-mail ya está en uso</string>
+    <string name="falloFormatoPass">Debe contener al menos una mayúscula, una minúscula y un número</string>
 
 
 </resources>
