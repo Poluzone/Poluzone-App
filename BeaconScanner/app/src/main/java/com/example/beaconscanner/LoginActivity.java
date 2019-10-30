@@ -15,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class LoginActivity extends AppCompatActivity implements CallbackLogin{
 
     // Servidor
@@ -179,8 +182,15 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
     // resultadoLogin: V/F -> callbackLogin() ->
     // ---------------------------------------------------------------------------
     @Override
-    public void callbackLogin(boolean resultadoLogin){
+    public void callbackLogin(boolean resultadoLogin, JSONObject response){
         if (resultadoLogin) {
+            // Guardamos también el teléfono
+            try {
+                loginPrefsEditor.putString("telefono", response.getJSONArray("Usuario").getJSONObject(0).get("Telefono").toString());
+            }
+            catch (JSONException e) {
+                Log.d("pruebas", "error json: " + e);
+            }
             loginPrefsEditor.commit();
             Intent i = new Intent(this, MainActivity.class);
             Log.d("pruebas", "intent main");

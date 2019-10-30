@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("pruebas", " preferencias: " + loginPreferences.getString("email", "") );
         Log.d("pruebas", " preferencias: " + loginPreferences.getString("pass", "") );
+        Log.d("pruebas", " preferencias: " + loginPreferences.getString("telefono", "") );
 
         textView = findViewById(R.id.text);
         textView2 = findViewById(R.id.text2);

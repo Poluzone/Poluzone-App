@@ -179,10 +179,10 @@ public class ServidorFake {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("pruebas",response.toString());
-                        callbackLogin.callbackLogin(true);
-                 /*       Intent i = new Intent(activity, MainActivity.class);
+                    //    callbackLogin.callbackLogin(true, response);
+                        Intent i = new Intent(activity, MainActivity.class);
                         Log.d("pruebas", "intent main");
-                        activity.startActivity(i); */
+                        activity.startActivity(i);
                     }
                 },
                 new Response.ErrorListener() {
@@ -224,10 +224,10 @@ public class ServidorFake {
                         Log.d("pruebas",response.toString());
                         try {
                             if (response.get("status").equals(true)) {
-                                callbackLogin.callbackLogin(true);
+                                callbackLogin.callbackLogin(true, response);
                             }
                             else {
-                                callbackLogin.callbackLogin(false);
+                                callbackLogin.callbackLogin(false, response);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
