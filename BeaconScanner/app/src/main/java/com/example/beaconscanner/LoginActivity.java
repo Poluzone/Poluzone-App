@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements CallbackLogin{
 
     // Servidor
     ServidorFake servidorFake;
@@ -28,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     // Para recordar que se ha logeado
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
+
+    public Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +145,6 @@ public class LoginActivity extends AppCompatActivity {
         if (validarSiEstanVacios(email, pass)) {
             loginPrefsEditor.putString("email", email);
             loginPrefsEditor.putString("pass", pass);
-            loginPrefsEditor.commit();
             servidorFake.comprobarUsuarioPorEmail(email, pass);
         }
     }
@@ -151,12 +152,9 @@ public class LoginActivity extends AppCompatActivity {
     // ---------------------------------------------------------------------------
     // -> errorLogin() ->
     // ---------------------------------------------------------------------------
-    public void errorLogin() {
-        TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_layout);
-        inputEmailLayout.setError("Contraseña y/o e-mail incorrectos");
-
-        TextInputLayout inputPassLayout = findViewById(R.id.texto_password_layout);
-        inputPassLayout.setError("Contraseña y/o e-mail incorrectos");
+    private void errorLogin() {
+        inputEmailLayout.setError(" ");
+        inputPassLayout.setError("Email y/o contraseña incorrecta");
     }
 
     // ---------------------------------------------------------------------------
@@ -173,6 +171,24 @@ public class LoginActivity extends AppCompatActivity {
         }
         else {
             return true;
+        }
+    }
+
+
+    // ---------------------------------------------------------------------------
+    // resultadoLogin: V/F -> callbackLogin() ->
+    // ---------------------------------------------------------------------------
+    @Override
+    public void callbackLogin(boolean resultadoLogin){
+        if (resultadoLogin) {
+            loginPrefsEditor.commit();
+            Intent i = new Intent(this, MainActivity.class);
+            Log.d("pruebas", "intent main");
+            this.startActivity(i);
+            this.finish();
+        }
+        else {
+           errorLogin();
         }
     }
 

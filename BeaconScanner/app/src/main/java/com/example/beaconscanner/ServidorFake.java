@@ -41,8 +41,10 @@ public class ServidorFake {
 
     Activity activity;
     RequestQueue queue;
+    CallbackLogin callbackLogin;
 
-    String IP = "192.168.1.104";//"172.20.10.5";
+    String IP = //"192.168.1.104";
+     "172.20.10.5";
     int puerto = 8080;
 
     // ---------------------------------------------------------------------------
@@ -54,6 +56,12 @@ public class ServidorFake {
         Log.d("pruebas", "constructor ServidorFake()");
 
         this.activity = activity;
+
+        // Si el servidor se ha creado desde loginactivity buscamos el callback
+        if (activity.getClass() == LoginActivity.class) {
+            Log.d("pruebas", "issa loginactivity");
+            callbackLogin = (LoginActivity) activity;
+        }
 
         // Instantiate the RequestQueue.
         queue = Volley.newRequestQueue(activity);
@@ -171,9 +179,10 @@ public class ServidorFake {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("pruebas",response.toString());
-                        Intent i = new Intent(activity, MainActivity.class);
+                        callbackLogin.callbackLogin(true);
+                 /*       Intent i = new Intent(activity, MainActivity.class);
                         Log.d("pruebas", "intent main");
-                        activity.startActivity(i);
+                        activity.startActivity(i); */
                     }
                 },
                 new Response.ErrorListener() {
@@ -214,17 +223,11 @@ public class ServidorFake {
                     public void onResponse(JSONObject response) {
                         Log.d("pruebas",response.toString());
                         try {
-                            if (response.get("status").equals("true")) {
-                                Intent i = new Intent(activity, MainActivity.class);
-                                Log.d("pruebas", "intent main");
-                                activity.startActivity(i);
+                            if (response.get("status").equals(true)) {
+                                callbackLogin.callbackLogin(true);
                             }
                             else {
-                                TextInputLayout inputEmailLayout = activity.findViewById(R.id.texto_email_layout);
-                                inputEmailLayout.setError(" ");
-
-                                TextInputLayout inputPassLayout = activity.findViewById(R.id.texto_password_layout);
-                                inputPassLayout.setError("Email y/o contraseña incorrecta");
+                                callbackLogin.callbackLogin(false);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
