@@ -194,7 +194,7 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
             loginPrefsEditor.commit();
 
             // Empezamos la nueva actividad
-            Intent i = new Intent(this, MainActivity.class);
+            Intent i = new Intent(this, NavigationDrawerActivity.class);
             Log.d("pruebas", "intent main");
             this.startActivity(i);
             this.finish();

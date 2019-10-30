@@ -52,8 +52,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
     // Servidor
     ServidorFake servidorFake;
-    String IP = "172.20.10.5";
-    int puerto = 8080;
 
 
     @Override
@@ -109,7 +107,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
             Log.d("pruebas", "receptor creado");
 
             // Creamos el servidorFake indicando la direccion ip y el puerto
-            servidorFake = new ServidorFake(this, IP, puerto);
+            servidorFake = new ServidorFake(this);
 
         //.............................................................................
         // /Backend

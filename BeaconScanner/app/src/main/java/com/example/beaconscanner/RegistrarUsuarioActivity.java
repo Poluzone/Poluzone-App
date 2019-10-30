@@ -159,7 +159,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             loginPrefsEditor.putString("telefono", phone);
             loginPrefsEditor.commit();
 
-            Intent i = new Intent(this, MainActivity.class);
+            Intent i = new Intent(this, NavigationDrawerActivity.class);
             Log.d("pruebas", "intent main");
             this.startActivity(i);
             this.finish();

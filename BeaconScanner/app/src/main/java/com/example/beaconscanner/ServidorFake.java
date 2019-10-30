@@ -39,7 +39,7 @@ import java.util.Map;
 
 public class ServidorFake {
 
-    NavigationDrawerActivity activity;
+    Activity activity;
 
     RequestQueue queue;
     CallbackLogin callbackLogin;
@@ -47,14 +47,14 @@ public class ServidorFake {
 
 
     String IP = //"192.168.1.104";
-     "172.20.10.5";
+     "172.20.10.8";
     int puerto = 8080;
 
     // ---------------------------------------------------------------------------
     // Constructor
     // IP, puerto -> ServidorFake() ->
     // ---------------------------------------------------------------------------
-    public ServidorFake(NavigationDrawerActivity activity, String ip, int puerto) {
+    public ServidorFake(Activity activity) {
 
 
         Log.d("pruebas", "constructor ServidorFake()");
