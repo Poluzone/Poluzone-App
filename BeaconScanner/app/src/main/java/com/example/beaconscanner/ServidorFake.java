@@ -42,6 +42,8 @@ public class ServidorFake {
     Activity activity;
     RequestQueue queue;
     CallbackLogin callbackLogin;
+    CallbackRegistro callbackRegistro;
+
 
     String IP = //"192.168.1.104";
      "172.20.10.5";
@@ -61,6 +63,12 @@ public class ServidorFake {
         if (activity.getClass() == LoginActivity.class) {
             Log.d("pruebas", "issa loginactivity");
             callbackLogin = (LoginActivity) activity;
+        }
+
+        // Si el servidor se ha creado desde loginactivity buscamos el callback
+        if (activity.getClass() == RegistrarUsuarioActivity.class) {
+            Log.d("pruebas", "issa loginactivity");
+            callbackRegistro = (RegistrarUsuarioActivity) activity;
         }
 
         // Instantiate the RequestQueue.
@@ -179,10 +187,18 @@ public class ServidorFake {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("pruebas",response.toString());
+                        try {
+                            if (response.get("status").equals(true)) {
+                                callbackRegistro.callbackRegistro(true);
+                            }
+                            else {
+                                callbackRegistro.callbackRegistro(false);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("pruebas", e.toString());
+                        }
                     //    callbackLogin.callbackLogin(true, response);
-                        Intent i = new Intent(activity, MainActivity.class);
-                        Log.d("pruebas", "intent main");
-                        activity.startActivity(i);
                     }
                 },
                 new Response.ErrorListener() {

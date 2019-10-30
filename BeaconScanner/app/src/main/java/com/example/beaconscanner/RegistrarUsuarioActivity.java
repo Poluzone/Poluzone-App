@@ -1,6 +1,7 @@
 package com.example.beaconscanner;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +11,7 @@ import android.widget.Button;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class RegistrarUsuarioActivity extends Activity {
+public class RegistrarUsuarioActivity extends Activity implements CallbackRegistro {
 
     ServidorFake servidorFake;
     // Para recordar que se ha registrado
@@ -62,9 +63,6 @@ public class RegistrarUsuarioActivity extends Activity {
 
         if (validarSiEstanVacios(email, pass, pass2, phone) && validarEmail(email) && validarContrasenya(pass, pass2)) {
             // Guardamos los datos en las preferencias
-            loginPrefsEditor.putString("email", email);
-            loginPrefsEditor.putString("pass", pass);
-            loginPrefsEditor.commit();
             servidorFake.insertarUsuario(email, pass, Integer.parseInt(phone));
         }
     }
@@ -129,6 +127,34 @@ public class RegistrarUsuarioActivity extends Activity {
         }
         else {
             return true;
+        }
+    }
+
+    @Override
+    public void callbackRegistro(boolean resultadoRegistro) {
+        if (resultadoRegistro) {
+            TextInputEditText inputEmail = findViewById(R.id.texto_email_registrar);
+            String email = inputEmail.getText().toString();
+
+            TextInputEditText inputPass = findViewById(R.id.texto_contrasenya_registrar);
+            String pass = inputPass.getText().toString();
+
+            TextInputEditText inputPhone = findViewById(R.id.texto_telefono_registrar);
+            String phone = inputPhone.getText().toString();
+
+            loginPrefsEditor.putString("email", email);
+            loginPrefsEditor.putString("pass", pass);
+            loginPrefsEditor.putString("telefono", phone);
+            loginPrefsEditor.commit();
+
+            Intent i = new Intent(this, MainActivity.class);
+            Log.d("pruebas", "intent main");
+            this.startActivity(i);
+            this.finish();
+        }
+        else {
+            TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
+            inputEmailLayout.setError(getString(R.string.yaExiste));
         }
     }
 }
