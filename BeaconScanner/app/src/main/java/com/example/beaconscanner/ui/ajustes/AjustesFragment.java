@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.beaconscanner.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class AjustesFragment extends Fragment {
     //---------------------------------------------------------------------------
@@ -25,6 +26,9 @@ public class AjustesFragment extends Fragment {
         ajustesViewModel =
                 ViewModelProviders.of(this).get(AjustesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_ajustes, container, false);
+
+        FloatingActionButton fab = root.findViewById(R.id.fab);
+
         /*final TextView textView = root.findViewById(R.id.text_ajustes);
         ajustesViewModel.getText().observe(this, new Observer<String>() {
             @Override
