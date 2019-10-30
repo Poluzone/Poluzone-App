@@ -39,7 +39,8 @@ import java.util.Map;
 
 public class ServidorFake {
 
-    Activity activity;
+    NavigationDrawerActivity activity;
+
     RequestQueue queue;
     CallbackLogin callbackLogin;
     CallbackRegistro callbackRegistro;
@@ -53,7 +54,8 @@ public class ServidorFake {
     // Constructor
     // IP, puerto -> ServidorFake() ->
     // ---------------------------------------------------------------------------
-    public ServidorFake(Activity activity) {
+    public ServidorFake(NavigationDrawerActivity activity, String ip, int puerto) {
+
 
         Log.d("pruebas", "constructor ServidorFake()");
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.beaconscanner.ui.mapa.MapaFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_mapa" />
+
+    <fragment
+        android:id="@+id/nav_foto"
+        android:name="com.example.beaconscanner.ui.foto.FotoFragment"
+        android:label="@string/menu_foto"
+        tools:layout="@layout/fragment_foto" />
+
+    <fragment
+        android:id="@+id/nav_ajustes"
+        android:name="com.example.beaconscanner.ui.ajustes.AjustesFragment"
+        android:label="@string/menu_ajustes"
+        tools:layout="@layout/fragment_ajustes" />
+
+    <fragment
+        android:id="@+id/nav_sesion"
+        android:name="com.example.beaconscanner.ui.sesion.SesionFragment"
+        android:label="@string/menu_sesion"
+        tools:layout="@layout/fragment_sesion" />
+
+</navigation>
