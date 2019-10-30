@@ -146,8 +146,6 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
         String email = inputEmail.getText().toString();
         String pass = inputPass.getText().toString();
         if (validarSiEstanVacios(email, pass)) {
-            loginPrefsEditor.putString("email", email);
-            loginPrefsEditor.putString("pass", pass);
             servidorFake.comprobarUsuarioPorEmail(email, pass);
         }
     }
@@ -184,20 +182,25 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
     @Override
     public void callbackLogin(boolean resultadoLogin, JSONObject response){
         if (resultadoLogin) {
-            // Guardamos también el teléfono
+            // Guardamos los datos de la consulta
             try {
+                loginPrefsEditor.putString("email", response.getJSONArray("Usuario").getJSONObject(0).get("Email").toString());
+                loginPrefsEditor.putString("pass", response.getJSONArray("Usuario").getJSONObject(0).get("Password").toString());
                 loginPrefsEditor.putString("telefono", response.getJSONArray("Usuario").getJSONObject(0).get("Telefono").toString());
             }
             catch (JSONException e) {
                 Log.d("pruebas", "error json: " + e);
             }
             loginPrefsEditor.commit();
+
+            // Empezamos la nueva actividad
             Intent i = new Intent(this, MainActivity.class);
             Log.d("pruebas", "intent main");
             this.startActivity(i);
             this.finish();
         }
         else {
+            // Mostramos los mensajes de error en pantalla
            errorLogin();
         }
     }
