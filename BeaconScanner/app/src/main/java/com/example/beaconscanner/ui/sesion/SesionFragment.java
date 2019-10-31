@@ -26,17 +26,20 @@ public class SesionFragment extends Fragment {
     //---------------------------------------------------------------------------
     //Clase relacionada con el botón Cerrar sesion
     //---------------------------------------------------------------------------
-    
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = null;
 
+        // Borramos to do de sharedpreferences
         SharedPreferences loginPreferences = getActivity().getSharedPreferences("loginPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = loginPreferences.edit();
         editor.remove("email");
         editor.remove("pass");
         editor.remove("telefono");
         editor.commit();
+
+        // Empezar el loginactivity y terminar el mainactivity
         Intent i = new Intent(getActivity(), LoginActivity.class);
         Log.d("pruebas", "intent main");
         this.startActivity(i);
