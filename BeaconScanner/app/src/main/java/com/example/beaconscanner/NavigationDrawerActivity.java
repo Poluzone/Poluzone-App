@@ -244,7 +244,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         // action item info, añade icono de rutas
         speedDialView.addActionItem(
                 new SpeedDialActionItem.Builder(R.id.routes, MaterialDrawableBuilder.with(this.getBaseContext()) // provide a context
-                        .setIcon(MaterialDrawableBuilder.IconValue.INFORMATION_OUTLINE) // provide an icon
+                        .setIcon(MaterialDrawableBuilder.IconValue.DIRECTIONS) // provide an icon
                         .setColor(Color.WHITE) // set the icon color
                         .setToActionbarSize() // set the icon size
                         .build())
