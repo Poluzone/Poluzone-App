@@ -37,4 +37,7 @@
     <string name="menu_sesion">Cerrar sesión</string>
     <string name="menu_perfil">Perfil</string>
 
+    <string name="filter">Filtro</string>
+    <string name="route">Rutas</string>
+
 </resources>

@@ -31,19 +31,22 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.leinardi.android.speeddial.SpeedDialOverlayLayout
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.leinardi.android.speeddial.SpeedDialView
         android:id="@+id/fab"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:background="@color/colorAccent"
-        android:foregroundTint="@android:color/white"
-        app:tint="@android:color/white"
-        app:backgroundTint="@color/colorAccent"
-        app:rippleColor="@android:color/white"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:sdOverlayLayout="@id/overlay"
+        />
 
  <!--   <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab2"
