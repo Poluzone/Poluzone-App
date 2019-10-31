@@ -25,6 +25,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,8 +47,8 @@ public class ServidorFake {
     CallbackRegistro callbackRegistro;
 
 
-    String IP = //"192.168.1.104";
-     "172.20.10.8";
+    String IP = "192.168.1.21";//"192.168.1.104";
+   //  "172.20.10.5";
     int puerto = 8080;
 
     // ---------------------------------------------------------------------------
@@ -259,8 +260,7 @@ public class ServidorFake {
                     public void onErrorResponse(VolleyError error) {
                         NetworkResponse networkResponse = error.networkResponse;
                         Log.d("pruebas",error.toString());
-                        if (error instanceof NoConnectionError) {
-                            TextInputLayout inputPassLayout = activity.findViewById(R.id.texto_password_layout);
+                        if (error instanceof NoConnectionError || error instanceof TimeoutError) {
                             Toast.makeText(activity, "Error de conexión", Toast.LENGTH_LONG).show();
                         }
                         else if (networkResponse.statusCode == 404){

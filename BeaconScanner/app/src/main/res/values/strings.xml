@@ -14,6 +14,7 @@
 
     <string name="siguiente">Siguiente</string>
     <string name="registrarse">Registrarse</string>
+    <string name="guardar">Guardar</string>
 
     <string name="errorContrasenyaNoCoincide">Las contraseñas no coinciden</string>
     <string name="errorEmail">Formato incorrecto</string>
@@ -34,4 +35,6 @@
     <string name="menu_foto">Polufoto</string>
     <string name="menu_ajustes">Ajustes</string>
     <string name="menu_sesion">Cerrar sesión</string>
+    <string name="menu_perfil">Perfil</string>
+
 </resources>

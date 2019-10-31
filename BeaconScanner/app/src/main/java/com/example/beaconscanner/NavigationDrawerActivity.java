@@ -1,6 +1,7 @@
 package com.example.beaconscanner;
 
 //Imports para hacer imagen redonda
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -50,14 +51,20 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     public Button button;
     public Button buttonRecibir;
 
+    // Para recordar que se ha logeado
+    private SharedPreferences loginPreferences;
+
     // Servidor
     ServidorFake servidorFake;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
+
+
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+
 
         //Funcion que redondea la imagen del menú
         //redondearImagen();
@@ -89,7 +96,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_foto, R.id.nav_ajustes, R.id.nav_sesion)
+                R.id.nav_home, R.id.nav_foto, R.id.nav_ajustes, R.id.nav_perfil, R.id.nav_sesion)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -113,16 +120,21 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         // /Backend
         //.............................................................................
 
-
-
     }
 
     //------------------------------------------------------------------------------
     // Método de la actividad del Navigation Drawer
+    // -----------------------------------------------------------------------
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         /*getMenuInflater().inflate(R.menu.navigation_drawer, menu);*/
+
+        // Mostramos los datos del usuario en el nav drawer
+        String email = loginPreferences.getString("email", "");
+        TextView textoNombre = findViewById(R.id.nombre_nav);
+        textoNombre.setText(email);
+
         return true;
     }
 

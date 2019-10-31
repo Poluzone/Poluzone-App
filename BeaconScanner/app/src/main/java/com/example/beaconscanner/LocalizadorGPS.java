@@ -8,11 +8,15 @@ package com.example.beaconscanner;
 // CopyRight:
 // -----------------------------------------------------------------------
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -36,11 +40,24 @@ public class LocalizadorGPS extends AsyncTask<Void, Void, Location> {
     // -----------------------------------------------------------------------
     public LocalizadorGPS(NavigationDrawerActivity activity) {
         this.activity = activity;
+        pedirPermisoGPS();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         ultimaPosicionMedida = new Location("");
         ultimaPosicionMedida.setLatitude(1234);
         ultimaPosicionMedida.setLongitude(1235);
         this.execute();
+    }
+
+    // -----------------------------------------------------------------------
+    // -> pedirPermisoGPS ->
+    // -----------------------------------------------------------------------
+    public void pedirPermisoGPS(){
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},3);
+        }
+       /* if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},3);
+        }*/
     }
 
     // -----------------------------------------------------------------------
