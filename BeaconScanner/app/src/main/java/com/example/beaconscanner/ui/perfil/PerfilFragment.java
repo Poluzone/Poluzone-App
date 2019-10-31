@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.beaconscanner.R;
 import com.example.beaconscanner.ui.foto.FotoViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -35,10 +36,13 @@ public class PerfilFragment extends Fragment {
 
         TextInputEditText emailinput = root.findViewById(R.id.textoemail);
         TextInputEditText tlfinput = root.findViewById(R.id.textotelefono);
+        FloatingActionButton fab = getParentFragment().getActivity().findViewById(R.id.fab);
+
+        fab.setImageResource(R.drawable.edit_account);
 
         emailinput.setEnabled(false);
         tlfinput.setEnabled(false);
-        
+
         emailinput.setText(email);
         tlfinput.setText(tlf);
 
