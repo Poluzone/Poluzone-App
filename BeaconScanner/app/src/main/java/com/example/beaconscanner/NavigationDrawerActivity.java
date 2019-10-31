@@ -47,6 +47,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
     SpeedDialView speedDialView;
 
+    Integer[] showOnMap = new Integer[4];
 
     // Bluetooth
     public String nuestroUUID = "EQUIPO-3XURODIMI";
@@ -82,8 +83,8 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         // Codigo relacionado con el navigation drawer
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        
 
+        mostrarTodosLosGases();
         crearFabSpeedDial();
 
         /*FloatingActionButton fab2 = findViewById(R.id.fab2);
@@ -259,7 +260,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                 switch (speedDialActionItem.getId()) {
                     case R.id.filter:
                         // filter action
-                       // boolean open = showFilterMenu(findViewById(R.id.filter));
+                        boolean open = showFilterMenu(findViewById(R.id.filter));
                         return true; // cierra el fab sin animacion
                     case R.id.routes:
                         // info action
@@ -278,9 +279,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
 
     // -----------------------------------------------------------------------
-    // -> showFilterMenu ->
+    // view -> showFilterMenu -> v/f
     // -----------------------------------------------------------------------
-  /*  public boolean showFilterMenu(View anchor) {
+    public boolean showFilterMenu(View anchor) {
         PopupMenu popup = new PopupMenu(this, anchor, R.style.FilterPopup);
         popup.getMenuInflater().inflate(R.menu.filter_menu, popup.getMenu());
         // Antes de mostrar el menu del popup miramos si estaba checked o no, y lo mostramos como tal
@@ -318,25 +319,21 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                 // El switch cambia el checked del item dependiendo del item
                 // -- falta implementar el filtrado real de los contenedores
                 switch(item.getItemId()){
-                    case R.id.plasticFilter:
+                    case R.id.ozonoFilter:
                         if (item.isChecked()) showOnMap[0] = 1;
                         else showOnMap[0] = 0;
                         return false;
-                    case R.id.glassFilter:
+                    case R.id.irritantesFilter:
                         if (item.isChecked()) showOnMap[1] = 1;
                         else showOnMap[1] = 0;
                         return false;
-                    case R.id.organicFilter:
+                    case R.id.calidadFilter:
                         if (item.isChecked()) showOnMap[2] = 1;
                         else showOnMap[2] = 0;
                         return false;
-                    case R.id.paperFilter:
+                    case R.id.so2Filter:
                         if (item.isChecked()) showOnMap[3] = 1;
                         else showOnMap[3] = 0;
-                        return false;
-                    case R.id.wasteFilter:
-                        if (item.isChecked()) showOnMap[4] = 1;
-                        else showOnMap[4] = 0;
                         return false;
                     default:
                         return false;
@@ -345,6 +342,16 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         });
 
         return true;
-    } */
+    }
+
+    // -----------------------------------------------------------------------
+    // -> mostrarTodosLosGases ->
+    // Hacemos checked todos los filtros al iniciar la app (aparecen todos los tipos de gas)
+    // -----------------------------------------------------------------------
+    public void mostrarTodosLosGases() {
+        for (int i = 0; i < showOnMap.length; i++) {
+            showOnMap[i] = 1;
+        }
+    }
 
 }

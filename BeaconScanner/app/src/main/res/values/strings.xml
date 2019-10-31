@@ -40,4 +40,8 @@
     <string name="filter">Filtro</string>
     <string name="route">Rutas</string>
 
+    <string name="calidad">Calidad del aire</string>
+    <string name="ozono">Ozono</string>
+    <string name="dioxidoAzufre">Dióxido de azufre</string>
+    <string name="irritantes">Gases irritantes</string>
 </resources>
