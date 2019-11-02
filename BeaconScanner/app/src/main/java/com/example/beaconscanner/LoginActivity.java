@@ -204,7 +204,6 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
             Log.d("pruebas", "intent main");
             this.startActivity(i);
             this.finish();
-            mostrarProgress(false);
         }
         else {
             mostrarProgress(false);

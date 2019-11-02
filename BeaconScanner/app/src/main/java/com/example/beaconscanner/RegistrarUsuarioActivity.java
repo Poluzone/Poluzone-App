@@ -181,7 +181,6 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             Intent i = new Intent(this, NavigationDrawerActivity.class);
             Log.d("pruebas", "intent main");
             this.startActivity(i);
-            mostrarProgress(false);
             this.finish();
         }
         else {
