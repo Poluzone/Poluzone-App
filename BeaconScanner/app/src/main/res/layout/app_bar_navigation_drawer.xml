@@ -48,18 +48,4 @@
         app:sdOverlayLayout="@id/overlay"
         />
 
- <!--   <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab2"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:background="@color/colorAccent"
-        android:foregroundTint="@android:color/white"
-        app:tint="@android:color/white"
-        app:backgroundTint="@color/colorAccent"
-        app:rippleColor="@android:color/white"
-        app:srcCompat="@android:drawable/ic_dialog_email" /> -->
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

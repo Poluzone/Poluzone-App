@@ -14,6 +14,7 @@ import com.example.beaconscanner.R;
 import com.example.beaconscanner.ui.foto.FotoViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.leinardi.android.speeddial.SpeedDialView;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -24,6 +25,7 @@ public class PerfilFragment extends Fragment {
     private PerfilViewModel perfilViewModel;
     // Para recordar que se ha logeado
     private SharedPreferences loginPreferences;
+    SpeedDialView speedDialView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         perfilViewModel = ViewModelProviders.of(this).get(PerfilViewModel.class);
@@ -36,8 +38,12 @@ public class PerfilFragment extends Fragment {
 
         TextInputEditText emailinput = root.findViewById(R.id.textoemail);
         TextInputEditText tlfinput = root.findViewById(R.id.textotelefono);
-        FloatingActionButton fab = getParentFragment().getActivity().findViewById(R.id.fab);
 
+        // acceder speed dial
+        speedDialView = root.findViewById(R.id.fab);
+        speedDialView.hide();
+
+        FloatingActionButton fab = root.findViewById(R.id.fabNormal);
         fab.setImageResource(R.drawable.edit_account);
 
         emailinput.setEnabled(false);
