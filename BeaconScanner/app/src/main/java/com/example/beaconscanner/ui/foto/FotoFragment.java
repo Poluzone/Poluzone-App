@@ -1,8 +1,12 @@
 package com.example.beaconscanner.ui.foto;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -24,28 +29,39 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.beaconscanner.R;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import static android.app.Activity.RESULT_OK;
+
 public class FotoFragment extends Fragment {
     //---------------------------------------------------------------------------
     //Clase relacionada con el botón Polufoto
     //---------------------------------------------------------------------------
-    private FotoViewModel fotoViewModel;
     private final int PEDIR_1_PERMISO=1;
     private final int PEDIR_2_PERMISOS=2;
-    private ImageButton btnCamera;
+    private ImageView foto;
+    private ImageButton botonCamera;
 
+    //---------------------------------------------------------------------------
+    // Metodo llamado al crear la actividad
+    //---------------------------------------------------------------------------
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        fotoViewModel =
-                ViewModelProviders.of(this).get(FotoViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_foto, container, false);
-        btnCamera= root.findViewById(R.id.foto_button);
 
-        btnCamera.setOnClickListener(new View.OnClickListener() {
+        View root = inflater.inflate(R.layout.fragment_foto, container, false);
+        botonCamera= root.findViewById(R.id.foto_button);
+        foto = root.findViewById(R.id.imagen);
+
+        // Escuchador del boton que abre la cámara
+        botonCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                // String con los permisos necesarios
                 String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA};
 
+                // Ifs que dependen de si la aplicacion tiene ya los permisos necesarios
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {// Marshmallow+
                     if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                             && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {// Si no hay ningun permiso
@@ -88,6 +104,7 @@ public class FotoFragment extends Fragment {
                     Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(i, 0);
                 }
+                // /IFs
             }
         });
 
@@ -101,13 +118,30 @@ public class FotoFragment extends Fragment {
 
     }*/
 
+    //------------------------------------------------------------------------------
+    // Se llama despues de tomar una foto para mostrar la imagen en el ImageView
+    //------------------------------------------------------------------------------
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+            if (resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                foto.setImageBitmap(imageBitmap);
+            }
+    }
+
+    //------------------------------------------------------------------------------
+    // Se llama despues de dar o denegar los permisos
+    //------------------------------------------------------------------------------
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         Log.d("hola","si");
         switch (requestCode) {
-            case PEDIR_1_PERMISO : {
+            case PEDIR_1_PERMISO : {// En el caso  de que la aplicacion haya solicitado aceptar un permiso
                 // Si la petición es cancelada, el array resultante estará vacío.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {//En el caso de haberlo permitido
                     // El permiso ha sido concedido.
                     Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(i,0);
@@ -116,9 +150,10 @@ public class FotoFragment extends Fragment {
                 }
                 return;
             }
-            case PEDIR_2_PERMISOS : {
+            case PEDIR_2_PERMISOS : {// En el caso  de que la aplicacion haya solicitado aceptar dos permisos
                 // Si la petición es cancelada, el array resultante estará vacío.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {//En el caso de haberlos permitido
                     // El permiso ha sido concedido.
                     Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(i,0);
