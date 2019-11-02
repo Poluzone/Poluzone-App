@@ -203,8 +203,8 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
             Intent i = new Intent(this, NavigationDrawerActivity.class);
             Log.d("pruebas", "intent main");
             this.startActivity(i);
-            mostrarProgress(false);
             this.finish();
+            mostrarProgress(false);
         }
         else {
             mostrarProgress(false);

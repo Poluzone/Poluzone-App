@@ -40,7 +40,7 @@ public class PerfilFragment extends Fragment {
         TextInputEditText tlfinput = root.findViewById(R.id.textotelefono);
 
         // acceder speed dial
-        speedDialView = root.findViewById(R.id.fab);
+        speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
         speedDialView.hide();
 
         FloatingActionButton fab = root.findViewById(R.id.fabNormal);
