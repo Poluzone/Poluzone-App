@@ -44,8 +44,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:elevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:sdOverlayLayout="@id/overlay" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

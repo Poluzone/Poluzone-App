@@ -52,14 +52,6 @@ public class PerfilFragment extends Fragment {
         emailinput.setText(email);
         tlfinput.setText(tlf);
 
-
-        /*final TextView textView = root.findViewById(R.id.text_foto);
-        fotoViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/ // Esto era para cambiar un texto que tenia por defecto la navigation Activity que te decia en que fragmento estabas
         return root;
     }
 }
