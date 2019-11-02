@@ -1,36 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
-<!--
-    <TextView
-        android:id="@+id/text_foto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:textColor="@color/cardview_light_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
--->
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="228dp"
-        android:layout_height="23dp"
-        android:text="Aquí ira la cámara"
-        android:textColor="@color/cardview_light_background"
-        app:autoSizeTextType="uniform"
+    <ImageButton
+        android:id="@+id/foto_button"
+        android:layout_width="156dp"
+        android:layout_height="140dp"
+        android:backgroundTint="#00FFFFFF"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.474"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/borde_imagen"
+        app:layout_constraintVertical_bias="0.276"
+        app:srcCompat="@drawable/ic_menu_camera" />
 
+    <ImageView
+        android:id="@+id/borde_imagen"
+        android:layout_width="225dp"
+        android:layout_height="225dp"
+        android:layout_marginTop="172dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/colorPrimaryDark" />
+
+    <ImageView
+        android:id="@+id/imagen"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toBottomOf="@+id/borde_imagen"
+        app:layout_constraintEnd_toEndOf="@+id/borde_imagen"
+        app:layout_constraintStart_toStartOf="@+id/borde_imagen"
+        app:layout_constraintTop_toTopOf="@+id/borde_imagen"
+        app:srcCompat="@color/colorPrimary" />
 </androidx.constraintlayout.widget.ConstraintLayout>
