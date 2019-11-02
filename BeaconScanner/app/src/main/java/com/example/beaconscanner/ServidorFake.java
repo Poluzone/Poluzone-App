@@ -261,7 +261,7 @@ public class ServidorFake {
                         NetworkResponse networkResponse = error.networkResponse;
                         Log.d("pruebas",error.toString());
                         if (error instanceof NoConnectionError || error instanceof TimeoutError) {
-                            Toast.makeText(activity, "Error de conexión", Toast.LENGTH_LONG).show();
+                            callbackLogin.callbackLogin(false, null);
                         }
                         else if (networkResponse.statusCode == 404){
                             Log.d("pruebas",networkResponse.statusCode + "");
