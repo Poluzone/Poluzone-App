@@ -53,58 +53,16 @@ public class FotoFragment extends Fragment {
         botonCamera= root.findViewById(R.id.foto_button);
         foto = root.findViewById(R.id.imagen);
 
+        // Para no tener que darle al boton de la camara para que esta se abra:
+        abrirCamara();
+
         // Escuchador del boton que abre la cámara
         botonCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                // String con los permisos necesarios
-                String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA};
+                abrirCamara();
 
-                // Ifs que dependen de si la aplicacion tiene ya los permisos necesarios
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {// Marshmallow+
-                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                            && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {// Si no hay ningun permiso
-                            requestPermissions(perms,
-                                    PEDIR_2_PERMISOS);
-                    }else {
-
-                        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            // Should we show an explanation?
-                            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                                // Show an expanation to the user *asynchronously* -- don't block
-                                // this thread waiting for the user's response! After the user
-                                // sees the explanation, try again to request the permission.
-                                // No se necesita dar una explicación al usuario, sólo pedimos el permiso.
-                                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                        PEDIR_1_PERMISO);
-                            }
-                        } else { //have permissions
-                            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                                // Should we show an explanation?
-                                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.CAMERA)) {
-                                    // Show an expanation to the user *asynchronously* -- don't block
-                                    // this thread waiting for the user's response! After the user
-                                    // sees the explanation, try again to request the permission.
-                                    // No se necesita dar una explicación al usuario, sólo pedimos el permiso.
-                                    requestPermissions(new String[]{Manifest.permission.CAMERA},
-                                            PEDIR_1_PERMISO);
-                                    // MY_PERMISSIONS_REQUEST_CAMARA es una constante definida en la app. El método callback obtiene el resultado de la petición.
-                                }
-                            } else { //have permissions
-                                Log.d("hola", "3");
-                                Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                startActivityForResult(i, 0);
-                            }
-                    }
-
-                    }
-                } else { // Pre-Marshmallow
-                    Log.d("hola", "4");
-                    Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(i, 0);
-                }
-                // /IFs
             }
         });
 
@@ -117,6 +75,57 @@ public class FotoFragment extends Fragment {
 
 
     }*/
+
+    private void abrirCamara(){
+        // String con los permisos necesarios
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA};
+
+        // Ifs que dependen de si la aplicacion tiene ya los permisos necesarios
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {// Marshmallow+
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {// Si no hay ningun permiso
+                requestPermissions(perms,
+                        PEDIR_2_PERMISOS);
+            }else {
+
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        // Show an expanation to the user *asynchronously* -- don't block
+                        // this thread waiting for the user's response! After the user
+                        // sees the explanation, try again to request the permission.
+                        // No se necesita dar una explicación al usuario, sólo pedimos el permiso.
+                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                PEDIR_1_PERMISO);
+                    }
+                } else { //have permissions
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        // Should we show an explanation?
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.CAMERA)) {
+                            // Show an expanation to the user *asynchronously* -- don't block
+                            // this thread waiting for the user's response! After the user
+                            // sees the explanation, try again to request the permission.
+                            // No se necesita dar una explicación al usuario, sólo pedimos el permiso.
+                            requestPermissions(new String[]{Manifest.permission.CAMERA},
+                                    PEDIR_1_PERMISO);
+                            // MY_PERMISSIONS_REQUEST_CAMARA es una constante definida en la app. El método callback obtiene el resultado de la petición.
+                        }
+                    } else { //have permissions
+                        Log.d("hola", "3");
+                        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(i, 0);
+                    }
+                }
+
+            }
+        } else { // Pre-Marshmallow
+            Log.d("hola", "4");
+            Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(i, 0);
+        }
+        // /IFs
+    }
+
 
     //------------------------------------------------------------------------------
     // Se llama despues de tomar una foto para mostrar la imagen en el ImageView
