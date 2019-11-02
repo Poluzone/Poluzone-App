@@ -1,6 +1,5 @@
 package com.example.beaconscanner;
 
-//Imports para hacer imagen redonda
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -123,7 +122,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     }
 
     //------------------------------------------------------------------------------
-    // Método de la actividad del Navigation Drawer
+    // Método de la actividad del Navigation Drawer que se llama al abrir el menu
     // -----------------------------------------------------------------------
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -138,6 +137,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         return true;
     }
 
+    //------------------------------------------------------------------------------
+    // Método de la actividad del Navigation Drawer
+    // -----------------------------------------------------------------------
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
