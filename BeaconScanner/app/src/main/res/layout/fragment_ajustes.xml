@@ -42,6 +42,7 @@
         android:layout_width="122dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"
+        android:gravity="center"
         android:text="Modo claro"
         android:textColor="@color/cardview_light_background"
         app:autoSizeTextType="uniform"
@@ -56,9 +57,14 @@
         android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="41dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center|center_horizontal|fill_horizontal|center_vertical|fill_vertical"
         android:textColor="@color/cardview_light_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.06"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.133" />
 </androidx.constraintlayout.widget.ConstraintLayout>
