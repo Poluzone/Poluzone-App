@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
 
-    CircularProgressView progressView;
+    private CircularProgressView progressView;
 
 
     @Override
@@ -217,7 +217,7 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
     // ---------------------------------------------------------------------------
     // V/F -> mostrarProgress() ->
     // ---------------------------------------------------------------------------
-    public void mostrarProgress(Boolean mostrar) {
+    private void mostrarProgress(Boolean mostrar) {
         if (mostrar) {
             progressView.resetAnimation();
             progressView.setVisibility(View.VISIBLE);

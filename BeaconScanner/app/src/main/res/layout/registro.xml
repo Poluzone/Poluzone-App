@@ -73,6 +73,16 @@
         app:layout_constraintStart_toStartOf="@+id/materialCardView"
         app:layout_constraintTop_toBottomOf="@+id/materialCardView">
 
+
+        <com.github.rahatarmanahmed.cpv.CircularProgressView
+            android:id="@+id/progress_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:elevation="10dp"
+            app:cpv_color="#ffffff"
+            app:cpv_indeterminate="true" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_register"
             style="@style/Widget.MaterialComponents.Button"

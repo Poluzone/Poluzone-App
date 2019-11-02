@@ -7,9 +7,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import org.json.JSONObject;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,6 +24,11 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
     // Para recordar que se ha registrado
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
+
+    private CircularProgressView progressView;
+
+    Button buttonRegistrarse;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +42,9 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
 
         servidorFake = new ServidorFake(this);
 
-        Button buttonRegistrarse = findViewById(R.id.button_register);
+        buttonRegistrarse = findViewById(R.id.button_register);
+
+        progressView  = (CircularProgressView) findViewById(R.id.progress_view);
 
         // Para el botón registrarse
         buttonRegistrarse.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +59,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
     // -> registrar() ->
     // ---------------------------------------------------------------------------
     public void registrar() {
+        mostrarProgress(true);
         TextInputEditText inputEmail = findViewById(R.id.texto_email_registrar);
 
         String email = inputEmail.getText().toString();
@@ -74,6 +86,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
         if (!email.contains("@") || !email.contains(".") || email.contains(" ")) {
             inputEmailLayout.setError(getString(R.string.errorEmail));
+            mostrarProgress(false);
             return false;
         }
         else return true;
@@ -95,6 +108,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             // Comprobar que las dos contraseñas coincidan
             if (!pass1.equals(pass2)) {
                 inputPassAgainLayout.setError(getString(R.string.errorContrasenyaNoCoincide));
+                mostrarProgress(false);
                 return false;
             }
             else return true;
@@ -102,6 +116,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         else {
             // Mostrar error si no coincide
             inputPassLayout.setError(getString(R.string.falloFormatoPass));
+            mostrarProgress(false);
             return false;
         }
 
@@ -123,18 +138,22 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
 
         if (email.equals("")) {
             inputEmailLayout.setError(getString(R.string.completar));
+            mostrarProgress(false);
             return false;
         }
         else if (pass1.equals("")) {
             texto_contrasenya_registrar_layout.setError(getString(R.string.completar));
+            mostrarProgress(false);
             return false;
         }
         else if (pass2.equals("")) {
             texto_contrasenyaotravez_registrar_layout.setError(getString(R.string.completar));
+            mostrarProgress(false);
             return false;
         }
         else if (telefono.equals("")) {
             texto_telefono_registrar_layout.setError(getString(R.string.completar));
+            mostrarProgress(false);
             return false;
         }
         else {
@@ -143,7 +162,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
     }
 
     @Override
-    public void callbackRegistro(boolean resultadoRegistro) {
+    public void callbackRegistro(boolean resultadoRegistro, JSONObject response) {
         if (resultadoRegistro) {
             TextInputEditText inputEmail = findViewById(R.id.texto_email_registrar);
             String email = inputEmail.getText().toString();
@@ -162,11 +181,32 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             Intent i = new Intent(this, NavigationDrawerActivity.class);
             Log.d("pruebas", "intent main");
             this.startActivity(i);
+            mostrarProgress(false);
             this.finish();
         }
         else {
             TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
-            inputEmailLayout.setError(getString(R.string.yaExiste));
+            mostrarProgress(false);
+            if (response == null) Toast.makeText(this, "Error de conexión", Toast.LENGTH_LONG).show();
+            else inputEmailLayout.setError(getString(R.string.yaExiste));
+        }
+    }
+
+    // ---------------------------------------------------------------------------
+    // V/F -> mostrarProgress() ->
+    // ---------------------------------------------------------------------------
+    private void mostrarProgress(Boolean mostrar) {
+        if (mostrar) {
+            progressView.resetAnimation();
+            progressView.setVisibility(View.VISIBLE);
+            buttonRegistrarse.setText("");
+            progressView.startAnimation();
+        }
+        else {
+            progressView.resetAnimation();
+            progressView.setVisibility(View.INVISIBLE);
+            progressView.stopAnimation();
+            buttonRegistrarse.setText(R.string.registrarse);
         }
     }
 }
