@@ -66,6 +66,15 @@
             app:backgroundTint="@color/colorAccent"
             />
 
+        <com.github.rahatarmanahmed.cpv.CircularProgressView
+            android:id="@+id/progress_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:elevation="10dp"
+            app:cpv_color="#ffffff"
+            app:cpv_indeterminate="true" />
+
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
@@ -173,6 +182,18 @@
         app:layout_constraintEnd_toEndOf="@+id/materialCardView"
         app:layout_constraintStart_toStartOf="@+id/materialCardView"
         app:layout_constraintTop_toBottomOf="@+id/materialCardViewBoton" />
+
+<!--    <com.github.rahatarmanahmed.cpv.CircularProgressView
+        android:id="@+id/progress_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:elevation="3dp"
+        app:cpv_indeterminate="true"
+        app:layout_constraintBottom_toTopOf="@+id/registrateaqui"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialCardViewBoton" /> -->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

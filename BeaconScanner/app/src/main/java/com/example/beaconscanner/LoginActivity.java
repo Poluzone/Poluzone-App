@@ -9,16 +9,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LoginActivity extends AppCompatActivity implements CallbackLogin{
+public class LoginActivity extends AppCompatActivity implements CallbackLogin {
 
     // Servidor
     ServidorFake servidorFake;
@@ -34,6 +34,9 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
 
     public Usuario usuario;
 
+    CircularProgressView progressView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,8 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
         inputPassLayout = findViewById(R.id.texto_password_layout);
         inputEmailLayout = findViewById(R.id.texto_email_layout);
         botonLogearse = findViewById(R.id.botonLogin);
+
+        progressView  = (CircularProgressView) findViewById(R.id.progress_view);
 
         final TextInputLayout inputPassLayout = findViewById(R.id.texto_password_layout);
         final TextInputEditText inputEmail = findViewById(R.id.texto_email);
@@ -139,6 +144,9 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
     // -> logearse() ->
     // ---------------------------------------------------------------------------
     public void logearse() {
+        progressView.resetAnimation();
+        progressView.startAnimation();
+
         inputPassLayout.setError(null);
         inputEmailLayout.setError(null);
         TextInputEditText inputEmail = findViewById(R.id.texto_email);
@@ -154,6 +162,7 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
     // -> errorLogin() ->
     // ---------------------------------------------------------------------------
     private void errorLogin() {
+        progressView.stopAnimation();
         inputEmailLayout.setError(" ");
         inputPassLayout.setError("Email y/o contraseña incorrecta");
     }
@@ -197,6 +206,7 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
             Intent i = new Intent(this, NavigationDrawerActivity.class);
             Log.d("pruebas", "intent main");
             this.startActivity(i);
+            progressView.stopAnimation();
             this.finish();
         }
         else {
