@@ -265,17 +265,12 @@ public class ServidorFake {
                         }
                         else if (networkResponse.statusCode == 404){
                             Log.d("pruebas",networkResponse.statusCode + "");
-                            TextInputLayout inputPassLayout = activity.findViewById(R.id.texto_password_layout);
-                            inputPassLayout.setError("Email y/o contraseña incorrecta");
-                            TextInputLayout inputEmailLayout = activity.findViewById(R.id.texto_email_layout);
-                            inputEmailLayout.setError(" ");
+                            callbackLogin.callbackLogin(false, null);
+
                         }
                         else if (networkResponse.statusCode == 401){
                             Log.d("pruebas",networkResponse.statusCode + "");
-                            TextInputLayout inputPassLayout = activity.findViewById(R.id.texto_password_layout);
-                            inputPassLayout.setError("Email y/o contraseña incorrecta");
-                            TextInputLayout inputEmailLayout = activity.findViewById(R.id.texto_email_layout);
-                            inputEmailLayout.setError(" ");
+                            callbackLogin.callbackLogin(false, null);
                         }
                     }
                 }
