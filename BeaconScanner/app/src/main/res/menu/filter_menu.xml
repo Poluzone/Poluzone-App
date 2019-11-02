@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="all">
+        <item android:id="@+id/calidadFilter"
+            android:icon="@drawable/icon"
+            android:title="@string/calidad" />
+
+        <item android:id="@+id/so2Filter"
+            android:icon="@drawable/icon"
+            android:title="@string/dioxidoAzufre" />
+
+        <item android:id="@+id/ozonoFilter"
+            android:icon="@drawable/icon"
+            android:title="@string/ozono" />
+
+        <item android:id="@+id/irritantesFilter"
+            android:icon="@drawable/icon"
+            android:title="@string/irritantes" />
+    </group>
+</menu>

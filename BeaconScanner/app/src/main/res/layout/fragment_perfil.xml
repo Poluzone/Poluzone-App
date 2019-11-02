@@ -130,7 +130,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:duplicateParentState="false"
-                    android:editable="false"
                     android:fontFamily="@font/nunito"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
@@ -156,7 +155,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:duplicateParentState="false"
-                    android:editable="false"
                     android:fontFamily="@font/nunito"
                     android:inputType="phone"
                     android:maxLines="1"
@@ -214,5 +212,20 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabNormal"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="23dp"
+        android:background="@color/colorAccent"
+        android:foregroundTint="@android:color/white"
+        app:backgroundTint="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@android:color/white"
+        app:tint="@android:color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

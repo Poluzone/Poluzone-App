@@ -9,16 +9,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LoginActivity extends AppCompatActivity implements CallbackLogin{
+public class LoginActivity extends AppCompatActivity implements CallbackLogin {
 
     // Servidor
     ServidorFake servidorFake;
@@ -32,7 +34,8 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
 
-    public Usuario usuario;
+    CircularProgressView progressView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,8 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
         inputPassLayout = findViewById(R.id.texto_password_layout);
         inputEmailLayout = findViewById(R.id.texto_email_layout);
         botonLogearse = findViewById(R.id.botonLogin);
+
+        progressView  = (CircularProgressView) findViewById(R.id.progress_view);
 
         final TextInputLayout inputPassLayout = findViewById(R.id.texto_password_layout);
         final TextInputEditText inputEmail = findViewById(R.id.texto_email);
@@ -146,6 +151,7 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
         String email = inputEmail.getText().toString();
         String pass = inputPass.getText().toString();
         if (validarSiEstanVacios(email, pass)) {
+            mostrarProgress(true);
             servidorFake.comprobarUsuarioPorEmail(email, pass);
         }
     }
@@ -177,7 +183,7 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
 
 
     // ---------------------------------------------------------------------------
-    // resultadoLogin: V/F -> callbackLogin() ->
+    // resultadoLogin: V/F, respuesta -> callbackLogin() ->
     // ---------------------------------------------------------------------------
     @Override
     public void callbackLogin(boolean resultadoLogin, JSONObject response){
@@ -198,10 +204,31 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin{
             Log.d("pruebas", "intent main");
             this.startActivity(i);
             this.finish();
+            mostrarProgress(false);
         }
         else {
+            mostrarProgress(false);
             // Mostramos los mensajes de error en pantalla
-           errorLogin();
+            if (response == null) Toast.makeText(this, "Error de conexión", Toast.LENGTH_LONG).show();
+            else errorLogin();
+        }
+    }
+
+    // ---------------------------------------------------------------------------
+    // V/F -> mostrarProgress() ->
+    // ---------------------------------------------------------------------------
+    public void mostrarProgress(Boolean mostrar) {
+        if (mostrar) {
+            progressView.resetAnimation();
+            progressView.setVisibility(View.VISIBLE);
+            botonLogearse.setText("");
+            progressView.startAnimation();
+        }
+        else {
+            progressView.resetAnimation();
+            progressView.setVisibility(View.INVISIBLE);
+            progressView.stopAnimation();
+            botonLogearse.setText(R.string.login);
         }
     }
 
