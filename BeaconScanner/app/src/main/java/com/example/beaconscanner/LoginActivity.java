@@ -37,10 +37,9 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
 
     private CircularProgressView progressView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        setTheme(R.style.LoginTheme);
 
         //  Declare a new thread to do a preference check
         Thread t = new Thread(new Runnable() {
@@ -80,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
         // Start the thread
         t.start();
 
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.login);
 
