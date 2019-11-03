@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
@@ -45,6 +46,17 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         buttonRegistrarse = findViewById(R.id.button_register);
 
         progressView  = (CircularProgressView) findViewById(R.id.progress_view);
+
+        TextView loginaqui = findViewById(R.id.loginaqui);
+
+
+        loginaqui.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
 
         // Para el botón registrarse
         buttonRegistrarse.setOnClickListener(new View.OnClickListener() {

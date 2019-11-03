@@ -1,8 +1,10 @@
 package com.example.beaconscanner;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -12,10 +14,14 @@ import com.github.paolorotolo.appintro.AppIntro2Fragment;
 import com.github.paolorotolo.appintro.model.SliderPage;
 
 public class IntroActivity extends AppIntro2 {
+    SharedPreferences getPrefs;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(R.style.LoginTheme);
         super.onCreate(savedInstanceState);
+
+        //  Initialize SharedPreferences
+        getPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
         // Just create a `SliderPage` and provide title, description, background and image.
         // AppIntro will do the rest.
@@ -65,6 +71,14 @@ public class IntroActivity extends AppIntro2 {
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
+        //  Make a new preferences editor
+        SharedPreferences.Editor e = getPrefs.edit();
+
+        //  Edit preference to make it false because we don't want this to run again
+        e.putBoolean("firstStart", false);
+
+        //  Apply changes
+        e.apply();
         final Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
     }

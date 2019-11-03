@@ -34,13 +34,12 @@
             android:name=".NavigationDrawerActivity"
             android:hardwareAccelerated="false"
             android:theme="@style/LoginTheme">
-
         </activity>-->
         <activity android:name=".RegistrarUsuarioActivity" android:theme="@style/LoginTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" android:noHistory="false">
         </activity>
         <activity android:name=".LoginActivity"
-            android:screenOrientation="portrait" android:noHistory="true">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

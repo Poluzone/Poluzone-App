@@ -40,11 +40,8 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.LoginTheme);
+        super.onCreate(savedInstanceState);
 
-        //  Declare a new thread to do a preference check
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
                 //  Initialize SharedPreferences
                 SharedPreferences getPrefs = PreferenceManager
                         .getDefaultSharedPreferences(getBaseContext());
@@ -63,120 +60,106 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
                             startActivity(i);
                         }
                     });
-
-                    //  Make a new preferences editor
-                    SharedPreferences.Editor e = getPrefs.edit();
-
-                    //  Edit preference to make it false because we don't want this to run again
-                    e.putBoolean("firstStart", false);
-
-                    //  Apply changes
-                    e.apply();
                 }
-            }
-        });
 
-        // Start the thread
-        t.start();
+                else {
+                    setContentView(R.layout.login);
 
-        super.onCreate(savedInstanceState);
+                    servidorFake = new ServidorFake(this);
+                    TextView registrateaqui = findViewById(R.id.registrateaqui);
+                    inputPassLayout = findViewById(R.id.texto_password_layout);
+                    inputEmailLayout = findViewById(R.id.texto_email_layout);
+                    botonLogearse = findViewById(R.id.botonLogin);
 
-        setContentView(R.layout.login);
+                    progressView  = (CircularProgressView) findViewById(R.id.progress_view);
 
-        servidorFake = new ServidorFake(this);
-        TextView registrateaqui = findViewById(R.id.registrateaqui);
-        inputPassLayout = findViewById(R.id.texto_password_layout);
-        inputEmailLayout = findViewById(R.id.texto_email_layout);
-        botonLogearse = findViewById(R.id.botonLogin);
+                    final TextInputLayout inputPassLayout = findViewById(R.id.texto_password_layout);
+                    final TextInputEditText inputEmail = findViewById(R.id.texto_email);
+                    final TextInputEditText inputPass = findViewById(R.id.texto_pass);
 
-        progressView  = (CircularProgressView) findViewById(R.id.progress_view);
+                    // Primero comprobamos si ya hizo login anteriormente
+                    // Recogemos las preferencias de la app
+                    loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+                    loginPrefsEditor = loginPreferences.edit();
 
-        final TextInputLayout inputPassLayout = findViewById(R.id.texto_password_layout);
-        final TextInputEditText inputEmail = findViewById(R.id.texto_email);
-        final TextInputEditText inputPass = findViewById(R.id.texto_pass);
+                    String email = loginPreferences.getString("email", "");
+                    String pass = loginPreferences.getString("pass", "");
 
-        // Primero comprobamos si ya hizo login anteriormente
-        // Recogemos las preferencias de la app
-        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        loginPrefsEditor = loginPreferences.edit();
+                    Log.d("pruebas", " preferencias: " + email);
+                    Log.d("pruebas", " preferencias: " + pass);
 
-        String email = loginPreferences.getString("email", "");
-        String pass = loginPreferences.getString("pass", "");
+                    // Si se ha rellenado hacemos el login
+                    if (validarSiEstanVacios(email, pass)) {
+                        servidorFake.comprobarUsuarioPorEmail(email, pass);
+                    }
 
-        Log.d("pruebas", " preferencias: " + email);
-        Log.d("pruebas", " preferencias: " + pass);
-
-        // Si se ha rellenado hacemos el login
-        if (validarSiEstanVacios(email, pass)) {
-            servidorFake.comprobarUsuarioPorEmail(email, pass);
-        }
-
-        registrateaqui.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), RegistrarUsuarioActivity.class);
-                startActivity(i);
-            }
-        });
+                    registrateaqui.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(getApplicationContext(), RegistrarUsuarioActivity.class);
+                            startActivity(i);
+                        }
+                    });
 
 
-        botonLogearse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logearse();
-            }
-        });
+                    botonLogearse.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            logearse();
+                        }
+                    });
 
 
-        inputEmail.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+                    inputEmail.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                inputEmailLayout.setError(null);
-            }
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            inputEmailLayout.setError(null);
+                        }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
 
-        });
+                    });
 
-        inputEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    inputEmail.setText(null);
+                    inputEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            if (hasFocus) {
+                                inputEmail.setText(null);
+                            }
+                        }
+                    });
+
+                    inputPass.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            inputPassLayout.setError(null);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+
+                    });
+
+                    inputPass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            if (hasFocus) {
+                                inputPass.setText(null);
+                            }
+                        }
+                    });
                 }
-            }
-        });
-
-        inputPass.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                inputPassLayout.setError(null);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-        });
-
-        inputPass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    inputPass.setText(null);
-                }
-            }
-        });
     }
 
 
