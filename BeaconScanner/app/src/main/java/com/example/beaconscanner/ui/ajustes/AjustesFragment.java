@@ -14,12 +14,14 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.beaconscanner.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.leinardi.android.speeddial.SpeedDialView;
 
 public class AjustesFragment extends Fragment {
     //---------------------------------------------------------------------------
     //Clase relacionada con el botón Ajustes
     //---------------------------------------------------------------------------
     private AjustesViewModel ajustesViewModel;
+    private SpeedDialView speedDialView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -27,7 +29,9 @@ public class AjustesFragment extends Fragment {
                 ViewModelProviders.of(this).get(AjustesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_ajustes, container, false);
 
-        FloatingActionButton fab = root.findViewById(R.id.fab);
+        // acceder speed dial para esconderlo
+        speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
+        speedDialView.hide();
 
         /*final TextView textView = root.findViewById(R.id.text_ajustes);
         ajustesViewModel.getText().observe(this, new Observer<String>() {

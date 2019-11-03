@@ -28,6 +28,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.beaconscanner.R;
+import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class FotoFragment extends Fragment {
     private final int PEDIR_2_PERMISOS=2;
     private ImageView foto;
     private ImageButton botonCamera;
+    private SpeedDialView speedDialView;
 
     //---------------------------------------------------------------------------
     // Metodo llamado al crear la actividad
@@ -50,6 +52,11 @@ public class FotoFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_foto, container, false);
+        
+        // acceder speed dial para esconderlo
+        speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
+        speedDialView.hide();
+
         botonCamera= root.findViewById(R.id.foto_button);
         foto = root.findViewById(R.id.imagen);
 

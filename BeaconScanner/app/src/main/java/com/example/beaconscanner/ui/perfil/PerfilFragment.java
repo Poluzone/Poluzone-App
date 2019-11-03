@@ -43,9 +43,6 @@ public class PerfilFragment extends Fragment {
         speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
         speedDialView.hide();
 
-        FloatingActionButton fab = root.findViewById(R.id.fabNormal);
-        fab.setImageResource(R.drawable.edit_account);
-
         emailinput.setEnabled(false);
         tlfinput.setEnabled(false);
 

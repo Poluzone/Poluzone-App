@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.beaconscanner.R;
+import com.leinardi.android.speeddial.SpeedDialView;
 
 public class MapaFragment extends Fragment {
 
@@ -21,12 +22,16 @@ public class MapaFragment extends Fragment {
     //---------------------------------------------------------------------------
 
     private MapaViewModel mapaViewModel;
+    private SpeedDialView speedDialView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mapaViewModel =
                 ViewModelProviders.of(this).get(MapaViewModel.class);
         View root = inflater.inflate(R.layout.activity_main, container, false);
+        // acceder speed dial
+        speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
+        speedDialView.show();
         final TextView textView = root.findViewById(R.id.text_home);
         mapaViewModel.getText().observe(this, new Observer<String>() {
             @Override
