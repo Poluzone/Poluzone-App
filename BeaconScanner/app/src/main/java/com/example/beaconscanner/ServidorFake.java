@@ -192,14 +192,15 @@ public class ServidorFake {
                         Log.d("pruebas",response.toString());
                         try {
                             if (response.get("status").equals(true)) {
-                                callbackRegistro.callbackRegistro(true);
+                                callbackRegistro.callbackRegistro(true, response);
                             }
                             else {
-                                callbackRegistro.callbackRegistro(false);
+                                callbackRegistro.callbackRegistro(false, response);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d("pruebas", e.toString());
+                            callbackRegistro.callbackRegistro(false, null);
                         }
                     //    callbackLogin.callbackLogin(true, response);
                     }
@@ -207,7 +208,20 @@ public class ServidorFake {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        NetworkResponse networkResponse = error.networkResponse;
                         Log.d("pruebas",error.toString());
+                        if (error instanceof NoConnectionError || error instanceof TimeoutError) {
+                            callbackRegistro.callbackRegistro(false, null);
+                        }
+                        else if (networkResponse.statusCode == 404){
+                            Log.d("pruebas",networkResponse.statusCode + "");
+                            callbackRegistro.callbackRegistro(false, null);
+
+                        }
+                        else if (networkResponse.statusCode == 401){
+                            Log.d("pruebas",networkResponse.statusCode + "");
+                            callbackRegistro.callbackRegistro(false, null);
+                        }
                     }
                 }
         );
@@ -261,21 +275,16 @@ public class ServidorFake {
                         NetworkResponse networkResponse = error.networkResponse;
                         Log.d("pruebas",error.toString());
                         if (error instanceof NoConnectionError || error instanceof TimeoutError) {
-                            Toast.makeText(activity, "Error de conexión", Toast.LENGTH_LONG).show();
+                            callbackLogin.callbackLogin(false, null);
                         }
                         else if (networkResponse.statusCode == 404){
                             Log.d("pruebas",networkResponse.statusCode + "");
-                            TextInputLayout inputPassLayout = activity.findViewById(R.id.texto_password_layout);
-                            inputPassLayout.setError("Email y/o contraseña incorrecta");
-                            TextInputLayout inputEmailLayout = activity.findViewById(R.id.texto_email_layout);
-                            inputEmailLayout.setError(" ");
+                            callbackLogin.callbackLogin(false, null);
+
                         }
                         else if (networkResponse.statusCode == 401){
                             Log.d("pruebas",networkResponse.statusCode + "");
-                            TextInputLayout inputPassLayout = activity.findViewById(R.id.texto_password_layout);
-                            inputPassLayout.setError("Email y/o contraseña incorrecta");
-                            TextInputLayout inputEmailLayout = activity.findViewById(R.id.texto_email_layout);
-                            inputEmailLayout.setError(" ");
+                            callbackLogin.callbackLogin(false, null);
                         }
                     }
                 }
