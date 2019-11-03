@@ -23,17 +23,24 @@
         <activity
             android:name=".NavigationDrawerActivity"
             android:label="@string/title_activity_navigation_drawer"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
         </activity>
+
+        <activity android:name="com.example.beaconscanner.IntroActivity"
+            android:label="@string/app_intro"
+            android:screenOrientation="portrait"/>
      <!--   <activity
             android:name=".NavigationDrawerActivity"
             android:hardwareAccelerated="false"
             android:theme="@style/LoginTheme">
 
         </activity>-->
-        <activity android:name=".RegistrarUsuarioActivity" android:theme="@style/LoginTheme">
+        <activity android:name=".RegistrarUsuarioActivity" android:theme="@style/LoginTheme"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".LoginActivity" android:theme="@style/LoginTheme">
+        <activity android:name=".LoginActivity" android:theme="@style/LoginTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

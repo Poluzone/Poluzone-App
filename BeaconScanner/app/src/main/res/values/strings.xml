@@ -44,4 +44,7 @@
     <string name="ozono">Ozono</string>
     <string name="dioxidoAzufre">Dióxido de azufre</string>
     <string name="irritantes">Gases irritantes</string>
+
+    <string name="app_intro">Poluzone intro</string>
+
 </resources>
