@@ -36,6 +36,12 @@ import android.widget.TextView;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
+// -----------------------------------------------------------------------
+// NavigationDrawerActivity.java
+// Equipo 3
+// Autor: Iván Romero, Emilia Rosa van der Heide
+// CopyRight:
+// -----------------------------------------------------------------------
 public class NavigationDrawerActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -105,15 +111,15 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         //.............................................................................
 
 
-            // Creamos el receptorBLE indicando la actividad y el uuid que buscamos
-            receptorBLE = new ReceptorBLE(this, nuestroUUID);
-            Log.d("pruebas", "receptor creado");
+        // Creamos el receptorBLE indicando la actividad y el uuid que buscamos
+        receptorBLE = new ReceptorBLE(this, nuestroUUID);
+        Log.d("pruebas", "receptor creado");
 
-            // Creamos el servidorFake indicando la direccion ip y el puerto
-            servidorFake = new ServidorFake(this);
+        // Creamos el servidorFake indicando la direccion ip y el puerto
+        servidorFake = new ServidorFake(this);
 
-            // Empezar temporizador para mandar al servidor (modo prueba)
-            empezarAContar();
+        // Empezar temporizador para mandar al servidor (temporal)
+        alarmaQueSuenaCadaMinuto();
 
         //.............................................................................
         // /Backend
@@ -148,40 +154,13 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     }
 
     // -----------------------------------------------------------------------
-    // uuid, major -> mostrarUUID ->
-    // Mostrar las lecturas del BLE por la pantalla del movil
-    // -----------------------------------------------------------------------
-    public void mostrarUUID (String uuid, String major) {
-        /*button.setClickable(true);
-        textView.setText("UUID del device: " + uuid);
-        textView2.setText("Major: " + major);*/
-    }
-
-    // -----------------------------------------------------------------------
     // -> hayQueActualizarMedicionesYEnviarlasAlServidor ->
     // Enviar las mediciones al servidor
     // -----------------------------------------------------------------------
     public void hayQueActualizarMedicionesYEnviarlasAlServidor() {
         Medida medida = receptorBLE.obtenerContaminacion();
-        Log.d ("pruebas", "valor: " + medida.getMedida() + " tiempo: " + medida.getTiempo() + " lati: " + medida.getPosicion().getLatitude());
-        servidorFake.guardarContaminacion(medida);
-    }
-
-    // -----------------------------------------------------------------------
-    // -> recibirMedicionesDelServidor ->
-    // Recibir las mediciones del servidor
-    // -----------------------------------------------------------------------
-    public void recibirMedicionesDelServidor () {
-        servidorFake.getContaminacion();
-    }
-
-
-    // -----------------------------------------------------------------------
-    // Medida -> mostrarDelServidor ->
-    // Mostrar las lecturas del servidor por la pantalla del movil
-    // -----------------------------------------------------------------------
-    public void mostrarDelServidor(Medida medida) {
-        textViewRecibir.setText("Dato del servidor: \n" + "Valor: "+ medida.getMedida() + "\nPosicion: " + medida.getPosicion().getLatitude() + " " + medida.getPosicion().getLongitude() + "\nTiempo: " + medida.getTiempo() );
+        Log.d("pruebas", "valor: " + medida.getMedida() + " tiempo: " + medida.getTiempo() + " lati: " + medida.getPosicion().getLatitude());
+        servidorFake.insertarMedida(medida);
     }
 
     //--------------------------------------------------------------------------
@@ -211,7 +190,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     // -> crearFabSpeedDial ->
     // -----------------------------------------------------------------------
     private void crearFabSpeedDial() {
-        // ---------- FAB SPEED DIAL ------------------------------------------------------------------------------------
+        // ---------- FAB SPEED DIAL -----------------------------------------
 
         // acceder speed dial
         speedDialView = findViewById(R.id.fab);
@@ -315,7 +294,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
                 // El switch cambia el checked del item dependiendo del item
                 // -- falta implementar el filtrado real de los contenedores
-                switch(item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.ozonoFilter:
                         if (item.isChecked()) showOnMap[0] = 1;
                         else showOnMap[0] = 0;
@@ -352,9 +331,11 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     }
 
     // -----------------------------------------------------------------------
-    // -> empezarAContar ->
+    // -> alarmaQueSuenaCadaMinuto ->
+    // Crea el handler para el timer de hayqueactualizarmediciones
+    // A modo de prueba suena cada 10 segundos
     // -----------------------------------------------------------------------
-    public void empezarAContar() {
+    public void alarmaQueSuenaCadaMinuto() {
         handler = new Handler();
         runnable = new Runnable() {
             @Override
@@ -367,17 +348,21 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
     // -----------------------------------------------------------------------
     // -> metodo_timer ->
+    // El timer
     // -----------------------------------------------------------------------
     public void metodo_timer() {
         contador++;
 
+        // Cada 10 segundos envía al servidor
         if (contador > 10) {
-            if (receptorBLE.ultimaTramaEncontrada != null) hayQueActualizarMedicionesYEnviarlasAlServidor();
+            // Sólo se hace si está conectado al beacon
+            if (receptorBLE.ultimaTramaEncontrada != null)
+                hayQueActualizarMedicionesYEnviarlasAlServidor();
             contador = 0;
         }
 
+        // Se suma 1 cada 1000 milisegundos
         handler.postDelayed(runnable, 1000);
-
     }
 
 }

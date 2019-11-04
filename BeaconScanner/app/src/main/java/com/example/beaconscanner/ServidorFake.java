@@ -79,9 +79,9 @@ public class ServidorFake {
     }
 
     // ---------------------------------------------------------------------------
-    // Medida -> guardarContaminacion() ->
+    // Medida -> insertarMedida() ->
     // ---------------------------------------------------------------------------
-    public void guardarContaminacion(Medida medidaContaminacion)  {
+    public void insertarMedida(Medida medidaContaminacion)  {
         Log.d("pruebas", "guardarContaminacion()");
         String url = "http://"+IP+":"+puerto+"/insertarMedida/"; /*+medidaContaminacion.getMedida(); */
 

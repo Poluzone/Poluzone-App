@@ -20,6 +20,12 @@ import org.json.JSONObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// -----------------------------------------------------------------------
+// RegistrarUsuarioActivity.java
+// Equipo 3
+// Autor: Emilia Rosa van der Heide
+// CopyRight:
+// -----------------------------------------------------------------------
 public class RegistrarUsuarioActivity extends Activity implements CallbackRegistro {
 
     ServidorFake servidorFake;

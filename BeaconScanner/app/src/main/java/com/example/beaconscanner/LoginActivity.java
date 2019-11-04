@@ -23,6 +23,12 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+// -----------------------------------------------------------------------
+// LoginActivity.java
+// Equipo 3
+// Autor: Emilia Rosa van der Heide
+// CopyRight:
+// -----------------------------------------------------------------------
 public class LoginActivity extends AppCompatActivity implements CallbackLogin {
 
     // Servidor
