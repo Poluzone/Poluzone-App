@@ -14,8 +14,11 @@ import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntro2Fragment;
 import com.github.paolorotolo.appintro.model.SliderPage;
 
+
+// Clase para la intro que se muestra la primera vez que se abre la aplicación
 public class IntroActivity extends AppIntro2 {
     SharedPreferences getPrefs;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(R.style.LoginTheme);
@@ -31,10 +34,8 @@ public class IntroActivity extends AppIntro2 {
         sliderPage.setDescription("Conéctate a tu sensor mediante bluetooth y podrás recibir toda la información de los gases que te rodean");
         sliderPage.setImageDrawable(R.drawable.bluetoothsensor);
         sliderPage.setBgColor(Color.parseColor("#222831"));
-      //sliderPage.setDescColor(Color.parseColor("#FFFFFF"));
+        //sliderPage.setDescColor(Color.parseColor("#FFFFFF"));
         addSlide(AppIntro2Fragment.newInstance(sliderPage));
-
-       // Log.d("pruebas", "" + sliderPage.setDescColor(););
 
         SliderPage sliderPage2 = new SliderPage();
         sliderPage2.setTitle("Visión Artificial");
@@ -56,19 +57,25 @@ public class IntroActivity extends AppIntro2 {
 
         // Permissions
         // Ask for BLUETOOTH permission on the first slide
-    //    askForPermissions(new String[]{Manifest.permission.BLUETOOTH}, 1);
+        //    askForPermissions(new String[]{Manifest.permission.BLUETOOTH}, 1);
         // Ask for CAMERA permission on the second slide
-      //  askForPermissions(new String[]{Manifest.permission.CAMERA}, 2);
+        //  askForPermissions(new String[]{Manifest.permission.CAMERA}, 2);
         // Ask for LOCALIZATION permission on the third slide
-      //  askForPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 3);
+        //  askForPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 3);
     }
 
+    // ---------------------------------------------------------------------------
+    // fragment -> onSkipPressed() ->
+    // ---------------------------------------------------------------------------
     @Override
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
         // Do something when users tap on Skip button.
     }
 
+    // ---------------------------------------------------------------------------
+    // fragment -> onDonePressed() ->
+    // ---------------------------------------------------------------------------
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
@@ -84,6 +91,9 @@ public class IntroActivity extends AppIntro2 {
         startActivity(i);
     }
 
+    // ---------------------------------------------------------------------------
+    // fragment, fragment -> onSlideChanged() ->
+    // ---------------------------------------------------------------------------
     @Override
     public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
         super.onSlideChanged(oldFragment, newFragment);
