@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -42,6 +44,16 @@ public class PerfilFragment extends Fragment {
         // acceder speed dial
         speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
         speedDialView.hide();
+
+        FloatingActionButton fab = root.findViewById(R.id.fabNormal);
+        fab.setImageResource(R.drawable.edit_account);
+        fab.show();
+
+     /*   Button guardar = root.findViewById(R.id.button_guardar);
+        guardar.setVisibility(View.INVISIBLE); */
+
+        CardView cardView = root.findViewById(R.id.materialCardViewBotonGuardar);
+        cardView.setVisibility(View.INVISIBLE);
 
         emailinput.setEnabled(false);
         tlfinput.setEnabled(false);

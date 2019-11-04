@@ -21,15 +21,6 @@
         app:layout_constraintStart_toStartOf="@+id/materialCardViewBg"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:elevation="20dp"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/earth" />
-
         <TextView
             android:id="@+id/appname"
             android:layout_width="wrap_content"
@@ -38,7 +29,7 @@
             android:layout_margin="10dp"
             android:elevation="10dp"
             android:fontFamily="@font/nunito_semibold"
-            android:text="@string/app_name"
+            android:text="@string/menu_perfil"
             android:textColor="#FFFFFF"
             android:textSize="30sp" />
 
@@ -58,7 +49,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardViewBoton"
+        android:id="@+id/materialCardViewBotonGuardar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#ffffff"

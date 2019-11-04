@@ -53,7 +53,8 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         loginaqui.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                Intent i = new Intent(getBaseContext(), LoginActivity.class);
+                startActivity(i);
             }
         });
 
