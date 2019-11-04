@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
                     loginPrefsEditor = loginPreferences.edit();
 
                     String email = loginPreferences.getString("email", "");
-                    String pass = loginPreferences.getString("pass", "");
+                    String pass = loginPreferences.getString("passSinEncriptar", "");
 
                     Log.d("pruebas", " preferencias: " + email);
                     Log.d("pruebas", " preferencias: " + pass);
@@ -213,8 +213,14 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
         if (resultadoLogin) {
             // Guardamos los datos de la consulta
             try {
+                TextInputEditText inputPass = findViewById(R.id.texto_pass);
+                String pass = inputPass.getText().toString();
+
+                Log.d("pruebas", "Ha iniciado sesión");
+
                 loginPrefsEditor.putString("email", response.getJSONArray("Usuario").getJSONObject(0).get("Email").toString());
-                loginPrefsEditor.putString("pass", response.getJSONArray("Usuario").getJSONObject(0).get("Password").toString());
+                loginPrefsEditor.putString("passEncriptado", response.getJSONArray("Usuario").getJSONObject(0).get("Password").toString());
+                loginPrefsEditor.putString("passSinEncriptar", pass);
                 loginPrefsEditor.putString("telefono", response.getJSONArray("Usuario").getJSONObject(0).get("Telefono").toString());
             }
             catch (JSONException e) {

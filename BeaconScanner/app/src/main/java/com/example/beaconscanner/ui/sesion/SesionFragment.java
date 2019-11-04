@@ -35,7 +35,8 @@ public class SesionFragment extends Fragment {
         SharedPreferences loginPreferences = getActivity().getSharedPreferences("loginPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = loginPreferences.edit();
         editor.remove("email");
-        editor.remove("pass");
+        editor.remove("passEncriptado");
+        editor.remove("passSinEncriptar");
         editor.remove("telefono");
         editor.commit();
 
