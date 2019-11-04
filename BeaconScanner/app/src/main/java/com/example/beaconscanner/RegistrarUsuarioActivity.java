@@ -3,6 +3,7 @@ package com.example.beaconscanner;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -45,11 +46,11 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
 
         buttonRegistrarse = findViewById(R.id.button_register);
 
-        progressView  = (CircularProgressView) findViewById(R.id.progress_view);
+        progressView = (CircularProgressView) findViewById(R.id.progress_view);
 
         TextView loginaqui = findViewById(R.id.loginaqui);
 
-
+        // Para el link de ir al login
         loginaqui.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +95,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
 
     // ---------------------------------------------------------------------------
     // email: texto -> validarEmail() -> boolean
+    // Comprueba si el email tiene el formato correcto
     // ---------------------------------------------------------------------------
     private boolean validarEmail(String email) {
         TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
@@ -101,12 +103,12 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             inputEmailLayout.setError(getString(R.string.errorEmail));
             mostrarProgress(false);
             return false;
-        }
-        else return true;
+        } else return true;
     }
 
     // ---------------------------------------------------------------------------
     // pass1, pass2: texto -> validarContrasenya() -> boolean
+    // Comprueba que la contraseña tiene el formato correcto
     // ---------------------------------------------------------------------------
     private boolean validarContrasenya(String pass1, String pass2) {
         TextInputLayout inputPassLayout = findViewById(R.id.texto_contrasenya_registrar_layout);
@@ -123,10 +125,8 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
                 inputPassAgainLayout.setError(getString(R.string.errorContrasenyaNoCoincide));
                 mostrarProgress(false);
                 return false;
-            }
-            else return true;
-        }
-        else {
+            } else return true;
+        } else {
             // Mostrar error si no coincide
             inputPassLayout.setError(getString(R.string.falloFormatoPass));
             mostrarProgress(false);
@@ -137,6 +137,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
 
     // ---------------------------------------------------------------------------
     // email, pass1, pass2, telefono: texto-> validarSiEstanVacios() -> boolean
+    // Comprueba que haya completado todos los campos
     // ---------------------------------------------------------------------------
     private boolean validarSiEstanVacios(String email, String pass1, String pass2, String telefono) {
         TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
@@ -153,29 +154,30 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             inputEmailLayout.setError(getString(R.string.completar));
             mostrarProgress(false);
             return false;
-        }
-        else if (pass1.equals("")) {
+        } else if (pass1.equals("")) {
             texto_contrasenya_registrar_layout.setError(getString(R.string.completar));
             mostrarProgress(false);
             return false;
-        }
-        else if (pass2.equals("")) {
+        } else if (pass2.equals("")) {
             texto_contrasenyaotravez_registrar_layout.setError(getString(R.string.completar));
             mostrarProgress(false);
             return false;
-        }
-        else if (telefono.equals("")) {
+        } else if (telefono.equals("")) {
             texto_telefono_registrar_layout.setError(getString(R.string.completar));
             mostrarProgress(false);
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
 
+
+    // ---------------------------------------------------------------------------
+    // V/F, respuesta -> callbackRegistro() -> boolean
+    // ---------------------------------------------------------------------------
     @Override
     public void callbackRegistro(boolean resultadoRegistro, JSONObject response) {
+        // Si se ha hecho correctamente
         if (resultadoRegistro) {
             TextInputEditText inputEmail = findViewById(R.id.texto_email_registrar);
             String email = inputEmail.getText().toString();
@@ -186,6 +188,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             TextInputEditText inputPhone = findViewById(R.id.texto_telefono_registrar);
             String phone = inputPhone.getText().toString();
 
+            // Guardamos las preferencias (cookie)
             loginPrefsEditor.putString("email", email);
             loginPrefsEditor.putString("pass", pass);
             loginPrefsEditor.putString("telefono", phone);
@@ -195,30 +198,31 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             Log.d("pruebas", "intent main");
             this.startActivity(i);
             this.finish();
-        }
-        else {
+        } else {
             TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
             mostrarProgress(false);
-            if (response == null) Toast.makeText(this, "Error de conexión", Toast.LENGTH_LONG).show();
+            // Convenio de devolver response = null cuando el error es de conexión
+            if (response == null)
+                Toast.makeText(this, "Error de conexión", Toast.LENGTH_LONG).show();
             else inputEmailLayout.setError(getString(R.string.yaExiste));
         }
     }
 
     // ---------------------------------------------------------------------------
     // V/F -> mostrarProgress() ->
+    // Ruedecita de carga
     // ---------------------------------------------------------------------------
     private void mostrarProgress(Boolean mostrar) {
         if (mostrar) {
             progressView.resetAnimation();
             progressView.setVisibility(View.VISIBLE);
-            buttonRegistrarse.setText("");
+            buttonRegistrarse.setTextColor(getResources().getColor(R.color.colorAccent));
             progressView.startAnimation();
-        }
-        else {
+        } else {
             progressView.resetAnimation();
             progressView.setVisibility(View.INVISIBLE);
             progressView.stopAnimation();
-            buttonRegistrarse.setText(R.string.registrarse);
+            buttonRegistrarse.setTextColor(Color.WHITE);
         }
     }
 }
