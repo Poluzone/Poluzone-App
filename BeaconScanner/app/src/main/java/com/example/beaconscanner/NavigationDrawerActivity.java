@@ -9,16 +9,12 @@ import android.graphics.drawable.Drawable;
 
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.widget.PopupMenu;
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -67,6 +63,11 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     // Servidor
     ServidorFake servidorFake;
 
+    // Contador
+    int contador = 0;
+    Handler handler;
+    Runnable runnable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +111,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
             // Creamos el servidorFake indicando la direccion ip y el puerto
             servidorFake = new ServidorFake(this);
+
+            // Empezar temporizador para mandar al servidor (modo prueba)
+            empezarAContar();
 
         //.............................................................................
         // /Backend
@@ -345,6 +349,35 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         for (int i = 0; i < showOnMap.length; i++) {
             showOnMap[i] = 1;
         }
+    }
+
+    // -----------------------------------------------------------------------
+    // -> empezarAContar ->
+    // -----------------------------------------------------------------------
+    public void empezarAContar() {
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                metodo_timer();
+            }
+        };
+        runnable.run();
+    }
+
+    // -----------------------------------------------------------------------
+    // -> metodo_timer ->
+    // -----------------------------------------------------------------------
+    public void metodo_timer() {
+        contador++;
+
+        if (contador > 2) {
+            if (receptorBLE.ultimaTramaEncontrada != null) hayQueActualizarMedicionesYEnviarlasAlServidor();
+            contador = 0;
+        }
+
+        handler.postDelayed(runnable, 1000);
+
     }
 
 }

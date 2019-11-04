@@ -47,7 +47,7 @@ public class ServidorFake {
     CallbackRegistro callbackRegistro;
 
 
-    String IP = "192.168.1.104";
+    String IP = "192.168.43.249";
    //  "172.20.10.5";
     int puerto = 8080;
 
@@ -83,7 +83,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void guardarContaminacion(Medida medidaContaminacion)  {
         Log.d("pruebas", "guardarContaminacion()");
-        String url = "http://"+IP+":"+puerto+"/guardarContaminacion/"; /*+medidaContaminacion.getMedida(); */
+        String url = "http://"+IP+":"+puerto+"/insertarMedida/"; /*+medidaContaminacion.getMedida(); */
 
         JSONObject datos = new JSONObject();
 
