@@ -80,10 +80,10 @@ public class ReceptorBLE {
                 //Log.d("pruebas", "device scanned: " + Utilidades.bytesToString(tramaIBeacon.getUUID()));
 
                 if (buscarEsteDispositivoBTLE(Utilidades.bytesToString(tramaIBeacon.getUUID()))) {
-                    Log.d("pruebas", "device found: " + nuestroUUID + " " + Utilidades.bytesToInt(tramaIBeacon.getMajor()));
+                    Log.d("pruebas", "device found: " + nuestroUUID + " major: " + Utilidades.bytesToInt(tramaIBeacon.getMajor()));
 
                     if(!haSalidoYaElToast){
-                        Toast.makeText(nuestroActivity, "CONECTADO AL SENSOR Y RECIBIENDO DATOS", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(nuestroActivity, "Conectado al beacon", Toast.LENGTH_SHORT).show();
                         haSalidoYaElToast=true;
                     }
 
@@ -97,7 +97,6 @@ public class ReceptorBLE {
                     instante = simpleDateFormat.format(new Date()); */
 
                     instante = System.currentTimeMillis();
-                    nuestroActivity.mostrarUUID(Utilidades.bytesToString(ultimaTramaEncontrada.getUUID()), Integer.toString(Utilidades.bytesToInt(ultimaTramaEncontrada.getMajor())));
 
                     // !! COMENTAR DESPUES DE LAS PRUEBAS
                     // stopEscanearDispositivosBLE();
@@ -131,6 +130,8 @@ public class ReceptorBLE {
 
     // -----------------------------------------------------------------------
     // -> activarBluetooth ->
+    // Hace toda la comprobación de permisos
+    // TODO: Que se recargue después de obtener los permisos
     // -----------------------------------------------------------------------
     public void activarBluetooth() {
         // Permisos de bluetooth y localizacion
