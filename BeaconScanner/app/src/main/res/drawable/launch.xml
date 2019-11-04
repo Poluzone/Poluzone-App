@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="opaque" android:layout_height="match_parent" android:layout_width="match_parent">
+    <item android:drawable="@color/colorAccent" />
+
+    <item>
+        <bitmap
+            android:src="@drawable/earthsmall"
+            android:gravity="center" />
+    </item>
+</layer-list>

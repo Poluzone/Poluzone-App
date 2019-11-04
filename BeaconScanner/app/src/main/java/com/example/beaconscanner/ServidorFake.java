@@ -89,10 +89,11 @@ public class ServidorFake {
 
         // Anyadimos los datos al json
         try {
-            datos.put("valor", medidaContaminacion.getMedida());
-            datos.put("tiempo", medidaContaminacion.getTiempo());
-            datos.put("lat", medidaContaminacion.getPosicion().getLatitude());
-            datos.put("long", medidaContaminacion.getPosicion().getLongitude());
+            datos.put("Valor", medidaContaminacion.getMedida());
+            datos.put("Tiempo", medidaContaminacion.getTiempo());
+            datos.put("Latitud", medidaContaminacion.getPosicion().getLatitude());
+            datos.put("Longitud", medidaContaminacion.getPosicion().getLongitude());
+            datos.put("IdTipoMedida", 2);
             Log.d("pruebas json", datos.toString());
         } catch (JSONException e) {
             Log.d("pruebas", e.toString());
@@ -283,8 +284,9 @@ public class ServidorFake {
 
                         }
                         else if (networkResponse.statusCode == 401){
+                            JSONObject object = new JSONObject();
                             Log.d("pruebas",networkResponse.statusCode + "");
-                            callbackLogin.callbackLogin(false, null);
+                            callbackLogin.callbackLogin(false, object);
                         }
                     }
                 }

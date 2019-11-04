@@ -1,5 +1,6 @@
 package com.example.beaconscanner;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -30,7 +31,7 @@ public class IntroActivity extends AppIntro2 {
         sliderPage.setDescription("Conéctate a tu sensor mediante bluetooth y podrás recibir toda la información de los gases que te rodean");
         sliderPage.setImageDrawable(R.drawable.bluetoothsensor);
         sliderPage.setBgColor(Color.parseColor("#222831"));
-      //  sliderPage.setDescColor(Color.parseColor("#FFFFFF"));
+      //sliderPage.setDescColor(Color.parseColor("#FFFFFF"));
         addSlide(AppIntro2Fragment.newInstance(sliderPage));
 
        // Log.d("pruebas", "" + sliderPage.setDescColor(););
@@ -59,7 +60,7 @@ public class IntroActivity extends AppIntro2 {
         // Ask for CAMERA permission on the second slide
       //  askForPermissions(new String[]{Manifest.permission.CAMERA}, 2);
         // Ask for LOCALIZATION permission on the third slide
-        //askForPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 3);
+      //  askForPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 3);
     }
 
     @Override

@@ -371,7 +371,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     public void metodo_timer() {
         contador++;
 
-        if (contador > 2) {
+        if (contador > 10) {
             if (receptorBLE.ultimaTramaEncontrada != null) hayQueActualizarMedicionesYEnviarlasAlServidor();
             contador = 0;
         }
