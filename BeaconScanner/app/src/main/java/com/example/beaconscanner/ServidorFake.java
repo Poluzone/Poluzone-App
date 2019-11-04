@@ -280,8 +280,8 @@ public class ServidorFake {
                         }
                         else if (networkResponse.statusCode == 404){
                             Log.d("pruebas",networkResponse.statusCode + "");
-                            callbackLogin.callbackLogin(false, null);
-
+                            JSONObject response = new JSONObject();
+                            callbackLogin.callbackLogin(false, response);
                         }
                         else if (networkResponse.statusCode == 401){
                             JSONObject object = new JSONObject();
