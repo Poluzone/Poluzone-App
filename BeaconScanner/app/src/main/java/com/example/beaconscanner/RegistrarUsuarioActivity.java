@@ -8,10 +8,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.safetynet.SafetyNet;
+import com.google.android.gms.safetynet.SafetyNetApi;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -26,17 +35,19 @@ import java.util.regex.Pattern;
 // Autor: Emilia Rosa van der Heide
 // CopyRight:
 // -----------------------------------------------------------------------
-public class RegistrarUsuarioActivity extends Activity implements CallbackRegistro {
+public class RegistrarUsuarioActivity extends Activity implements CallbackRegistro, GoogleApiClient.ConnectionCallbacks {
 
     ServidorFake servidorFake;
+    GoogleApiClient googleApiClient;
+    //Site key string:
+    String SiteKey = "6Lds58IUAAAAAM9RcjpumLh7XGwWe-AMOiNyFS3P";
     // Para recordar que se ha registrado
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
 
     private CircularProgressView progressView;
-
+    CheckBox checkBox;
     Button buttonRegistrarse;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,11 +59,17 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
 
         setContentView(R.layout.registro);
 
+
         servidorFake = new ServidorFake(this);
 
         buttonRegistrarse = findViewById(R.id.button_register);
 
         progressView = (CircularProgressView) findViewById(R.id.progress_view);
+
+        checkBox = (CheckBox) findViewById(R.id.check_box_ReCaptcha);
+
+        //
+        startReCaptcha();
 
         TextView loginaqui = findViewById(R.id.loginaqui);
 
@@ -79,7 +96,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
     // -> registrar() ->
     // ---------------------------------------------------------------------------
     public void registrar() {
-        mostrarProgress(true);
+
         TextInputEditText inputEmail = findViewById(R.id.texto_email_registrar);
 
         String email = inputEmail.getText().toString();
@@ -93,8 +110,9 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         TextInputEditText inputPhone = findViewById(R.id.texto_telefono_registrar);
         String phone = inputPhone.getText().toString();
 
-        if (validarSiEstanVacios(email, pass, pass2, phone) && validarEmail(email) && validarContrasenya(pass, pass2)) {
+        if (validarSiEstanVacios(email, pass, pass2, phone) && validarEmail(email) && validarContrasenya(pass, pass2) && validarReCaptcha()==true) {
             // Guardamos los datos en las preferencias
+            mostrarProgress(true);
             servidorFake.insertarUsuario(email, pass, Integer.parseInt(phone));
         }
     }
@@ -230,5 +248,78 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             progressView.stopAnimation();
             buttonRegistrarse.setTextColor(Color.WHITE);
         }
+    }
+
+    // ---------------------------------------------------------------------------
+    // startReCaptcha()
+    // Al pulsar en el checkbox que valide ReCaptcha
+    // ---------------------------------------------------------------------------
+    private void startReCaptcha() {
+
+        //Connectar con google
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(SafetyNet.API)
+                .addConnectionCallbacks(RegistrarUsuarioActivity.this)
+                .build();
+        googleApiClient.connect();
+
+        //Cuando clickas el checkbox empieza el ReCaptcha
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (checkBox.isChecked()) {
+
+                    SafetyNet.SafetyNetApi.verifyWithRecaptcha(googleApiClient, SiteKey)
+                            .setResultCallback(new ResultCallback<SafetyNetApi.RecaptchaTokenResult>() {
+                                @Override
+                                public void onResult(@NonNull SafetyNetApi.RecaptchaTokenResult recaptchaTokenResult) {
+                                    Status statusReCaptcha = recaptchaTokenResult.getStatus();
+
+                                    if (statusReCaptcha.isSuccess() && statusReCaptcha != null) {
+
+                                        checkBox.setChecked(true);
+                                        checkBox.setClickable(false);
+
+                                    } else {
+                                        checkBox.setClickable(true);
+                                        checkBox.setChecked(false);
+                                    }
+                                }
+                            });
+                } else {
+                    checkBox.setClickable(true);
+                    checkBox.setChecked(false);
+
+                }
+            }
+        });
+
+    }
+
+    // ---------------------------------------------------------------------------
+    // validarReCaptcha()
+    // validar si se ha verificado que no es un robot
+    // ---------------------------------------------------------------------------
+    private boolean validarReCaptcha(){
+        if(!checkBox.isChecked()){
+
+            Toast toast1 =
+                Toast.makeText(getApplicationContext(),
+                        "Verifica que no eres un robot", Toast.LENGTH_SHORT);
+            toast1.show();
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 }

@@ -214,6 +214,38 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/recaptcha" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/check_box_ReCaptcha"
+                    android:fontFamily="@font/nunito"
+                    android:text="No soy un robot"
+                    android:textSize="18sp"
+                    android:layout_marginTop="10dp"
+
+                    />
+
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
