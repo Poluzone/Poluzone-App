@@ -47,4 +47,16 @@
 
     <string name="app_intro">Poluzone intro</string>
 
+    <string name="inicio">Inicio</string>
+    <string name="cal">Calidad del aire</string>
+    <string name="veinticuatro">Según las últimas 24 horas</string>
+    <string name="estadonodo">Estado nodo: </string>
+    <string name="mismedidas">Mis medidas</string>
+    <string name="activo">Activo</string>
+    <string name="inactivo">Inactivo</string>
+    <string name="porciento">70%</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
