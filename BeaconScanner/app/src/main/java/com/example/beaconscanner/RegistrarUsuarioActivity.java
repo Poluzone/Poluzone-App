@@ -267,7 +267,9 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkBox.isChecked()) {
+                if (checkBox.isClickable()) {
+
+                    checkBox.setChecked(false);
 
                     SafetyNet.SafetyNetApi.verifyWithRecaptcha(googleApiClient, SiteKey)
                             .setResultCallback(new ResultCallback<SafetyNetApi.RecaptchaTokenResult>() {
