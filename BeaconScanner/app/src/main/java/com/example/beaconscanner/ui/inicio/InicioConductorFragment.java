@@ -12,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.beaconscanner.R;
+import com.leinardi.android.speeddial.SpeedDialView;
 
 public class InicioConductorFragment extends Fragment {
 
     private InicioConductorViewModel mViewModel;
+    private SpeedDialView speedDialView;
 
     public static InicioConductorFragment newInstance() {
         return new InicioConductorFragment();
@@ -28,8 +30,8 @@ public class InicioConductorFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_inicio_conductor, container, false);
 
         // acceder speed dial para esconderlo
-    /*    speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
-        speedDialView.hide();*/
+        speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
+        speedDialView.hide();
 
         return root;
     }
