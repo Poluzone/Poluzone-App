@@ -364,7 +364,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         if (contador > 10) {
             Log.d("pruebas", "alarmaminuto");
             // Sólo se hace si está conectado al beacon y si se ha movido
-            if (receptorBLE.ultimaTramaEncontrada != null && receptorBLE.localizadorGPS.meHeMovido(receptorBLE.posicion))
+         //   receptorBLE.localizadorGPS.obtenerMiPosicionGPS();
+            Location posicionAnterior = receptorBLE.posicion;
+            if (receptorBLE.ultimaTramaEncontrada != null && receptorBLE.localizadorGPS.meHeMovido(posicionAnterior))
                 hayQueActualizarMedicionesYEnviarlasAlServidor();
             contador = 0;
         }

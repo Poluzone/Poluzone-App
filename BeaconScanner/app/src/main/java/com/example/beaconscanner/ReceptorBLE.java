@@ -80,7 +80,7 @@ public class ReceptorBLE {
                 //Log.d("pruebas", "device scanned: " + Utilidades.bytesToString(tramaIBeacon.getUUID()));
 
                 if (buscarEsteDispositivoBTLE(Utilidades.bytesToString(tramaIBeacon.getUUID()))) {
-                    Log.d("pruebas", "device found: " + nuestroUUID + " major: " + Utilidades.bytesToInt(tramaIBeacon.getMajor()));
+               //     Log.d("pruebas", "device found: " + nuestroUUID + " major: " + Utilidades.bytesToInt(tramaIBeacon.getMajor()));
 
                     if(!haSalidoYaElToast){
                         Toast.makeText(nuestroActivity, "Conectado al beacon", Toast.LENGTH_SHORT).show();
@@ -89,6 +89,7 @@ public class ReceptorBLE {
 
                     // asignamos los datos de nuestro device encontrado
                     ultimaTramaEncontrada = new TramaIBeacon(bytesTrama);
+                    localizadorGPS.obtenerMiPosicionGPS();
 
                     posicion = localizadorGPS.getUltimaPosicionMedida();
                     //Log.d("pruebas", Double.toString(posicion.getLatitude()));
