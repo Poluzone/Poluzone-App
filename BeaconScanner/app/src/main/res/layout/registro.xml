@@ -21,13 +21,13 @@
         app:layout_constraintStart_toStartOf="@+id/materialCardViewBg"
         app:layout_constraintTop_toTopOf="parent">
 
-  <!--      <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:elevation="2dp"
-            app:srcCompat="@drawable/earth" /> -->
+        <!--      <ImageView
+                  android:id="@+id/imageView2"
+                  android:layout_width="40dp"
+                  android:layout_height="40dp"
+                  android:layout_gravity="center|center_horizontal|center_vertical"
+                  android:elevation="2dp"
+                  app:srcCompat="@drawable/earth" /> -->
 
         <TextView
             android:id="@+id/appname"
@@ -215,35 +215,40 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_margin="10dp"
                 android:gravity="center"
-                >
+                app:cardElevation="2dp">
 
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/recaptcha" />
-
-                <CheckBox
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/check_box_ReCaptcha"
-                    android:fontFamily="@font/nunito"
-                    android:text="No soy un robot"
-                    android:textSize="18sp"
-                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical">
 
-                    />
+                    <CheckBox
+                        android:id="@+id/check_box_ReCaptcha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/nunito"
+                        android:text="No soy un robot"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:layout_weight="4"
+                        android:src="@drawable/recaptcha" />
+                </LinearLayout>
 
 
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
 
         </LinearLayout>
@@ -254,9 +259,9 @@
         android:id="@+id/loginaqui"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:fontFamily="@font/nunito"
         android:text="@string/logeate"
-        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/materialCardView"
         app:layout_constraintStart_toStartOf="@+id/materialCardView"
