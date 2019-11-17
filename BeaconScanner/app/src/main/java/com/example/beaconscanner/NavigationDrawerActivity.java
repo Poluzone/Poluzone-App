@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 
+import android.location.Location;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -64,7 +65,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     public Button buttonRecibir;
 
     // Para recordar que se ha logeado
-    private SharedPreferences loginPreferences;
+    public SharedPreferences loginPreferences;
 
     // Servidor
     ServidorFake servidorFake;

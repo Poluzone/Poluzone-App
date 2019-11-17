@@ -40,24 +40,11 @@ public class LocalizadorGPS extends AsyncTask<Void, Void, Location> {
     // -----------------------------------------------------------------------
     public LocalizadorGPS(NavigationDrawerActivity activity) {
         this.activity = activity;
-        pedirPermisoGPS();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         ultimaPosicionMedida = new Location("");
         ultimaPosicionMedida.setLatitude(1234);
         ultimaPosicionMedida.setLongitude(1235);
         this.execute();
-    }
-
-    // -----------------------------------------------------------------------
-    // -> pedirPermisoGPS ->
-    // -----------------------------------------------------------------------
-    public void pedirPermisoGPS(){
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},3);
-        }
-       /* if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},3);
-        }*/
     }
 
     // -----------------------------------------------------------------------
@@ -70,6 +57,7 @@ public class LocalizadorGPS extends AsyncTask<Void, Void, Location> {
                     public void onSuccess(Location location) {
                         if (location != null) {
                             ultimaPosicionMedida = location;
+                            Log.d("pruebas", "localizacion: " + ultimaPosicionMedida.getLatitude() + " " + ultimaPosicionMedida.getLongitude());
                         }
                     }
                 }).addOnFailureListener(activity, new OnFailureListener() {
