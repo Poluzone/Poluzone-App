@@ -23,7 +23,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-public class LocalizadorGPS extends AsyncTask<Void, Void, Location> {
+public class LocalizadorGPS {
     private Location ultimaPosicionMedida;
     private FusedLocationProviderClient fusedLocationClient;
     private NavigationDrawerActivity activity;
@@ -40,24 +40,10 @@ public class LocalizadorGPS extends AsyncTask<Void, Void, Location> {
     // -----------------------------------------------------------------------
     public LocalizadorGPS(NavigationDrawerActivity activity) {
         this.activity = activity;
-        pedirPermisoGPS();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         ultimaPosicionMedida = new Location("");
         ultimaPosicionMedida.setLatitude(1234);
         ultimaPosicionMedida.setLongitude(1235);
-        this.execute();
-    }
-
-    // -----------------------------------------------------------------------
-    // -> pedirPermisoGPS ->
-    // -----------------------------------------------------------------------
-    public void pedirPermisoGPS(){
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},3);
-        }
-       /* if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},3);
-        }*/
     }
 
     // -----------------------------------------------------------------------
@@ -70,6 +56,7 @@ public class LocalizadorGPS extends AsyncTask<Void, Void, Location> {
                     public void onSuccess(Location location) {
                         if (location != null) {
                             ultimaPosicionMedida = location;
+                            Log.d("pruebas", "localizacion: " + ultimaPosicionMedida.getLatitude() + " " + ultimaPosicionMedida.getLongitude());
                         }
                     }
                 }).addOnFailureListener(activity, new OnFailureListener() {
@@ -84,35 +71,20 @@ public class LocalizadorGPS extends AsyncTask<Void, Void, Location> {
     // Posicion -> meHeMovido -> V/F
     // -----------------------------------------------------------------------
     public boolean meHeMovido(Location posicion) {
-        calcularDistancia(posicion);
-
-        // algoritmo
-
-        return true;
+        float distancia = calcularDistancia(posicion);
+        Log.d("pruebas", "me he movido " + distancia + " metros");
+        if (distancia >= 100) return true;
+        else return false;
     }
 
     // -----------------------------------------------------------------------
-    // Posicion -> calcularDistancia -> N
+    // Posicion -> calcularDistancia -> R
     // -----------------------------------------------------------------------
-    private int calcularDistancia(Location posicionAnterior) {
+    private float calcularDistancia(Location posicionAnterior) {
         // algoritmo con ultimaPosicionMedida
-
-        return 0;
+        float distancia = ultimaPosicionMedida.distanceTo(posicionAnterior);
+        Log.d("pruebas", "anterior" + posicionAnterior.toString() + "dsp" + ultimaPosicionMedida.toString());
+        return distancia;
     }
 
-
-
-    // No funcional
-    @Override
-    protected Location doInBackground(Void... voids) {
-        obtenerMiPosicionGPS();
-        // Log.d("pruebas", "" + ultimaPosicionMedida);
-        while (ultimaPosicionMedida.getLatitude()==0) { }
-        return ultimaPosicionMedida;
-    }
-
-    @Override
-    protected void onPostExecute(Location posicion) {
-        ultimaPosicionMedida = posicion;
-    }
 }

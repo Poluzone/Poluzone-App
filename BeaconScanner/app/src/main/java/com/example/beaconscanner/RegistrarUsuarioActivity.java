@@ -212,6 +212,8 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             TextInputEditText inputPhone = findViewById(R.id.texto_telefono_registrar);
             String phone = inputPhone.getText().toString();
 
+            // TODO: Hay que guardar el idUsuario en los loginprefs
+
             // Guardamos las preferencias (cookie)
             loginPrefsEditor.putString("email", email);
             loginPrefsEditor.putString("pass", pass);
