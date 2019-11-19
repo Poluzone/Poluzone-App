@@ -6,65 +6,58 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-    <TextView
-        android:id="@+id/title2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/nunito_semibold"
-        android:text="@string/cal"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:foregroundGravity="bottom"
+        android:gravity="bottom"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title2">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!--   <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:src="@drawable/earthsmall" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:gravity="center_horizontal"
-            android:text="@string/porciento"
-            android:textColor="@color/common_google_signin_btn_text_dark_default"
-            android:textSize="90sp" /> -->
         <ImageView
             android:id="@+id/imageView5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="end"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="65dp"
             android:layout_weight="3"
+            android:foregroundGravity="bottom"
             android:padding="16dp"
             android:src="@drawable/happ" />
 
-        <TextView
-            android:id="@+id/textView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
             android:layout_weight="2"
-            android:fontFamily="@font/nunito_semibold"
-            android:foregroundGravity="center_vertical|center_horizontal"
-            android:gravity="center_horizontal|center_vertical"
-            android:padding="8dp"
-            android:text="@string/porciento"
-            android:textColor="@color/common_google_signin_btn_text_dark_default"
-            android:textSize="80sp" />
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/title2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/nunito_semibold"
+                android:text="@string/cal"
+                android:textColor="@color/common_google_signin_btn_text_dark_default"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="-20dp"
+                android:fontFamily="@font/nunito_semibold"
+                android:text="@string/porciento"
+                android:textColor="@color/common_google_signin_btn_text_dark_default"
+                android:textSize="90sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <TextView
@@ -87,7 +80,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="64dp"
         android:foregroundGravity="center_vertical|center_horizontal"
         app:cardBackgroundColor="@color/common_google_signin_btn_text_dark_default"
         app:cardCornerRadius="4dp"
@@ -116,7 +109,12 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:fontFamily="@font/nunito_semibold"
-                    android:padding="15dp"
+                    android:paddingStart="0dp"
+                    android:paddingLeft="0dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingBottom="8dp"
                     android:text="@string/estadonodo"
                     android:textAlignment="textEnd"
                     android:textColor="#000000"
@@ -129,7 +127,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
                     android:fontFamily="@font/nunito_semibold"
-                    android:padding="15dp"
+                    android:padding="8dp"
                     android:text="@string/activo"
                     android:textAlignment="textStart"
                     android:textColor="#000000"
@@ -137,18 +135,45 @@
 
             </LinearLayout>
 
-            <!--   <com.db.williamchart.view.LineChartView
-                android:id="@+id/lineChart"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:chart_axis="none"
-                app:chart_lineColor="@color/colorAccent"
-                app:chart_lineThickness="3dp"
-                app:chart_smoothLine="true" /> -->
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:paddingLeft="0dp"
+                    android:paddingTop="8dp"
+                    android:paddingRight="0dp"
+                    android:paddingBottom="8dp"
+                    android:text="@string/dist"
+                    android:textAlignment="textEnd"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:padding="8dp"
+                    android:text="28Km"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="200dp" />
 
         </LinearLayout>
 
@@ -158,6 +183,7 @@
         android:id="@+id/carviewbotonvermedidas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/materialCardView"
         app:layout_constraintEnd_toEndOf="@+id/materialCardView"
