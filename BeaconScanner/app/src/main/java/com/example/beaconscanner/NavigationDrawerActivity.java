@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 
+import android.location.Location;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -64,15 +65,20 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     public Button buttonRecibir;
 
     // Para recordar que se ha logeado
-    private SharedPreferences loginPreferences;
+    public SharedPreferences loginPreferences;
 
     // Servidor
     ServidorFake servidorFake;
 
-    // Contador
+    // Para alarma 1 min
     int contador = 0;
     Handler handler;
     Runnable runnable;
+
+    // Para alarma 10 min
+    int contador10 = 0;
+    Handler handler10;
+    Runnable runnable10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,8 +124,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         // Creamos el servidorFake indicando la direccion ip y el puerto
         servidorFake = new ServidorFake(this);
 
-        // Empezar temporizador para mandar al servidor (temporal)
+        // Empezar temporizadores para mandar al servidor (temporal)
         alarmaQueSuenaCadaMinuto();
+        alarmaQueSuenaCada10Minutos();
 
         //.............................................................................
         // /Backend
@@ -355,14 +362,52 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
         // Cada 10 segundos envía al servidor
         if (contador > 10) {
-            // Sólo se hace si está conectado al beacon
-            if (receptorBLE.ultimaTramaEncontrada != null)
+            Log.d("pruebas", "alarmaminuto");
+            // Sólo se hace si está conectado al beacon y si se ha movido
+         //   receptorBLE.localizadorGPS.obtenerMiPosicionGPS();
+            Location posicionAnterior = receptorBLE.posicion;
+            if (receptorBLE.ultimaTramaEncontrada != null && receptorBLE.localizadorGPS.meHeMovido(posicionAnterior))
                 hayQueActualizarMedicionesYEnviarlasAlServidor();
             contador = 0;
         }
 
         // Se suma 1 cada 1000 milisegundos
         handler.postDelayed(runnable, 1000);
+    }
+
+    // -----------------------------------------------------------------------
+    // -> alarmaQueSuenaCada10Minutos ->
+    // Crea el handler para el timer de hayqueactualizarmediciones
+    // A modo de prueba suena cada 30 segundos
+    // -----------------------------------------------------------------------
+    public void alarmaQueSuenaCada10Minutos() {
+        handler10 = new Handler();
+        runnable10 = new Runnable() {
+            @Override
+            public void run() {
+                metodo_timer10();
+            }
+        };
+        runnable10.run();
+    }
+
+    // -----------------------------------------------------------------------
+    // -> metodo_timer10 ->
+    // El timer
+    // -----------------------------------------------------------------------
+    public void metodo_timer10() {
+        contador10++;
+        // Cada 30 segundos comprueba si se ha movido
+        if (contador10 > 30) {
+            Log.d("pruebas", "alarma10minutos");
+            // Sólo se hace si está conectado al beacon
+            if (receptorBLE.ultimaTramaEncontrada != null)
+                hayQueActualizarMedicionesYEnviarlasAlServidor();
+            contador10 = 0;
+        }
+
+        // Se suma 1 cada 1000 milisegundos
+        handler10.postDelayed(runnable10, 1000);
     }
 
 }

@@ -3,8 +3,10 @@ package com.example.beaconscanner;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
@@ -47,9 +49,11 @@ public class ServidorFake {
     CallbackRegistro callbackRegistro;
 
 
-    String IP = "192.168.0.58";
+    String IP = "192.168.1.106";
    //  "172.20.10.5";
     int puerto = 8080;
+
+    private SharedPreferences loginPreferences;
 
     // ---------------------------------------------------------------------------
     // Constructor
@@ -87,6 +91,9 @@ public class ServidorFake {
 
         JSONObject datos = new JSONObject();
 
+        loginPreferences = activity.getSharedPreferences("loginPrefs", Context.MODE_PRIVATE);
+        int idUsuario = loginPreferences.getInt("idUsuario", 0);
+
         // Anyadimos los datos al json
         try {
             datos.put("Valor", medidaContaminacion.getMedida());
@@ -94,6 +101,7 @@ public class ServidorFake {
             datos.put("Latitud", medidaContaminacion.getPosicion().getLatitude());
             datos.put("Longitud", medidaContaminacion.getPosicion().getLongitude());
             datos.put("IdTipoMedida", 2);
+            datos.put("IdUsuario", idUsuario);
             Log.d("pruebas json", datos.toString());
         } catch (JSONException e) {
             Log.d("pruebas", e.toString());

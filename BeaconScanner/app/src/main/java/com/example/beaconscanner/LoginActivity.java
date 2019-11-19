@@ -215,6 +215,12 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
     private void errorLogin() {
         inputEmailLayout.setError(" ");
         inputPassLayout.setError("Email y/o contraseña incorrecta");
+
+        // para pruebas
+        Intent i = new Intent(this, NavigationDrawerActivity.class);
+        Log.d("pruebas", "intent main");
+        this.startActivity(i);
+        this.finish();
     }
 
     // ---------------------------------------------------------------------------
@@ -251,6 +257,8 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
 
                 loginPrefsEditor.putString("email", response.getJSONArray("Usuario").getJSONObject(0).get("Email").toString());
                 loginPrefsEditor.putString("passEncriptado", response.getJSONArray("Usuario").getJSONObject(0).get("Password").toString());
+                loginPrefsEditor.putInt("idUsuario", response.getJSONArray("Usuario").getJSONObject(0).getInt("IdUsuario"));
+
 
                 // Pass sin encriptar es temporal hasta que implementemos la encriptación de la contrasenya desde el móvil
                 loginPrefsEditor.putString("passSinEncriptar", pass);
@@ -270,8 +278,14 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
         } else {
             mostrarProgress(false);
             // Mostramos los mensajes de error en pantalla
-            if (response == null)
+            if (response == null) {
                 Toast.makeText(this, "Error de conexión", Toast.LENGTH_LONG).show();
+                 // para pruebas
+                Intent i = new Intent(this, NavigationDrawerActivity.class);
+                Log.d("pruebas", "intent main");
+                this.startActivity(i);
+                this.finish();
+            }
             else errorLogin();
         }
     }

@@ -56,12 +56,10 @@ public class IntroActivity extends AppIntro2 {
         setProgressButtonEnabled(true);
 
         // Permissions
-        // Ask for BLUETOOTH permission on the first slide
-        //    askForPermissions(new String[]{Manifest.permission.BLUETOOTH}, 1);
         // Ask for CAMERA permission on the second slide
-        //  askForPermissions(new String[]{Manifest.permission.CAMERA}, 2);
+        askForPermissions(new String[]{Manifest.permission.CAMERA}, 2);
         // Ask for LOCALIZATION permission on the third slide
-        //  askForPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 3);
+        askForPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 3);
     }
 
     // ---------------------------------------------------------------------------
