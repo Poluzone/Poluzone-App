@@ -213,8 +213,9 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             String phone = inputPhone.getText().toString();
 
             // TODO: Hay que guardar el idUsuario en los loginprefs
-            servidorFake.getIdUsuario(email);
+
             // Guardamos las preferencias (cookie)
+            loginPrefsEditor.putString("idUsuario", servidorFake.getIdUsuario(email));
             loginPrefsEditor.putString("email", email);
             loginPrefsEditor.putString("pass", pass);
             loginPrefsEditor.putString("telefono", phone);

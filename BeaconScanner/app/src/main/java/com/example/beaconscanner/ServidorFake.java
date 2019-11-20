@@ -315,7 +315,7 @@ public class ServidorFake {
      *
      *  - Matthew Conde Oltra -
      */
-    public void getIdUsuario (String email) {
+    public String getIdUsuario (String email) {
         Log.d("GETIDUSUARIO", "GetIdUsuario()");
         String url = "http://"+IP+":"+puerto+"/GETidUsuario";
 
@@ -368,7 +368,7 @@ public class ServidorFake {
 
         // Add the request to the RequestQueue.
         queue.add(jsonobj);
-
+        return id;
     }
     public static boolean isNumeric(String cadena) {
 
