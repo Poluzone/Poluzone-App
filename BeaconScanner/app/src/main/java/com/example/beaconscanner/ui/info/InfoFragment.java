@@ -13,26 +13,31 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.beaconscanner.R;
+import com.example.beaconscanner.ui.inicio.InicioConductorViewModel;
+import com.example.beaconscanner.ui.mapa.MapaViewModel;
+import com.leinardi.android.speeddial.SpeedDialView;
 
 public class InfoFragment extends Fragment {
 
-    private InfoViewModel mViewModel;
+    //---------------------------------------------------------------------------
+    //Clase relacionada con el navigation info
+    //---------------------------------------------------------------------------
 
-    public static InfoFragment newInstance() {
-        return new InfoFragment();
-    }
+    private InfoViewModel mViewModel;
+    private SpeedDialView speedDialView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_info, container, false);
-    }
+        mViewModel =
+                ViewModelProviders.of(this).get(InfoViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_info, container, false);
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(InfoViewModel.class);
-        // TODO: Use the ViewModel
+        // acceder speed dial
+        speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
+        speedDialView.show();
+
+        return root;
     }
 
 }
