@@ -49,7 +49,7 @@ public class ServidorFake {
     CallbackRegistro callbackRegistro;
 
 
-    String IP = "192.168.1.106";
+    String IP = "192.168.1.107";
    //  "172.20.10.5";
     int puerto = 8080;
 
@@ -188,6 +188,7 @@ public class ServidorFake {
             datos.put("Email", email);
             datos.put("Password", password);
             datos.put("Telefono", telefono);
+            datos.put("TipoUsuario", "normal");
             Log.d("pruebas json", datos.toString());
         } catch (JSONException e) {
             Log.d("pruebas", e.toString());
