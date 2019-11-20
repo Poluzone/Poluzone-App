@@ -336,17 +336,23 @@ public class ServidorFake {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("GETIDUSUARIO",response.toString());
-                        try {
-                            if (response.get("status").equals(true)) {
-                                Log.d("GETIDUSUARIO", response.getJSONArray("Usuario").getJSONObject(0).get("IdUsuario").toString());
+                        String R = response.toString();
+                        String[] s = R.split("");
+                        String n = "";
+
+                        for(int i = 0; i<s.length; i++)
+                        {
+                            if(isNumeric(s[i]))
+                            {
+                                n+= s[i];
+                                //Log.d("GETIDUSUARIO", n);
+                            }else
+                            {
+                                //Log.d("GETIDUSUARIO", "Este no es el número"+s[i]);
                             }
-                            else {
-                                callbackLogin.callbackLogin(false, response);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("GETIDUSUARIO", e.toString());
                         }
+                        id = n;
+                        Log.d("GETIDUSUARIO", id);
 
                     }
                 },
@@ -363,6 +369,19 @@ public class ServidorFake {
         // Add the request to the RequestQueue.
         queue.add(jsonobj);
 
+    }
+    public static boolean isNumeric(String cadena) {
+
+        boolean resultado;
+
+        try {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+
+        return resultado;
     }
 
     // ---------------------------------------------------------------------------
