@@ -17,6 +17,10 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_foto" />
         <item
+            android:id="@+id/nav_info"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_info" />
+        <item
             android:id="@+id/nav_ajustes"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/menu_ajustes" />
