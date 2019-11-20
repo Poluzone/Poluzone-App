@@ -11,9 +11,11 @@
         android:layout_width="175dp"
         android:layout_height="42dp"
         android:layout_marginStart="8dp"
+        android:fontFamily="@font/nunito_semibold"
         android:gravity="center|center_horizontal|center_vertical"
-        android:text="@string/menu_ajustes"
+        android:text="@string/menu_info"
         android:textColor="@color/cardview_light_background"
+        android:textSize="18sp"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,34 +24,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.022" />
 
+
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="122dp"
-        android:layout_height="35dp"
+        android:id="@+id/textViewahora"
+        android:layout_width="175dp"
+        android:layout_height="42dp"
         android:layout_marginStart="8dp"
-        android:gravity="center"
-        android:text="Modo claro"
+        android:fontFamily="@font/nunito_semibold"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="contenedor info sobre contaminantes"
         android:textColor="@color/cardview_light_background"
+        android:textSize="18sp"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.156"
+        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.135" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center|center_horizontal|fill_horizontal|center_vertical|fill_vertical"
-        android:textColor="@color/cardview_light_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.06"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.133" />
 </androidx.constraintlayout.widget.ConstraintLayout>
