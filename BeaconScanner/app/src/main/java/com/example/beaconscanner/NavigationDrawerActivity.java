@@ -104,20 +104,21 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         crearFabSpeedDial();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
 
         NavController navController;
         if (tipoUser.equals("conductor")) {
+            navigationView = findViewById(R.id.nav_viewc);
             mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_inicio,
                     R.id.nav_home, R.id.nav_foto, R.id.nav_info, R.id.nav_ajustes, R.id.nav_perfil, R.id.nav_sesion)
                     .setDrawerLayout(drawer)
                     .build();
             navController = Navigation.findNavController(this, R.id.nav_host_fragmentc);
-
         }
         else {
+            navigationView = findViewById(R.id.nav_viewc);
             mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home,
                     R.id.nav_foto, R.id.nav_info, R.id.nav_ajustes, R.id.nav_perfil, R.id.nav_sesion)
                     .setDrawerLayout(drawer)
