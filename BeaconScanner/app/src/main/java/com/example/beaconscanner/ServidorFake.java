@@ -352,7 +352,7 @@ public class ServidorFake {
                             }
                         }
                         id = n;
-                        Log.d("GETIDUSUARIO", id);
+                        //Log.d("GETIDUSUARIO", id);
 
                     }
                 },
@@ -370,6 +370,18 @@ public class ServidorFake {
         queue.add(jsonobj);
         return id;
     }
+
+    /**
+     * Esta función sirve para comparar caracteres, uno a uno de forma que te diga si son o no numericos.
+     *
+     * cadena: string ->
+     *                   isNumeric()
+     *                              -> boolean
+     * @param cadena
+     * @return
+     *
+     *  - Matthew Conde Oltra -
+     */
     public static boolean isNumeric(String cadena) {
 
         boolean resultado;
