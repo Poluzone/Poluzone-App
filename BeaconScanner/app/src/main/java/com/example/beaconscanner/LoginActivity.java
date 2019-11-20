@@ -79,6 +79,9 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
             loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
             loginPrefsEditor = loginPreferences.edit();
 
+            loginPrefsEditor.putString("tipoUsuario", "conductor");
+            loginPrefsEditor.commit();
+
             String email = loginPreferences.getString("email", "");
             String pass = loginPreferences.getString("passSinEncriptar", "");
 
