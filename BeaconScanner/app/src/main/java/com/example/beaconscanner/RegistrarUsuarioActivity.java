@@ -1,6 +1,7 @@
 package com.example.beaconscanner;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -9,12 +10,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.blikoon.qrcodescanner.QrCodeActivity;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -48,7 +51,10 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
     private CircularProgressView progressView;
     CheckBox checkBox;
     Button buttonRegistrarse;
-
+    Button buttonTipoUser;
+    RadioButton siTengoSensor;
+    RadioButton noTengoSensor;
+    private static final int REQUEST_CODE_QR_SCAN = 101;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +66,13 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         setContentView(R.layout.registro);
 
 
+
         servidorFake = new ServidorFake(this);
 
         buttonRegistrarse = findViewById(R.id.button_register);
+
+
+
 
         progressView = (CircularProgressView) findViewById(R.id.progress_view);
 
@@ -77,8 +87,11 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         loginaqui.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent i = new Intent(getBaseContext(), LoginActivity.class);
                 startActivity(i);
+
+
             }
         });
 
@@ -87,9 +100,42 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         buttonRegistrarse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registrar();
+
+               // registrar();
+
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegistrarUsuarioActivity.this);
+                View mView = getLayoutInflater().inflate(R.layout.popup_tipo_usuario,null);
+                mBuilder.setView(mView);
+                AlertDialog dialog = mBuilder.create();
+                dialog.show();
+
+                buttonTipoUser =  (Button) mView.findViewById(R.id.button_tipo_user);
+                siTengoSensor =  (RadioButton) mView.findViewById(R.id.boton_si_sensor);
+
+                buttonTipoUser.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        if(siTengoSensor.isChecked()){
+
+                            Intent i = new Intent(RegistrarUsuarioActivity.this, QrCodeActivity.class);
+                            startActivityForResult(i, REQUEST_CODE_QR_SCAN);
+
+                        }
+
+
+                    }
+                });
+
+
+
             }
         });
+
+
+
+
     }
 
     // ---------------------------------------------------------------------------
@@ -325,5 +371,29 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    // ---------------------------------------------------------------------------
+    // onActivityResult()
+    // Valida si una actividad se ha desarrollado correctamente
+    // ---------------------------------------------------------------------------
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode != Activity.RESULT_OK) {
+            Toast.makeText(getApplicationContext(), "No se pudo obtener una respuesta", Toast.LENGTH_SHORT).show();
+            String resultado = data.getStringExtra("com.blikoon.qrcodescanner.error_decoding_image");
+            if (resultado != null) {
+                Toast.makeText(getApplicationContext(), "No se pudo escanear el código QR", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+        if (requestCode == REQUEST_CODE_QR_SCAN) {
+            if (data != null) {
+                String lectura = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
+
+                Toast.makeText(getApplicationContext(), "Leído: " + lectura, Toast.LENGTH_SHORT).show();
+
+            }
+        }
     }
 }

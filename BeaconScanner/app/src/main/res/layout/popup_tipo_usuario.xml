@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/tienes_un_sensor"
+            android:textSize="25sp"
+            ></TextView>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checkedButton="@id/boton_no_sensor">
+
+        <RadioButton
+            android:id="@+id/boton_si_sensor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/si"></RadioButton>
+
+        <RadioButton
+            android:id="@+id/boton_no_sensor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no"></RadioButton>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/button_tipo_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/aceptar"></Button>
+
+</LinearLayout>
