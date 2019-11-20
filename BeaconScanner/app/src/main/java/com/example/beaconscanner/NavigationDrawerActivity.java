@@ -85,8 +85,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation_drawer);
-
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         tipoUser = loginPreferences.getString("tipoUsuario", "o");
@@ -97,19 +95,20 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         //redondearImagen();
 
         // Codigo relacionado con el navigation drawer
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        Toolbar toolbar;
 
-        mostrarTodosLosGases();
-        crearFabSpeedDial();
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer;
         NavigationView navigationView;
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
 
         NavController navController;
         if (tipoUser.equals("conductor")) {
+            setContentView(R.layout.activity_navigation_drawerc);
+            toolbar = findViewById(R.id.toolbarc);
+            setSupportActionBar(toolbar);
+            drawer = findViewById(R.id.drawer_layoutc);
             navigationView = findViewById(R.id.nav_viewc);
             mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_inicio,
                     R.id.nav_home, R.id.nav_foto, R.id.nav_info, R.id.nav_ajustes, R.id.nav_perfil, R.id.nav_sesion)
@@ -118,7 +117,11 @@ public class NavigationDrawerActivity extends AppCompatActivity {
             navController = Navigation.findNavController(this, R.id.nav_host_fragmentc);
         }
         else {
-            navigationView = findViewById(R.id.nav_viewc);
+            setContentView(R.layout.activity_navigation_drawer);
+            toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            drawer = findViewById(R.id.drawer_layout);
+            navigationView = findViewById(R.id.nav_view);
             mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home,
                     R.id.nav_foto, R.id.nav_info, R.id.nav_ajustes, R.id.nav_perfil, R.id.nav_sesion)
                     .setDrawerLayout(drawer)
@@ -129,6 +132,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         // /Codigo relacionado con el navigation drawer
+
+        crearFabSpeedDial();
+        mostrarTodosLosGases();
 
         //.............................................................................
         // Backend
