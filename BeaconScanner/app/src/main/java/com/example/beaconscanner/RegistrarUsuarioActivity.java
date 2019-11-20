@@ -213,7 +213,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             String phone = inputPhone.getText().toString();
 
             // TODO: Hay que guardar el idUsuario en los loginprefs
-
+            servidorFake.getIdUsuario("ivan@gti.com");
             // Guardamos las preferencias (cookie)
             loginPrefsEditor.putString("email", email);
             loginPrefsEditor.putString("pass", pass);

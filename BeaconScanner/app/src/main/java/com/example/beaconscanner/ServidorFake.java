@@ -49,10 +49,10 @@ public class ServidorFake {
     CallbackRegistro callbackRegistro;
 
 
-    String IP = "192.168.1.107";
+    String IP = "192.168.0.104";
    //  "172.20.10.5";
     int puerto = 8080;
-
+    String id;
     private SharedPreferences loginPreferences;
 
     // ---------------------------------------------------------------------------
@@ -305,7 +305,65 @@ public class ServidorFake {
         queue.add(jsonobj);
     }
 
+    /**
+     * getIdUsuario : devuelve el id del usuario.
+     * email: string ->
+     *                  getIdUsuario()
+     *                                  -> idUsuario: N
+     *
+     * @param email
+     *
+     *  - Matthew Conde Oltra -
+     */
+    public void getIdUsuario (String email) {
+        Log.d("GETIDUSUARIO", "GetIdUsuario()");
+        String url = "http://"+IP+":"+puerto+"/GETidUsuario";
 
+        JSONObject datos = new JSONObject();
+
+        // Anyadimos los datos al json
+        try {
+            datos.put("Email", email);
+
+            Log.d("GETIDUSUARIO", datos.toString());
+        } catch (JSONException e) {
+            Log.d("GETIDUSUARIOERROR", "Error de email:"+e.toString());
+        }
+
+        // Hacemos la peticion
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("GETIDUSUARIO",response.toString());
+                        try {
+                            if (response.get("status").equals(true)) {
+                                Log.d("GETIDUSUARIO", response.getJSONArray("Usuario").getJSONObject(0).get("IdUsuario").toString());
+                            }
+                            else {
+                                callbackLogin.callbackLogin(false, response);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("GETIDUSUARIO", e.toString());
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        NetworkResponse networkResponse = error.networkResponse;
+                        Log.d("GETIDUSUARIO",error.toString());
+
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonobj);
+
+    }
 
     // ---------------------------------------------------------------------------
     // -> cerrarConexion() ->
