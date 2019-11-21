@@ -87,7 +87,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        tipoUser = loginPreferences.getString("tipoUsuario", "o");
+        tipoUser = loginPreferences.getString("tipousuario", "o");
 
         Log.d("pruebasssss", tipoUser);
 
@@ -173,7 +173,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController;
-        if (tipoUser.equals("conductor")) {
+        if (tipoUser.equals("Conductor")) {
             navController = Navigation.findNavController(this, R.id.nav_host_fragmentc);
 
         }

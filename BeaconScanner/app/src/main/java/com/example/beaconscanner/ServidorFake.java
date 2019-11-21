@@ -24,6 +24,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,7 +51,8 @@ public class ServidorFake {
     CallbackLogin callbackLogin;
     CallbackRegistro callbackRegistro;
     //String IP = "192.168.1.107";
-    String IP = "192.168.1.110";
+    //String IP = "192.168.0.104"; //Red Matthew
+    String IP = "192.168.1.107"; //Red Rosa
    //  "172.20.10.5";
     int puerto = 8080;
     private String id;
@@ -308,7 +310,7 @@ public class ServidorFake {
 
 
     /**
-     * getIdUsuario : devuelve el id del usuario.
+     * getUsuario : devuelve el id del usuario.
      * email: string ->
      *                  getIdUsuario()
      *                                  -> idUsuario: N
@@ -317,9 +319,9 @@ public class ServidorFake {
      *
      *  - Matthew Conde Oltra -
      */
-    public void getIdUsuario (String email) {
-        Log.d("GETIDUSUARIO", "GetIdUsuario()");
-        String url = "http://"+IP+":"+puerto+"/GETidUsuario";
+    public void getUsuario (String email) {
+        Log.d("GETUSUARIO", "GetUsuario() con"+email);
+        String url = "http://"+IP+":"+puerto+"/GetUsuarioPorEmail";
 
         JSONObject datos = new JSONObject();
 
@@ -327,9 +329,9 @@ public class ServidorFake {
         try {
             datos.put("Email", email);
 
-            Log.d("GETIDUSUARIO", datos.toString());
+            Log.d("GETUSUARIO", datos.toString());
         } catch (JSONException e) {
-            Log.d("GETIDUSUARIOERROR", "Error de email:"+e.toString());
+            Log.d("GETUSUARIOERROR", "Error de email:"+e.toString());
         }
 
         // Hacemos la peticion
@@ -338,27 +340,15 @@ public class ServidorFake {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        Log.d("GETIDUSUARIO",response.toString());
-                        String R = response.toString();
-                        String[] s = R.split("");
-                        String n = "";
-
-                        for(int i = 0; i<s.length; i++)
+                        Log.d("GETUSUARIO",response.toString());
+                        if(response == null)
                         {
-                            if(isNumeric(s[i]))
-                            {
-                                n+= s[i];
-                                //Log.d("GETIDUSUARIO", n);
-                            }else
-                            {
-                                //Log.d("GETIDUSUARIO", "Este no es el número"+s[i]);
-                            }
+                            // No hace nada
                         }
-                        id = n;
-                        Log.d("GETIDUSUARIO", id);
-                        callbackRegistro.callbackId(true, id);
-
-
+                        else
+                        {
+                            callbackRegistro.callbackUsuario(true, response);
+                        }
 
                     }
                 },
@@ -366,7 +356,7 @@ public class ServidorFake {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         NetworkResponse networkResponse = error.networkResponse;
-                        Log.d("GETIDUSUARIO",error.toString());
+                        Log.d("GETUSUARIO",error.toString());
 
                     }
                 }
@@ -374,7 +364,7 @@ public class ServidorFake {
 
         // Add the request to the RequestQueue.
         queue.add(jsonobj);
-        //Log.d("GETIDUSUARIO", id);
+        //Log.d("GETUSUARIO", id);
         //return id;
     }
     // ---------------------------------------------------------------------------
