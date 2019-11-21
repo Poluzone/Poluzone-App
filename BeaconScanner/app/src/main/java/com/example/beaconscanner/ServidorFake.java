@@ -306,6 +306,47 @@ public class ServidorFake {
     }
 
 
+    // ---------------------------------------------------------------------------
+    // idUsuario, idSensor -> vincularIDdeUsuarioConSensor() ->
+    // ---------------------------------------------------------------------------
+    public void vincularIDdeUsuarioConSensor(int idUsuario, int idSensor) {
+        Log.d("pruebas", "GetUsuarioPorEmail()");
+        String url = "http://"+IP+":"+puerto+"/ComprobarLogin";
+
+        JSONObject datos = new JSONObject();
+
+
+        // Anyadimos los datos al json
+        try {
+            datos.put("IdUsuario", idUsuario);
+            datos.put("IdSensor", idSensor);
+            Log.d("pruebas json", datos.toString());
+        } catch (JSONException e) {
+            Log.d("pruebas", e.toString());
+        }
+
+        // Hacemos la peticion
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("pruebas",response.toString());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("pruebas",error.toString());
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonobj);
+    }
+
+
 
     // ---------------------------------------------------------------------------
     // -> cerrarConexion() ->
