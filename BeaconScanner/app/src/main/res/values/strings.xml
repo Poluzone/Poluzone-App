@@ -59,10 +59,10 @@
     <string name="porciento">70%</string>
     <string name="nomedidas">No hay medidas disponibles</string>
     <string name="dist">Distancia recorrida:</string>
+
     <string name="tienes_un_sensor">¿Tienes un sensor?</string>
     <string name="aceptar">Aceptar</string>
     <string name="si">Si</string>
     <string name="no">No</string>
-
 
 </resources>
