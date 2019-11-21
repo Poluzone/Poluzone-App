@@ -268,14 +268,14 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             TextInputEditText inputPhone = findViewById(R.id.texto_telefono_registrar);
             String phone = inputPhone.getText().toString();
 
-            // TODO: El id se guarda en el callbackId que es llamado dentro de getIdUsuario()
+            // TODO: El id se guarda en el callbackId que es llamado dentro de getUsuario()
             // - Matthew Conde Oltra -
-            servidorFake.getIdUsuario(email);
+            servidorFake.getUsuario(email);
             // Guardamos las preferencias (cookie)
-            loginPrefsEditor.putString("email", email);
+            /*loginPrefsEditor.putString("email", email);
             loginPrefsEditor.putString("pass", pass);
             loginPrefsEditor.putString("telefono", phone);
-            loginPrefsEditor.commit();
+            loginPrefsEditor.commit();*/
 
             Toast.makeText(getApplicationContext(), statusConductor.toString() , Toast.LENGTH_SHORT).show();
 
@@ -315,25 +315,36 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
      *
      *
      * @param resultado
-     * @param id
+     * @param usuario
      *
      *  - Matthew Conde Oltra -
      */
     @Override
-    public void callbackId(boolean resultado, String id) {
+    public void callbackUsuario(boolean resultado, JSONObject usuario) {
         // Si se ha hecho correctamente
         if (resultado) {
-            // TODO: Hay que guardar el idUsuario en los loginprefs
+            // TODO: Hay que guardar el Usuario en los loginprefs
+            Log.d("Usuario", usuario.toString());
             // Guardamos las preferencias (cookie)
-            //Log.d("GETIDUSUARIO", id);
-            loginPrefsEditor.putString("idUsuario", id);
-            loginPrefsEditor.commit();
+            try
+            {
+                loginPrefsEditor.putString("idUsuario", usuario.getJSONArray("Value").getJSONObject(0).get("Id").toString());
+                loginPrefsEditor.putString("email", usuario.getJSONArray("Value").getJSONObject(0).get("Email").toString());
+                loginPrefsEditor.putString("passEncriptado", usuario.getJSONArray("Value").getJSONObject(0).get("Pass").toString());
+                loginPrefsEditor.putString("telefono", usuario.getJSONArray("Value").getJSONObject(0).get("Telefono").toString());
+                loginPrefsEditor.putString("tipousuario", usuario.getJSONArray("Value").getJSONObject(0).get("Tipo").toString());
+                loginPrefsEditor.commit();
+            }catch(Exception e)
+            {
+                Log.d("Error", e.toString());
+            }
+
 
         } else {
             TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
             mostrarProgress(false);
             // Convenio de devolver response = null cuando el error es de conexión
-            if (id == null)
+            if (usuario == null)
                 Toast.makeText(this, "Error de conexión", Toast.LENGTH_LONG).show();
             else inputEmailLayout.setError(getString(R.string.yaExiste));
         }
