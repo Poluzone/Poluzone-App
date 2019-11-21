@@ -80,37 +80,61 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     Handler handler10;
     Runnable runnable10;
 
+    String tipoUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation_drawer);
-
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        tipoUser = loginPreferences.getString("tipoUsuario", "o");
 
+        Log.d("pruebasssss", tipoUser);
 
         //Funcion que redondea la imagen del menú
         //redondearImagen();
 
         // Codigo relacionado con el navigation drawer
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        Toolbar toolbar;
 
-        mostrarTodosLosGases();
-        crearFabSpeedDial();
+        DrawerLayout drawer;
+        NavigationView navigationView;
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_inicio,
-                R.id.nav_home, R.id.nav_foto, R.id.nav_info, R.id.nav_ajustes, R.id.nav_perfil, R.id.nav_sesion)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+        NavController navController;
+        if (tipoUser.equals("conductor")) {
+            setContentView(R.layout.activity_navigation_drawerc);
+            toolbar = findViewById(R.id.toolbarc);
+            setSupportActionBar(toolbar);
+            drawer = findViewById(R.id.drawer_layoutc);
+            navigationView = findViewById(R.id.nav_viewc);
+            mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_inicio,
+                    R.id.nav_home, R.id.nav_foto, R.id.nav_info, R.id.nav_ajustes, R.id.nav_perfil, R.id.nav_sesion)
+                    .setDrawerLayout(drawer)
+                    .build();
+            navController = Navigation.findNavController(this, R.id.nav_host_fragmentc);
+        }
+        else {
+            setContentView(R.layout.activity_navigation_drawer);
+            toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            drawer = findViewById(R.id.drawer_layout);
+            navigationView = findViewById(R.id.nav_view);
+            mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home,
+                    R.id.nav_foto, R.id.nav_info, R.id.nav_ajustes, R.id.nav_perfil, R.id.nav_sesion)
+                    .setDrawerLayout(drawer)
+                    .build();
+            navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        }
+
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         // /Codigo relacionado con el navigation drawer
+
+        crearFabSpeedDial();
+        mostrarTodosLosGases();
 
         //.............................................................................
         // Backend
@@ -144,6 +168,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
         // Mostramos los datos del usuario en el nav drawer
         String email = loginPreferences.getString("email", "");
+
         TextView textoNombre = findViewById(R.id.nombre_nav);
         textoNombre.setText(email);
 
@@ -155,7 +180,14 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     // -----------------------------------------------------------------------
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavController navController;
+        if (tipoUser.equals("conductor")) {
+            navController = Navigation.findNavController(this, R.id.nav_host_fragmentc);
+
+        }
+        else {
+            navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        }
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
