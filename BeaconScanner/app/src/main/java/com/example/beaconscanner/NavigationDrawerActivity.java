@@ -394,6 +394,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
         // Cada 10 segundos envía al servidor
         if (contador > 10) {
+            receptorBLE.BTAdapter.startLeScan(receptorBLE.callbackLeScan);
             Log.d("pruebas", "alarmaminuto");
             // Sólo se hace si está conectado al beacon y si se ha movido
          //   receptorBLE.localizadorGPS.obtenerMiPosicionGPS();

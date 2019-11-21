@@ -73,7 +73,7 @@ public class LocalizadorGPS {
     public boolean meHeMovido(Location posicion) {
         float distancia = calcularDistancia(posicion);
         Log.d("pruebas", "me he movido " + distancia + " metros");
-        if (distancia >= 100) return true;
+        if (distancia >= 2) return true;
         else return false;
     }
 
