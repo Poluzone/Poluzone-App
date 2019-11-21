@@ -215,7 +215,9 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             // TODO: Hay que guardar el idUsuario en los loginprefs
 
             // Guardamos las preferencias (cookie)
-            loginPrefsEditor.putString("idUsuario", servidorFake.getIdUsuario(email));
+            servidorFake.getIdUsuario(email);
+            //Log.d("GETIDUSUARIO", );
+            //loginPrefsEditor.putString("idUsuario", idUsuario);
             loginPrefsEditor.putString("email", email);
             loginPrefsEditor.putString("pass", pass);
             loginPrefsEditor.putString("telefono", phone);
@@ -230,6 +232,33 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             mostrarProgress(false);
             // Convenio de devolver response = null cuando el error es de conexión
             if (response == null)
+                Toast.makeText(this, "Error de conexión", Toast.LENGTH_LONG).show();
+            else inputEmailLayout.setError(getString(R.string.yaExiste));
+        }
+    }
+    @Override
+    public void callbackId(boolean resultado, String id) {
+        // Si se ha hecho correctamente
+        if (resultado) {
+            // TODO: Hay que guardar el idUsuario en los loginprefs
+
+            // Guardamos las preferencias (cookie)
+
+            Log.d("GETIDUSUARIO", id);
+            loginPrefsEditor.putString("idUsuario", id);
+
+            loginPrefsEditor.commit();
+
+            Log.d("loginprefrences", loginPreferences.getString("idUsuario", ""));
+            Intent i = new Intent(this, NavigationDrawerActivity.class);
+            Log.d("pruebas", "intent main");
+            this.startActivity(i);
+            this.finish();
+        } else {
+            TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
+            mostrarProgress(false);
+            // Convenio de devolver response = null cuando el error es de conexión
+            if (id == null)
                 Toast.makeText(this, "Error de conexión", Toast.LENGTH_LONG).show();
             else inputEmailLayout.setError(getString(R.string.yaExiste));
         }
