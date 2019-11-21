@@ -215,6 +215,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             // TODO: Hay que guardar el idUsuario en los loginprefs
 
             // Guardamos las preferencias (cookie)
+            loginPrefsEditor.putString("idUsuario", servidorFake.getIdUsuario(email));
             loginPrefsEditor.putString("email", email);
             loginPrefsEditor.putString("pass", pass);
             loginPrefsEditor.putString("telefono", phone);

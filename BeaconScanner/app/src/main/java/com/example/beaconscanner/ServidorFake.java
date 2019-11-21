@@ -53,7 +53,7 @@ public class ServidorFake {
     String IP = "192.168.0.104"; //Red Matthew
    //  "172.20.10.5";
     int puerto = 8080;
-
+    private String id;
     private SharedPreferences loginPreferences;
 
     // ---------------------------------------------------------------------------
@@ -307,7 +307,96 @@ public class ServidorFake {
     }
 
 
+    /**
+     * getIdUsuario : devuelve el id del usuario.
+     * email: string ->
+     *                  getIdUsuario()
+     *                                  -> idUsuario: N
+     *
+     * @param email
+     *
+     *  - Matthew Conde Oltra -
+     */
+    public String getIdUsuario (String email) {
+        Log.d("GETIDUSUARIO", "GetIdUsuario()");
+        String url = "http://"+IP+":"+puerto+"/GETidUsuario";
 
+        JSONObject datos = new JSONObject();
+
+        // Anyadimos los datos al json
+        try {
+            datos.put("Email", email);
+
+            Log.d("GETIDUSUARIO", datos.toString());
+        } catch (JSONException e) {
+            Log.d("GETIDUSUARIOERROR", "Error de email:"+e.toString());
+        }
+
+        // Hacemos la peticion
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("GETIDUSUARIO",response.toString());
+                        String R = response.toString();
+                        String[] s = R.split("");
+                        String n = "";
+
+                        for(int i = 0; i<s.length; i++)
+                        {
+                            if(isNumeric(s[i]))
+                            {
+                                n+= s[i];
+                                //Log.d("GETIDUSUARIO", n);
+                            }else
+                            {
+                                //Log.d("GETIDUSUARIO", "Este no es el número"+s[i]);
+                            }
+                        }
+                        id = n;
+                        //Log.d("GETIDUSUARIO", id);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        NetworkResponse networkResponse = error.networkResponse;
+                        Log.d("GETIDUSUARIO",error.toString());
+
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonobj);
+        return id;
+    }
+
+    /**
+     * Esta función sirve para comparar caracteres, uno a uno de forma que te diga si son o no numericos.
+     *
+     * cadena: string ->
+     *                   isNumeric()
+     *                              -> boolean
+     * @param cadena
+     * @return
+     *
+     *  - Matthew Conde Oltra -
+     */
+    public static boolean isNumeric(String cadena) {
+
+        boolean resultado;
+
+        try {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+
+        return resultado;
+    }
     // ---------------------------------------------------------------------------
     // -> cerrarConexion() ->
     // ---------------------------------------------------------------------------
