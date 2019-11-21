@@ -79,9 +79,6 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
             loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
             loginPrefsEditor = loginPreferences.edit();
 
-            loginPrefsEditor.putString("tipoUsuario", "normal");
-            loginPrefsEditor.commit();
-
             String email = loginPreferences.getString("email", "");
             String pass = loginPreferences.getString("passSinEncriptar", "");
 
@@ -218,12 +215,6 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
     private void errorLogin() {
         inputEmailLayout.setError(" ");
         inputPassLayout.setError("Email y/o contraseña incorrecta");
-
-        // para pruebas
-        Intent i = new Intent(this, NavigationDrawerActivity.class);
-        Log.d("pruebas", "intent main");
-        this.startActivity(i);
-        this.finish();
     }
 
     // ---------------------------------------------------------------------------
@@ -283,11 +274,6 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
             // Mostramos los mensajes de error en pantalla
             if (response == null) {
                 Toast.makeText(this, "Error de conexión", Toast.LENGTH_LONG).show();
-                 // para pruebas
-                Intent i = new Intent(this, NavigationDrawerActivity.class);
-                Log.d("pruebas", "intent main");
-                this.startActivity(i);
-                this.finish();
             }
             else errorLogin();
         }
