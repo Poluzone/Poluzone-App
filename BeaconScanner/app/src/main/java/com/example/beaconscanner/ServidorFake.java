@@ -31,6 +31,8 @@ import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.security.auth.callback.Callback;
+
 // -----------------------------------------------------------------------
 // ServidorFake.java
 // Equipo 3
@@ -47,9 +49,8 @@ public class ServidorFake {
     RequestQueue queue;
     CallbackLogin callbackLogin;
     CallbackRegistro callbackRegistro;
-
-
-    String IP = "192.168.43.18";
+    //String IP = "192.168.1.107";
+    String IP = "192.168.0.104"; //Red Matthew
    //  "172.20.10.5";
     int puerto = 8080;
     private String id;
@@ -316,7 +317,7 @@ public class ServidorFake {
      *
      *  - Matthew Conde Oltra -
      */
-    public String getIdUsuario (String email) {
+    public void getIdUsuario (String email) {
         Log.d("GETIDUSUARIO", "GetIdUsuario()");
         String url = "http://"+IP+":"+puerto+"/GETidUsuario";
 
@@ -336,6 +337,7 @@ public class ServidorFake {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
                         Log.d("GETIDUSUARIO",response.toString());
                         String R = response.toString();
                         String[] s = R.split("");
@@ -353,7 +355,10 @@ public class ServidorFake {
                             }
                         }
                         id = n;
-                        //Log.d("GETIDUSUARIO", id);
+                        Log.d("GETIDUSUARIO", id);
+                        callbackRegistro.callbackId(true, id);
+
+
 
                     }
                 },
@@ -369,7 +374,8 @@ public class ServidorFake {
 
         // Add the request to the RequestQueue.
         queue.add(jsonobj);
-        return id;
+        //Log.d("GETIDUSUARIO", id);
+        //return id;
     }
     // ---------------------------------------------------------------------------
     // idUsuario, idSensor -> vincularIDdeUsuarioConSensor() ->
