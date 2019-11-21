@@ -103,6 +103,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
 
+        // Creamos el servidorFake indicando la direccion ip y el puerto
+        servidorFake = new ServidorFake(this);
+
         NavController navController;
         if (tipoUser.equals("conductor")) {
             setContentView(R.layout.activity_navigation_drawerc);
@@ -115,6 +118,15 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     .setDrawerLayout(drawer)
                     .build();
             navController = Navigation.findNavController(this, R.id.nav_host_fragmentc);
+
+            // ---------------------------------- BACKEND ------------------------------------------
+            // Creamos el receptorBLE indicando la actividad y el uuid que buscamos
+            receptorBLE = new ReceptorBLE(this, nuestroUUID);
+            Log.d("pruebas", "receptor creado");
+
+            // Empezar temporizadores para mandar al servidor (temporal)
+            alarmaQueSuenaCadaMinuto();
+            alarmaQueSuenaCada10Minutos();
         }
         else {
             setContentView(R.layout.activity_navigation_drawer);
@@ -135,26 +147,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
         crearFabSpeedDial();
         mostrarTodosLosGases();
-
-        //.............................................................................
-        // Backend
-        //.............................................................................
-
-
-        // Creamos el receptorBLE indicando la actividad y el uuid que buscamos
-        receptorBLE = new ReceptorBLE(this, nuestroUUID);
-        Log.d("pruebas", "receptor creado");
-
-        // Creamos el servidorFake indicando la direccion ip y el puerto
-        servidorFake = new ServidorFake(this);
-
-        // Empezar temporizadores para mandar al servidor (temporal)
-        alarmaQueSuenaCadaMinuto();
-        alarmaQueSuenaCada10Minutos();
-
-        //.............................................................................
-        // /Backend
-        //.............................................................................
 
     }
 
@@ -394,6 +386,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
         // Cada 10 segundos envía al servidor
         if (contador > 10) {
+            receptorBLE.BTAdapter.startLeScan(receptorBLE.callbackLeScan);
             Log.d("pruebas", "alarmaminuto");
             // Sólo se hace si está conectado al beacon y si se ha movido
          //   receptorBLE.localizadorGPS.obtenerMiPosicionGPS();

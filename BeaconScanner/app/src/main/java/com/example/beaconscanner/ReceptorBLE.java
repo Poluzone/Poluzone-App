@@ -100,7 +100,7 @@ public class ReceptorBLE {
                     instante = System.currentTimeMillis();
 
                     // !! COMENTAR DESPUES DE LAS PRUEBAS
-                    // stopEscanearDispositivosBLE();
+                    stopEscanearDispositivosBLE();
                 }
             }
         };
