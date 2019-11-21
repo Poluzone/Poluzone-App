@@ -50,7 +50,7 @@ public class ServidorFake {
     CallbackLogin callbackLogin;
     CallbackRegistro callbackRegistro;
     //String IP = "192.168.1.107";
-    String IP = "192.168.0.104"; //Red Matthew
+    String IP = "192.168.1.110";
    //  "172.20.10.5";
     int puerto = 8080;
     private String id;
@@ -177,7 +177,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     // mail:texto, password:texto, telefono:N -> insertarUsuario() ->
     // ---------------------------------------------------------------------------
-    public void insertarUsuario(String email, String password, int telefono) {
+    public void insertarUsuario(String email, String password, int telefono,String tipoUsuario) {
         Log.d("pruebas", "insertarUsuario()");
         String url = "http://"+IP+":"+puerto+"/insertarUsuario/";
 
@@ -189,7 +189,7 @@ public class ServidorFake {
             datos.put("Email", email);
             datos.put("Password", password);
             datos.put("Telefono", telefono);
-            datos.put("TipoUsuario", "normal");
+            datos.put("TipoUsuario", tipoUsuario);
             Log.d("pruebas json", datos.toString());
         } catch (JSONException e) {
             Log.d("pruebas", e.toString());
@@ -377,6 +377,45 @@ public class ServidorFake {
         //Log.d("GETIDUSUARIO", id);
         //return id;
     }
+    // ---------------------------------------------------------------------------
+    // idUsuario, idSensor -> vincularIDdeUsuarioConSensor() ->
+    // ---------------------------------------------------------------------------
+    public void vincularIDdeUsuarioConSensor(int idUsuario, int idSensor) {
+        Log.d("pruebas", "vincularIDdeUsuarioConSensor()");
+        String url = "http://"+IP+":"+puerto+"/insertarIdUsuarioConIdsensor";
+
+        JSONObject datos = new JSONObject();
+
+
+        // Anyadimos los datos al json
+        try {
+            datos.put("IdUsuario", idUsuario);
+            datos.put("IdSensor", idSensor);
+            Log.d("pruebas json", datos.toString());
+        } catch (JSONException e) {
+            Log.d("pruebasIDUSuario", e.toString());
+        }
+
+        // Hacemos la peticion
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("pruebasIDUSuario",response.toString());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("pruebasIDUSuario",error.toString());
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonobj);
+    }
 
     /**
      * Esta función sirve para comparar caracteres, uno a uno de forma que te diga si son o no numericos.
@@ -409,6 +448,3 @@ public class ServidorFake {
 
     }
 }
-
-
-

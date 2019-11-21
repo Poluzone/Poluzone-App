@@ -1,6 +1,7 @@
 package com.example.beaconscanner;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -9,12 +10,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.blikoon.qrcodescanner.QrCodeActivity;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -48,7 +51,16 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
     private CircularProgressView progressView;
     CheckBox checkBox;
     Button buttonRegistrarse;
+    Button buttonTipoUser;
+    RadioButton siTengoSensor;
+    RadioButton noTengoSensor;
+    AlertDialog dialog;
+    View mView;
+    Boolean statusConductor;
+    int IdUsuario =0;
+    int idSensor=0;
 
+    private static final int REQUEST_CODE_QR_SCAN = 101;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +72,17 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         setContentView(R.layout.registro);
 
 
+
         servidorFake = new ServidorFake(this);
 
         buttonRegistrarse = findViewById(R.id.button_register);
+
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegistrarUsuarioActivity.this);
+        mView = getLayoutInflater().inflate(R.layout.popup_tipo_usuario,null);
+        mBuilder.setView(mView);
+        dialog = mBuilder.create();
+
 
         progressView = (CircularProgressView) findViewById(R.id.progress_view);
 
@@ -77,8 +97,11 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         loginaqui.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent i = new Intent(getBaseContext(), LoginActivity.class);
                 startActivity(i);
+
+
             }
         });
 
@@ -87,9 +110,15 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         buttonRegistrarse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registrar();
+
+               registrar();
+
             }
         });
+
+
+
+
     }
 
     // ---------------------------------------------------------------------------
@@ -99,21 +128,48 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
 
         TextInputEditText inputEmail = findViewById(R.id.texto_email_registrar);
 
-        String email = inputEmail.getText().toString();
+        final String email = inputEmail.getText().toString();
 
         TextInputEditText inputPass = findViewById(R.id.texto_contrasenya_registrar);
-        String pass = inputPass.getText().toString();
+        final String pass = inputPass.getText().toString();
 
         TextInputEditText inputPass2 = findViewById(R.id.texto_contrasenyaotravez_registrar);
         String pass2 = inputPass2.getText().toString();
 
         TextInputEditText inputPhone = findViewById(R.id.texto_telefono_registrar);
-        String phone = inputPhone.getText().toString();
+        final String phone = inputPhone.getText().toString();
 
         if (validarSiEstanVacios(email, pass, pass2, phone) && validarEmail(email) && validarContrasenya(pass, pass2) && validarReCaptcha()==true) {
-            // Guardamos los datos en las preferencias
-            mostrarProgress(true);
-            servidorFake.insertarUsuario(email, pass, Integer.parseInt(phone));
+
+
+            dialog.show();
+
+            buttonTipoUser =  (Button) mView.findViewById(R.id.button_tipo_user);
+            siTengoSensor =  (RadioButton) mView.findViewById(R.id.boton_si_sensor);
+            noTengoSensor = (RadioButton)mView.findViewById(R.id.boton_no_sensor);
+
+            buttonTipoUser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    if(siTengoSensor.isChecked()){
+
+                        Intent i = new Intent(RegistrarUsuarioActivity.this, QrCodeActivity.class);
+                        startActivityForResult(i, REQUEST_CODE_QR_SCAN);
+
+                    }if (noTengoSensor.isChecked()){
+
+                        statusConductor = false;
+                        dialog.dismiss();
+                        mostrarProgress(true);
+                        servidorFake.insertarUsuario(email, pass, Integer.parseInt(phone),"normal");
+                    }
+
+
+                }
+            });
+
         }
     }
 
@@ -221,7 +277,24 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             loginPrefsEditor.putString("telefono", phone);
             loginPrefsEditor.commit();
 
-            Log.d("pruebas", loginPreferences.toString());
+            Toast.makeText(getApplicationContext(), statusConductor.toString() , Toast.LENGTH_SHORT).show();
+
+            if(statusConductor==true){
+
+                mostrarProgress(true);
+                String stringIDUser =loginPreferences.getString("idUsuario","");
+
+
+                try{
+                    IdUsuario = Integer.parseInt(stringIDUser.toString());
+                    servidorFake.vincularIDdeUsuarioConSensor(IdUsuario,idSensor);
+                }
+                catch (NumberFormatException nfe){
+
+                    Toast.makeText(getApplicationContext(), "Could not parse " + nfe, Toast.LENGTH_SHORT).show();
+                }
+            }
+
             Intent i = new Intent(this, NavigationDrawerActivity.class);
             Log.d("pruebas", "intent main");
             this.startActivity(i);
@@ -255,13 +328,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             //Log.d("GETIDUSUARIO", id);
             loginPrefsEditor.putString("idUsuario", id);
             loginPrefsEditor.commit();
-            //Comprobación de que se ha guardado
-            //Log.d("loginprefrences", loginPreferences.getString("idUsuario", ""));
 
-            Intent i = new Intent(this, NavigationDrawerActivity.class);
-            Log.d("pruebas", "intent main");
-            this.startActivity(i);
-            this.finish();
         } else {
             TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
             mostrarProgress(false);
@@ -363,5 +430,64 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    // ---------------------------------------------------------------------------
+    // onActivityResult()
+    // Recoge el QR y crea o no el usuario con su respectivo sensor
+    // ---------------------------------------------------------------------------
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode != Activity.RESULT_OK) {
+            Toast.makeText(getApplicationContext(), "No se pudo obtener una respuesta", Toast.LENGTH_SHORT).show();
+            String resultado = data.getStringExtra("com.blikoon.qrcodescanner.error_decoding_image");
+            if (resultado != null) {
+                Toast.makeText(getApplicationContext(), "No se pudo escanear el código QR", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+        if (requestCode == REQUEST_CODE_QR_SCAN) {
+            if (data != null) {
+                String lectura = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
+
+                Toast.makeText(getApplicationContext(), "Leído: " + lectura, Toast.LENGTH_SHORT).show();
+
+                if(lectura.regionMatches(0,"poluzone/idSensor/",0,18)){
+
+
+                    statusConductor = true;
+
+                    TextInputEditText inputEmail = findViewById(R.id.texto_email_registrar);
+
+                    final String email = inputEmail.getText().toString();
+
+                    TextInputEditText inputPass = findViewById(R.id.texto_contrasenya_registrar);
+                    final String pass = inputPass.getText().toString();
+
+                    TextInputEditText inputPhone = findViewById(R.id.texto_telefono_registrar);
+                    final String phone = inputPhone.getText().toString();
+
+                    try{
+                        idSensor = Integer.parseInt( lectura.substring(18,19));
+                        servidorFake.insertarUsuario(email,pass, Integer.parseInt(phone),"Conductor");
+                    }
+                    catch (NumberFormatException nfe){
+
+                        Toast.makeText(getApplicationContext(), "Could not parse " + nfe, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                    Toast.makeText(getApplicationContext(), lectura.substring(18,19), Toast.LENGTH_SHORT).show();
+                }else{
+                    statusConductor = false;
+                    dialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "El QR no coincide con ningún sensor", Toast.LENGTH_SHORT).show();
+                }
+
+            }else{
+                statusConductor = false;
+                dialog.dismiss();
+            }
+        }
     }
 }
