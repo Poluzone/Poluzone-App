@@ -395,7 +395,12 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
 
                 if(lectura.regionMatches(0,"poluzone/idSensor/",0,18)){
 
-                    Toast.makeText(getApplicationContext(), "Funciono ", Toast.LENGTH_SHORT).show();
+
+                    String idSensor = lectura.substring(18,21);
+
+                    //servidorFake.vincularIDdeUsuarioConSensor(,idSensor);
+
+                    Toast.makeText(getApplicationContext(), lectura.substring(18,21), Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getApplicationContext(), "No funciono ", Toast.LENGTH_SHORT).show();
                 }
