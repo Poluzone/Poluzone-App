@@ -212,12 +212,10 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             TextInputEditText inputPhone = findViewById(R.id.texto_telefono_registrar);
             String phone = inputPhone.getText().toString();
 
-            // TODO: Hay que guardar el idUsuario en los loginprefs
-
-            // Guardamos las preferencias (cookie)
+            // TODO: El id se guarda en el callbackId que es llamado dentro de getIdUsuario()
+            // - Matthew Conde Oltra -
             servidorFake.getIdUsuario(email);
-            //Log.d("GETIDUSUARIO", );
-            //loginPrefsEditor.putString("idUsuario", idUsuario);
+            // Guardamos las preferencias (cookie)
             loginPrefsEditor.putString("email", email);
             loginPrefsEditor.putString("pass", pass);
             loginPrefsEditor.putString("telefono", phone);
@@ -236,20 +234,29 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             else inputEmailLayout.setError(getString(R.string.yaExiste));
         }
     }
+
+    /**
+     * Función callback que recibe el id del usuario desde una función del servidorFake.
+     * Y le guarda el id del usuario en la variable loginPreferences.
+     *
+     *
+     * @param resultado
+     * @param id
+     *
+     *  - Matthew Conde Oltra -
+     */
     @Override
     public void callbackId(boolean resultado, String id) {
         // Si se ha hecho correctamente
         if (resultado) {
             // TODO: Hay que guardar el idUsuario en los loginprefs
-
             // Guardamos las preferencias (cookie)
-
-            Log.d("GETIDUSUARIO", id);
+            //Log.d("GETIDUSUARIO", id);
             loginPrefsEditor.putString("idUsuario", id);
-
             loginPrefsEditor.commit();
+            //Comprobación de que se ha guardado
+            //Log.d("loginprefrences", loginPreferences.getString("idUsuario", ""));
 
-            Log.d("loginprefrences", loginPreferences.getString("idUsuario", ""));
             Intent i = new Intent(this, NavigationDrawerActivity.class);
             Log.d("pruebas", "intent main");
             this.startActivity(i);
