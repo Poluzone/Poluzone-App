@@ -177,7 +177,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     // mail:texto, password:texto, telefono:N -> insertarUsuario() ->
     // ---------------------------------------------------------------------------
-    public void insertarUsuario(String email, String password, int telefono) {
+    public void insertarUsuario(String email, String password, int telefono,String tipoUsuario) {
         Log.d("pruebas", "insertarUsuario()");
         String url = "http://"+IP+":"+puerto+"/insertarUsuario/";
 
@@ -189,7 +189,7 @@ public class ServidorFake {
             datos.put("Email", email);
             datos.put("Password", password);
             datos.put("Telefono", telefono);
-            datos.put("TipoUsuario", "normal");
+            datos.put("TipoUsuario", tipoUsuario);
             Log.d("pruebas json", datos.toString());
         } catch (JSONException e) {
             Log.d("pruebas", e.toString());
@@ -393,7 +393,7 @@ public class ServidorFake {
             datos.put("IdSensor", idSensor);
             Log.d("pruebas json", datos.toString());
         } catch (JSONException e) {
-            Log.d("pruebas", e.toString());
+            Log.d("pruebasIDUSuario", e.toString());
         }
 
         // Hacemos la peticion
@@ -401,14 +401,14 @@ public class ServidorFake {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("pruebas",response.toString());
+                        Log.d("pruebasIDUSuario",response.toString());
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("pruebas",error.toString());
+                        Log.d("pruebasIDUSuario",error.toString());
                     }
                 }
         );
