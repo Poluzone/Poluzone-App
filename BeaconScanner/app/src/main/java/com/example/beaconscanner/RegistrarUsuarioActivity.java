@@ -27,6 +27,7 @@ import com.google.android.gms.safetynet.SafetyNetApi;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.regex.Matcher;
@@ -158,8 +159,8 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
                         Intent i = new Intent(RegistrarUsuarioActivity.this, QrCodeActivity.class);
                         startActivityForResult(i, REQUEST_CODE_QR_SCAN);
 
-                    }if (noTengoSensor.isChecked()){
-
+                    }
+                    if (noTengoSensor.isChecked()){
                         statusConductor = false;
                         dialog.dismiss();
                         mostrarProgress(true);
@@ -262,12 +263,6 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             TextInputEditText inputEmail = findViewById(R.id.texto_email_registrar);
             String email = inputEmail.getText().toString();
 
-            TextInputEditText inputPass = findViewById(R.id.texto_contrasenya_registrar);
-            String pass = inputPass.getText().toString();
-
-            TextInputEditText inputPhone = findViewById(R.id.texto_telefono_registrar);
-            String phone = inputPhone.getText().toString();
-
             // TODO: El id se guarda en el callbackId que es llamado dentro de getUsuario()
             // - Matthew Conde Oltra -
             servidorFake.getUsuario(email);
@@ -279,25 +274,6 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
 
             Toast.makeText(getApplicationContext(), statusConductor.toString() , Toast.LENGTH_SHORT).show();
 
-            if(statusConductor==true){
-
-                mostrarProgress(true);
-                String stringIDUser =loginPreferences.getString("idUsuario","");
-
-
-                try{
-                    IdUsuario = Integer.parseInt(stringIDUser.toString());
-                    servidorFake.vincularIDdeUsuarioConSensor(IdUsuario,idSensor);
-                }
-                catch (NumberFormatException nfe){
-
-                    Toast.makeText(getApplicationContext(), "Could not parse " + nfe, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            Intent i = new Intent(this, NavigationDrawerActivity.class);
-            Log.d("pruebas", "intent main");
-            this.startActivity(i);
             this.finish();
         } else {
             TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
@@ -323,17 +299,39 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
     public void callbackUsuario(boolean resultado, JSONObject usuario) {
         // Si se ha hecho correctamente
         if (resultado) {
-            // TODO: Hay que guardar el Usuario en los loginprefs
             Log.d("Usuario", usuario.toString());
             // Guardamos las preferencias (cookie)
             try
             {
-                loginPrefsEditor.putString("idUsuario", usuario.getJSONArray("Value").getJSONObject(0).get("Id").toString());
-                loginPrefsEditor.putString("email", usuario.getJSONArray("Value").getJSONObject(0).get("Email").toString());
-                loginPrefsEditor.putString("passEncriptado", usuario.getJSONArray("Value").getJSONObject(0).get("Pass").toString());
-                loginPrefsEditor.putString("telefono", usuario.getJSONArray("Value").getJSONObject(0).get("Telefono").toString());
-                loginPrefsEditor.putString("tipousuario", usuario.getJSONArray("Value").getJSONObject(0).get("Tipo").toString());
+                loginPrefsEditor.putString("idUsuario", usuario.getJSONArray("Usuario").getJSONObject(0).get("IdUsuario").toString());
+                loginPrefsEditor.putString("email", usuario.getJSONArray("Usuario").getJSONObject(0).get("Email").toString());
+                loginPrefsEditor.putString("passEncriptado", usuario.getJSONArray("Usuario").getJSONObject(0).get("Password").toString());
+                loginPrefsEditor.putString("telefono", usuario.getJSONArray("Usuario").getJSONObject(0).get("Telefono").toString());
+                loginPrefsEditor.putString("tipousuario", usuario.getJSONArray("Usuario").getJSONObject(0).get("TipoUsuario").toString());
+                loginPrefsEditor.putString("nombre", usuario.getJSONArray("Usuario").getJSONObject(0).get("Nombre").toString());
                 loginPrefsEditor.commit();
+
+                if(statusConductor==true){
+
+                    dialog.dismiss();
+                    mostrarProgress(true);
+                    String stringIDUser = usuario.getJSONArray("Usuario").getJSONObject(0).get("IdUsuario").toString();
+
+                    try{
+                        IdUsuario = Integer.parseInt(stringIDUser);
+                        servidorFake.vincularIDdeUsuarioConSensor(IdUsuario,idSensor);
+                    }
+                    catch (NumberFormatException nfe){
+
+                        Toast.makeText(getApplicationContext(), "Could not parse " + nfe, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                Intent i = new Intent(this, NavigationDrawerActivity.class);
+                Log.d("pruebas", "intent main");
+                this.startActivity(i);
+                this.finish();
+
             }catch(Exception e)
             {
                 Log.d("Error", e.toString());

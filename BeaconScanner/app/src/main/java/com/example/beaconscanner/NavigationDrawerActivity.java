@@ -87,7 +87,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        tipoUser = loginPreferences.getString("tipoUsuario", "o");
+        tipoUser = loginPreferences.getString("tipousuario", "o");
 
         Log.d("pruebasssss", tipoUser);
 
@@ -107,7 +107,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         servidorFake = new ServidorFake(this);
 
         NavController navController;
-        if (tipoUser.equals("conductor")) {
+        if (tipoUser.equals("Conductor")) {
             setContentView(R.layout.activity_navigation_drawerc);
             toolbar = findViewById(R.id.toolbarc);
             setSupportActionBar(toolbar);
@@ -173,7 +173,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController;
-        if (tipoUser.equals("conductor")) {
+        if (tipoUser.equals("Conductor")) {
             navController = Navigation.findNavController(this, R.id.nav_host_fragmentc);
 
         }
