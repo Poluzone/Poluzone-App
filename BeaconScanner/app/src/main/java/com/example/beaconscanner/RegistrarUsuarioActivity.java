@@ -217,10 +217,11 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             servidorFake.getIdUsuario(email);
             // Guardamos las preferencias (cookie)
             loginPrefsEditor.putString("email", email);
-            loginPrefsEditor.putString("pass", pass);
+            loginPrefsEditor.putString("passSinEncriptar", pass);
             loginPrefsEditor.putString("telefono", phone);
             loginPrefsEditor.commit();
 
+            Log.d("pruebas", loginPreferences.toString());
             Intent i = new Intent(this, NavigationDrawerActivity.class);
             Log.d("pruebas", "intent main");
             this.startActivity(i);
