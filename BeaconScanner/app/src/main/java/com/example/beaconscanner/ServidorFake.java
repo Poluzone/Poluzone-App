@@ -49,7 +49,7 @@ public class ServidorFake {
     CallbackRegistro callbackRegistro;
 
 
-    String IP = "192.168.1.107";
+    String IP = "192.168.2.233";
    //  "172.20.10.5";
     int puerto = 8080;
 
@@ -310,8 +310,8 @@ public class ServidorFake {
     // idUsuario, idSensor -> vincularIDdeUsuarioConSensor() ->
     // ---------------------------------------------------------------------------
     public void vincularIDdeUsuarioConSensor(int idUsuario, int idSensor) {
-        Log.d("pruebas", "GetUsuarioPorEmail()");
-        String url = "http://"+IP+":"+puerto+"/ComprobarLogin";
+        Log.d("pruebas", "vincularIDdeUsuarioConSensor()");
+        String url = "http://"+IP+":"+puerto+"/insertarIdUsuarioConIdsensor";
 
         JSONObject datos = new JSONObject();
 
