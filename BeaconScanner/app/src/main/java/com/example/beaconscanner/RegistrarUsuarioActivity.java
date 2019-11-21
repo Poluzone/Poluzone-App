@@ -56,6 +56,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
     RadioButton noTengoSensor;
     AlertDialog dialog;
     View mView;
+    int IdUsuario =0;
 
     private static final int REQUEST_CODE_QR_SCAN = 101;
     @Override
@@ -79,8 +80,6 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         mView = getLayoutInflater().inflate(R.layout.popup_tipo_usuario,null);
         mBuilder.setView(mView);
         dialog = mBuilder.create();
-
-
 
 
         progressView = (CircularProgressView) findViewById(R.id.progress_view);
@@ -463,15 +462,25 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
                     mostrarProgress(true);
                     servidorFake.insertarUsuario(email, pass, Integer.parseInt(phone));
 
-                    int idSensor = Integer.parseInt( lectura.substring(18,21));
-                    int idUsuario =Integer.parseInt( loginPreferences.getString("idUsuario",""));
+                    int idSensor = Integer.parseInt( lectura.substring(18,19));
+                   String stringIDUser =loginPreferences.getString("idUsuario","");
 
-                    servidorFake.vincularIDdeUsuarioConSensor(idUsuario,idSensor);
+                   try{
+                   IdUsuario = Integer.parseInt(stringIDUser.toString());
 
-                    Toast.makeText(getApplicationContext(), lectura.substring(18,21), Toast.LENGTH_SHORT).show();
+                       servidorFake.vincularIDdeUsuarioConSensor(IdUsuario,idSensor);
+                   }
+                   catch (NumberFormatException nfe){
+
+                       Toast.makeText(getApplicationContext(), "Could not parse " + nfe, Toast.LENGTH_SHORT).show();
+                   }
+
+
+
+                    Toast.makeText(getApplicationContext(), lectura.substring(18,19), Toast.LENGTH_SHORT).show();
                 }else{
                     dialog.dismiss();
-                    Toast.makeText(getApplicationContext(), "El QR no pertenece a la empresa", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "El QR no coincide con ningún sensor", Toast.LENGTH_SHORT).show();
                 }
 
             }else{
