@@ -49,7 +49,8 @@ public class ServidorFake {
     CallbackRegistro callbackRegistro;
 
 
-    String IP = "192.168.1.107";
+    //String IP = "192.168.1.107";
+    String IP = "192.168.0.104"; //Red Matthew
    //  "172.20.10.5";
     int puerto = 8080;
 
