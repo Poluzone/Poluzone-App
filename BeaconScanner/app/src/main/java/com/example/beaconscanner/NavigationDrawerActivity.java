@@ -107,7 +107,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         servidorFake = new ServidorFake(this);
 
         NavController navController;
-        if (tipoUser.equals("conductor")) {
+        if (tipoUser.equals("Conductor")) {
             setContentView(R.layout.activity_navigation_drawerc);
             toolbar = findViewById(R.id.toolbarc);
             setSupportActionBar(toolbar);
