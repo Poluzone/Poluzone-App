@@ -269,7 +269,6 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
 
             Toast.makeText(getApplicationContext(), statusConductor.toString() , Toast.LENGTH_SHORT).show();
 
-            this.finish();
         } else {
             TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
             mostrarProgress(false);
