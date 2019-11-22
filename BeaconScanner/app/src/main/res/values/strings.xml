@@ -59,5 +59,6 @@
     <string name="porciento">70%</string>
     <string name="nomedidas">No hay medidas disponibles</string>
     <string name="dist">Distancia recorrida:</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>
