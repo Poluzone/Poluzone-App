@@ -252,8 +252,6 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
 
                 Log.d("prueba", "Ha iniciado sesión");
 
-                String id = servidorFake.getIdUsuario(response.getJSONArray("Usuario").getJSONObject(0).get("Email").toString());
-
                 loginPrefsEditor.putString("email", response.getJSONArray("Usuario").getJSONObject(0).get("Email").toString());
                 loginPrefsEditor.putString("passEncriptado", response.getJSONArray("Usuario").getJSONObject(0).get("Password").toString());
                 loginPrefsEditor.putInt("idUsuario", response.getJSONArray("Usuario").getJSONObject(0).getInt("IdUsuario"));
