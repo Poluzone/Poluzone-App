@@ -54,16 +54,39 @@
                 android:textColor="@color/common_google_signin_btn_text_dark_default"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/textView"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nunito_semibold"
-                android:gravity="center_vertical"
-                android:text="@string/porciento"
-                android:textAlignment="viewStart"
-                android:textColor="@color/common_google_signin_btn_text_dark_default"
-                android:textSize="45sp" />
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textViewPorcentaje"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:gravity="center_vertical"
+                    android:text="@string/porciento"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/common_google_signin_btn_text_dark_default"
+                    android:textSize="45sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iconoinfo"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:adjustViewBounds="true"
+                    android:padding="16dp"
+                    android:src="@drawable/baseline_info_black_48"
+                    android:tint="@color/common_google_signin_btn_text_dark_default"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/textViewPorcentaje"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/textView5"

@@ -51,7 +51,7 @@
     <string name="app_intro">Poluzone intro</string>
 
     <string name="cal">Calidad del aire</string>
-    <string name="veinticuatro">Según las últimas 24 horas</string>
+    <string name="veinticuatro">Durante su jornada de trabajo</string>
     <string name="estadonodo">Estado nodo: </string>
     <string name="mismedidas">Mis medidas</string>
     <string name="activo">Activo</string>
