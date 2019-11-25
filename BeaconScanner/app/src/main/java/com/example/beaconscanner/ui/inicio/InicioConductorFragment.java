@@ -2,6 +2,7 @@ package com.example.beaconscanner.ui.inicio;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.graphics.drawable.Drawable;
@@ -15,8 +16,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.beaconscanner.InfoDialog;
 import com.example.beaconscanner.Medida;
 import com.example.beaconscanner.R;
 import com.github.mikephil.charting.charts.LineChart;
@@ -143,6 +146,18 @@ public class InicioConductorFragment extends Fragment {
         LineData lineData = new LineData(dataSet);
         chart.setData(lineData);
         chart.invalidate(); // refresh
+
+
+        // ----------------------------------- INFO DIALOG ---------------------------------------------
+
+        final InfoDialog infoDialog = new InfoDialog();
+        ImageView iconoInfo = root.findViewById(R.id.iconoinfo);
+        iconoInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                infoDialog.show(getFragmentManager(),"");
+            }
+        });
 
         return root;
     }
