@@ -295,6 +295,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
         if (resultado) {
             Log.d("Usuario", usuario.toString());
             // Guardamos las preferencias (cookie)
+
             try
             {
                 loginPrefsEditor.putString("idUsuario", usuario.getJSONArray("Usuario").getJSONObject(0).get("IdUsuario").toString());
@@ -330,8 +331,6 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
             {
                 Log.d("Error", e.toString());
             }
-
-
         } else {
             TextInputLayout inputEmailLayout = findViewById(R.id.texto_email_registrar_layout);
             mostrarProgress(false);

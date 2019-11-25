@@ -50,9 +50,10 @@ public class ServidorFake {
     RequestQueue queue;
     CallbackLogin callbackLogin;
     CallbackRegistro callbackRegistro;
+
     //String IP = "192.168.1.107";
-    //String IP = "192.168.0.104"; //Red Matthew
-    String IP = "192.168.1.107"; //Red Rosa
+    String IP = "192.168.43.125"; //Red Matthew
+    //String IP = "192.168.1.107"; //Red Rosa
    //  "172.20.10.5";
     int puerto = 8080;
     private String id;
@@ -308,11 +309,10 @@ public class ServidorFake {
         queue.add(jsonobj);
     }
 
-
     /**
      * getUsuario : devuelve el id del usuario.
      * email: string ->
-     *                  getIdUsuario()
+     *                  getUsuario()
      *                                  -> idUsuario: N
      *
      * @param email

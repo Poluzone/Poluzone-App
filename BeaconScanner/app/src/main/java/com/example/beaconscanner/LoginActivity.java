@@ -87,6 +87,9 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
 
 
             // Si hay loginprefs (se ha logeado antes)
+            // Comprobamos si el loginPrefs están vacios, si lo están comprobará el
+            // usuario para saber si existe.
+            // Esto solo ocurre si es la primera vez que se loguea
             if (validarSiEstanVacios(email, pass, 1)) {
                 servidorFake.comprobarUsuarioPorEmail(email, pass);
             }
@@ -247,7 +250,7 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
                 else pass = loginPreferences.getString("passSinEncriptar", "");
 
 
-                Log.d("pruebas", "Ha iniciado sesión");
+                Log.d("prueba", "Ha iniciado sesión");
 
                 loginPrefsEditor.putString("email", response.getJSONArray("Usuario").getJSONObject(0).get("Email").toString());
                 loginPrefsEditor.putString("passEncriptado", response.getJSONArray("Usuario").getJSONObject(0).get("Password").toString());

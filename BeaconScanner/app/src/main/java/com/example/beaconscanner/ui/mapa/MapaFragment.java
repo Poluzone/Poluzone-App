@@ -28,17 +28,17 @@ public class MapaFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         mapaViewModel =
                 ViewModelProviders.of(this).get(MapaViewModel.class);
-        View root = inflater.inflate(R.layout.activity_main, container, false);
+        View root = inflater.inflate(R.layout.activity_maps, container, false);
         // acceder speed dial
         speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
         speedDialView.show();
-        final TextView textView = root.findViewById(R.id.text_home);
-        mapaViewModel.getText().observe(this, new Observer<String>() {
+        //final TextView textView = root.findViewById(R.id.text_home);
+        /*mapaViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 //textView.setText(s);
             }
-        });
+        });*/
         return root;
     }
 }
