@@ -10,14 +10,16 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-public class InfoDialog  extends DialogFragment {
+public class InfoDialog extends DialogFragment {
 
+    DialogFragment dialogFragment;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        dialogFragment = this;
         View view = inflater.inflate(R.layout.popup_info_calidadaire,container,false);
-        getDialog().setTitle("Sample");
-        Button doneBtn = (Button) mView.findViewById(R.id.done_convert);
+        getDialog().setTitle(R.string.calidad);
+        Button doneBtn = (Button) view.findViewById(R.id.botonCerrarDialogInfos);
         doneBtn.setOnClickListener(doneAction);
         return view;
     }
@@ -26,6 +28,7 @@ public class InfoDialog  extends DialogFragment {
         @Override
         public void onClick(View v) {
             Toast.makeText(getActivity(),"Test",Toast.LENGTH_LONG).show();
+            dialogFragment.dismiss();
         }
     };
 
