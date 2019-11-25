@@ -277,6 +277,14 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
             // Mostramos los mensajes de error en pantalla
             if (response == null) {
                 Toast.makeText(this, "Error de conexión", Toast.LENGTH_LONG).show();
+
+                // Para pruebas
+                loginPrefsEditor.putString("tipousuario", "Conductor");
+                Intent i = new Intent(this, NavigationDrawerActivity.class);
+                Log.d("pruebas", "intent main");
+                loginPrefsEditor.commit();
+                this.startActivity(i);
+                this.finish();
             }
             else errorLogin();
         }
