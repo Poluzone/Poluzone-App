@@ -52,7 +52,7 @@ public class ServidorFake {
     CallbackRegistro callbackRegistro;
 
     //String IP = "192.168.1.107";
-    String IP = "192.168.43.125"; //Red Matthew
+    String URL = "https://juconol.upv.edu.es/"; //Red Matthew
     //String IP = "192.168.1.107"; //Red Rosa
    //  "172.20.10.5";
     int puerto = 8080;
@@ -91,7 +91,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void insertarMedida(Medida medidaContaminacion)  {
         Log.d("pruebas", "guardarContaminacion()");
-        String url = "http://"+IP+":"+puerto+"/insertarMedida/"; /*+medidaContaminacion.getMedida(); */
+        String url = URL+"/insertarMedida/"; /*+medidaContaminacion.getMedida(); */
 
         JSONObject datos = new JSONObject();
 
@@ -136,7 +136,7 @@ public class ServidorFake {
     public void getContaminacion() {
         final Medida medida = new Medida();
         Log.d("pruebas", "getContaminacion()");
-        String url = "http://"+IP+":"+puerto+"/contaminacion";
+        String url = URL+"/contaminacion";
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -182,7 +182,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void insertarUsuario(String email, String password, int telefono,String tipoUsuario) {
         Log.d("pruebas", "insertarUsuario()");
-        String url = "http://"+IP+":"+puerto+"/insertarUsuario/";
+        String url = URL+"/insertarUsuario/";
 
         JSONObject datos = new JSONObject();
 
@@ -249,7 +249,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void comprobarUsuarioPorEmail (String email, String pass) {
         Log.d("pruebas", "GetUsuarioPorEmail()");
-        String url = "http://"+IP+":"+puerto+"/ComprobarLogin";
+        String url = URL+"/ComprobarLogin";
 
         JSONObject datos = new JSONObject();
 
@@ -321,7 +321,7 @@ public class ServidorFake {
      */
     public void getUsuario (String email) {
         Log.d("GETUSUARIO", "GetUsuario() con"+email);
-        String url = "http://"+IP+":"+puerto+"/GetUsuarioPorEmail";
+        String url = URL+"/GetUsuarioPorEmail";
 
         JSONObject datos = new JSONObject();
 
@@ -372,7 +372,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void vincularIDdeUsuarioConSensor(int idUsuario, int idSensor) {
         Log.d("pruebas", "vincularIDdeUsuarioConSensor()");
-        String url = "http://"+IP+":"+puerto+"/insertarIdUsuarioConIdsensor";
+        String url = URL+"/insertarIdUsuarioConIdsensor";
 
         JSONObject datos = new JSONObject();
 
