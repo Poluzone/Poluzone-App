@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.example.beaconscanner.InfoDialog;
+import com.equipo3.poluzone.InfoDialog;
 
 import com.equipo3.poluzone.Medida;
 import com.equipo3.poluzone.R;

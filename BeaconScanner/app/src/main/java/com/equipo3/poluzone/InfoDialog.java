@@ -1,4 +1,4 @@
-package com.example.beaconscanner;
+package com.equipo3.poluzone;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,13 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+// -----------------------------------------------------------------------
+// InfoDialog.java
+// Equipo 3
+// Autor: Emilia Rosa van der Heide
+// CopyRight:
+// Popup que se muestra cuando se pulsa el botón info de la calidad del aire
+// -----------------------------------------------------------------------
 public class InfoDialog extends DialogFragment {
 
     DialogFragment dialogFragment;

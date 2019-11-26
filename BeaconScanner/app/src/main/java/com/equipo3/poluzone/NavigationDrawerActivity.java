@@ -38,6 +38,7 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 // Equipo 3
 // Autor: Iván Romero, Emilia Rosa van der Heide
 // CopyRight:
+// El MainActivity mezclado con el navigation drawer
 // -----------------------------------------------------------------------
 public class NavigationDrawerActivity extends AppCompatActivity {
 
@@ -96,13 +97,12 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         DrawerLayout drawer;
         NavigationView navigationView;
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-
         // Creamos el servidorFake indicando la direccion ip y el puerto
         servidorFake = new ServidorFake(this);
 
         NavController navController;
+
+        // Para los usuarios conductor
         if (tipoUser.equals("Conductor")) {
             setContentView(R.layout.activity_navigation_drawerc);
             toolbar = findViewById(R.id.toolbarc);
@@ -124,6 +124,8 @@ public class NavigationDrawerActivity extends AppCompatActivity {
             alarmaQueSuenaCadaMinuto();
             alarmaQueSuenaCada10Minutos();
         }
+
+        // Para los usuarios normales
         else {
             setContentView(R.layout.activity_navigation_drawer);
             toolbar = findViewById(R.id.toolbar);
