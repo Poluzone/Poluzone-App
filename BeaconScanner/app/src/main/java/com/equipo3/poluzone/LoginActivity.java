@@ -28,7 +28,7 @@ import org.json.JSONObject;
 // Autor: Emilia Rosa van der Heide
 // CopyRight:
 // -----------------------------------------------------------------------
-public class LoginActivity extends AppCompatActivity implements CallbackLogin {
+public class LoginActivity extends AppCompatActivity implements Callback {
 
     // Servidor
     ServidorFake servidorFake;
@@ -236,7 +236,7 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
 
 
     // ---------------------------------------------------------------------------
-    // resultadoLogin: V/F, respuesta -> callbackLogin() ->
+    // resultadoLogin: V/F, respuesta -> callback() ->
     // ---------------------------------------------------------------------------
     @Override
     public void callbackLogin(boolean resultadoLogin, JSONObject response) {
@@ -306,5 +306,9 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
             botonLogearse.setTextColor(Color.WHITE);
         }
     }
+
+
+    @Override
+    public void callbackMediaCalidadAire(double media) { }
 
 }

@@ -1,10 +1,9 @@
 package com.equipo3.poluzone;
 
-import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.util.Log;
 
 import com.android.volley.NetworkResponse;
@@ -15,8 +14,8 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.equipo3.poluzone.ui.inicio.InicioConductorFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,10 +31,10 @@ import org.json.JSONObject;
 
 public class ServidorFake {
 
-    Activity activity;
+    android.app.Activity activity;
 
     RequestQueue queue;
-    CallbackLogin callbackLogin;
+    public Callback callback;
     CallbackRegistro callbackRegistro;
 
     //String IP = "192.168.1.107";
@@ -49,7 +48,7 @@ public class ServidorFake {
     // Constructor
     // activity -> ServidorFake() ->
     // ---------------------------------------------------------------------------
-    public ServidorFake(Activity activity) {
+    public ServidorFake(android.app.Activity activity) {
 
 
         Log.d("pruebas", "constructor ServidorFake()");
@@ -59,14 +58,21 @@ public class ServidorFake {
         // Si el servidor se ha creado desde loginactivity buscamos el callback
         if (activity.getClass() == LoginActivity.class) {
             Log.d("pruebas", "issa loginactivity");
-            callbackLogin = (LoginActivity) activity;
+            callback = (LoginActivity) activity;
         }
 
         // Si el servidor se ha creado desde loginactivity buscamos el callback
         if (activity.getClass() == RegistrarUsuarioActivity.class) {
-            Log.d("pruebas", "issa loginactivity");
+            Log.d("pruebas", "issa registrousuarioactivity");
             callbackRegistro = (RegistrarUsuarioActivity) activity;
         }
+
+        // Si el servidor se ha creado desde el inicio buscamos el callback
+    /*    if (activity.getClass() == NavigationDrawerActivity.class) {
+            Log.d("pruebas", "issa navdraweractivity");
+            FragmentManager fragmentManager = activity.getFragmentManager();
+            callback = fragmentManager.findFragmentById(R.id.nav_inicio);
+        }*/
 
         // Instantiate the RequestQueue.
         queue = Volley.newRequestQueue(activity);
@@ -149,6 +155,12 @@ public class ServidorFake {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("pruebas",response.toString());
+                        try {
+                            callback.callbackMediaCalidadAire(response.getDouble("media"));
+                        }
+                        catch (JSONException e) {
+                            Log.d("pruebas", e.toString());
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -204,7 +216,7 @@ public class ServidorFake {
                             Log.d("pruebas", e.toString());
                             callbackRegistro.callbackRegistro(false, null);
                         }
-                    //    callbackLogin.callbackLogin(true, response);
+                    //    callback.callback(true, response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -259,10 +271,10 @@ public class ServidorFake {
                         Log.d("pruebas",response.toString());
                         try {
                             if (response.get("status").equals(true)) {
-                                callbackLogin.callbackLogin(true, response);
+                                callback.callbackLogin(true, response);
                             }
                             else {
-                                callbackLogin.callbackLogin(false, response);
+                                callback.callbackLogin(false, response);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -277,17 +289,17 @@ public class ServidorFake {
                         NetworkResponse networkResponse = error.networkResponse;
                         Log.d("pruebas",error.toString());
                         if (error instanceof NoConnectionError || error instanceof TimeoutError) {
-                            callbackLogin.callbackLogin(false, null);
+                            callback.callbackLogin(false, null);
                         }
                         else if (networkResponse.statusCode == 404){
                             Log.d("pruebas",networkResponse.statusCode + "");
                             JSONObject response = new JSONObject();
-                            callbackLogin.callbackLogin(false, response);
+                            callback.callbackLogin(false, response);
                         }
                         else if (networkResponse.statusCode == 401){
                             JSONObject object = new JSONObject();
                             Log.d("pruebas",networkResponse.statusCode + "");
-                            callbackLogin.callbackLogin(false, object);
+                            callback.callbackLogin(false, object);
                         }
                     }
                 }

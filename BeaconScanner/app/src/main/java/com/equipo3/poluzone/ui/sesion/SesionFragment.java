@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.equipo3.poluzone.LoginActivity;
-import com.equipo3.poluzone.R;
 
 import static android.content.Context.MODE_PRIVATE;
 

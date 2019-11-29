@@ -18,7 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.equipo3.poluzone.Callback;
 import com.equipo3.poluzone.InfoDialog;
 
 import com.equipo3.poluzone.Medida;
@@ -31,14 +33,20 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.Utils;
 import com.leinardi.android.speeddial.SpeedDialView;
 
+import org.json.JSONObject;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class InicioConductorFragment extends Fragment {
+public class InicioConductorFragment extends Fragment implements Callback {
 
     private InicioConductorViewModel mViewModel;
     private SpeedDialView speedDialView;
+    private View root;
 
     public static InicioConductorFragment newInstance() {
         return new InicioConductorFragment();
@@ -49,7 +57,7 @@ public class InicioConductorFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         mViewModel =
                 ViewModelProviders.of(this).get(InicioConductorViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_inicio_conductor, container, false);
+        root = inflater.inflate(R.layout.fragment_inicio_conductor, container, false);
 
         // acceder speed dial para esconderlo
         speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
@@ -162,22 +170,54 @@ public class InicioConductorFragment extends Fragment {
 
 
         // ----------------------------------- MEDIA CALIDAD AIRE --------------------------------------
-        double calidadAire = getCalidadDelAireDeLaJornada();
-        Log.d("pruebas", "calidad "+calidadAire);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getCalidadDelAireDeLaJornada();
+        }
+        NavigationDrawerActivity navigationDrawerActivity = (NavigationDrawerActivity) getParentFragment().getActivity();
+        navigationDrawerActivity.servidorFake.callback = this;
 
         return root;
     }
 
 
+    // ---------------------------------------------------------------------------
+    // calidad: R -> callbackMediaCalidadAire() ->
+    // Muestra la media en el layout
+    // ---------------------------------------------------------------------------
+    @Override
+    public void callbackMediaCalidadAire(double media) {
+        Log.d("pruebas", "calidad " + media);
+        TextView porcentaje = root.findViewById(R.id.textViewPorcentaje);
+        porcentaje.setText(Double.toString(media));
+    }
+
 
     // ---------------------------------------------------------------------------
-    // -> getCalidadDelAireDeLaJornada() -> calidad: R
+    // -> getCalidadDelAireDeLaJornada() -> calidad: R (callback)
     // Recoge la media de la calidad del aire de la jornada de trabajo
     // ---------------------------------------------------------------------------
-    public double getCalidadDelAireDeLaJornada() {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void getCalidadDelAireDeLaJornada() {
         NavigationDrawerActivity navigationDrawerActivity = (NavigationDrawerActivity) getParentFragment().getActivity();
-        navigationDrawerActivity.servidorFake.getMediaCalidadDelAireDeLaJornada(0, System.currentTimeMillis(), navigationDrawerActivity.idUser);
-        return 0.0;
+
+        // Cogemos la hora actual
+        ZonedDateTime now = ZonedDateTime.now();
+
+        // Cogemos la info de hoy a las 7 am
+        ZonedDateTime before = ZonedDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), 7, 0, 0, 0, ZoneId.systemDefault());
+
+        // Lo pasamos a milisegundos
+        Long beforemili = before.toInstant().toEpochMilli();
+
+        // Llamamos al metodo adecuado de servidorFake
+        navigationDrawerActivity.servidorFake.getMediaCalidadDelAireDeLaJornada(beforemili, System.currentTimeMillis(), navigationDrawerActivity.idUser);
     }
+
+
+    @Override
+    public void callbackLogin(boolean resultadoLogin, JSONObject response) {
+
+    }
+
 
 }

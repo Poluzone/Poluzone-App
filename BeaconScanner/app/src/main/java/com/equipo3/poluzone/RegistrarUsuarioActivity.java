@@ -1,6 +1,5 @@
 package com.equipo3.poluzone;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,7 +37,7 @@ import java.util.regex.Pattern;
 // Autor: Emilia Rosa van der Heide
 // CopyRight:
 // -----------------------------------------------------------------------
-public class RegistrarUsuarioActivity extends Activity implements CallbackRegistro, GoogleApiClient.ConnectionCallbacks {
+public class RegistrarUsuarioActivity extends android.app.Activity implements CallbackRegistro, GoogleApiClient.ConnectionCallbacks {
 
     ServidorFake servidorFake;
     GoogleApiClient googleApiClient;
@@ -439,7 +438,7 @@ public class RegistrarUsuarioActivity extends Activity implements CallbackRegist
     // ---------------------------------------------------------------------------
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode != Activity.RESULT_OK) {
+        if (resultCode != android.app.Activity.RESULT_OK) {
             Toast.makeText(getApplicationContext(), "No se pudo obtener una respuesta", Toast.LENGTH_SHORT).show();
             String resultado = data.getStringExtra("com.blikoon.qrcodescanner.error_decoding_image");
             if (resultado != null) {
