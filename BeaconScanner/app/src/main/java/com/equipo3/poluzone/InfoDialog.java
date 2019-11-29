@@ -34,8 +34,9 @@ public class InfoDialog extends DialogFragment {
     View.OnClickListener doneAction = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(),"Test",Toast.LENGTH_LONG).show();
             dialogFragment.dismiss();
+            dialogFragment.dismissAllowingStateLoss();
+            getFragmentManager().executePendingTransactions();
         }
     };
 

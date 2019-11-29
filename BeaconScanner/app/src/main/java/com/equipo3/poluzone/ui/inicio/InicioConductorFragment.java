@@ -148,12 +148,12 @@ public class InicioConductorFragment extends Fragment {
 
         // ----------------------------------- INFO DIALOG ---------------------------------------------
 
-        final InfoDialog infoDialog = new InfoDialog();
         ImageView iconoInfo = root.findViewById(R.id.iconoinfo);
         iconoInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                infoDialog.show(getFragmentManager(),"");
+                final InfoDialog infoDialog = new InfoDialog();
+                if (!infoDialog.isAdded()) infoDialog.show(getFragmentManager(),"");
             }
         });
 
