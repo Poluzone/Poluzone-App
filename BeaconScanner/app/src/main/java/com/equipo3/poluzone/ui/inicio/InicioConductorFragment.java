@@ -12,6 +12,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 import com.equipo3.poluzone.InfoDialog;
 
 import com.equipo3.poluzone.Medida;
+import com.equipo3.poluzone.NavigationDrawerActivity;
 import com.equipo3.poluzone.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -30,6 +32,7 @@ import com.github.mikephil.charting.utils.Utils;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class InicioConductorFragment extends Fragment {
@@ -157,7 +160,24 @@ public class InicioConductorFragment extends Fragment {
             }
         });
 
+
+        // ----------------------------------- MEDIA CALIDAD AIRE --------------------------------------
+        double calidadAire = getCalidadDelAireDeLaJornada();
+        Log.d("pruebas", "calidad "+calidadAire);
+
         return root;
+    }
+
+
+
+    // ---------------------------------------------------------------------------
+    // -> getCalidadDelAireDeLaJornada() -> calidad: R
+    // Recoge la media de la calidad del aire de la jornada de trabajo
+    // ---------------------------------------------------------------------------
+    public double getCalidadDelAireDeLaJornada() {
+        NavigationDrawerActivity navigationDrawerActivity = (NavigationDrawerActivity) getParentFragment().getActivity();
+        navigationDrawerActivity.servidorFake.getMediaCalidadDelAireDeLaJornada(0, System.currentTimeMillis(), navigationDrawerActivity.idUser);
+        return 0.0;
     }
 
 }

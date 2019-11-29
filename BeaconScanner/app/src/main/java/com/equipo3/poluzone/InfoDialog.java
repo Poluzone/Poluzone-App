@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -26,14 +25,18 @@ public class InfoDialog extends DialogFragment {
         dialogFragment = this;
         View view = inflater.inflate(R.layout.popup_info_calidadaire,container,false);
         getDialog().setTitle(R.string.calidad);
-        Button doneBtn = (Button) view.findViewById(R.id.botonCerrarDialogInfos);
-        doneBtn.setOnClickListener(doneAction);
+
+
+        Button ententido = (Button) view.findViewById(R.id.botonCerrarDialogInfos);
+        ententido.setOnClickListener(doneAction);
         return view;
     }
 
+    // Cuando es pulsado el botón entendido
     View.OnClickListener doneAction = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            // Cierra el popup
             dialogFragment.dismiss();
             dialogFragment.dismissAllowingStateLoss();
             getFragmentManager().executePendingTransactions();

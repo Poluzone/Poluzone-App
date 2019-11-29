@@ -39,16 +39,15 @@ public class ServidorFake {
     CallbackRegistro callbackRegistro;
 
     //String IP = "192.168.1.107";
-    String IP = "192.168.43.125"; //Red Matthew
-    //String IP = "192.168.1.107"; //Red Rosa
+    //String IP = "192.168.43.125"; //Red Matthew
+    String IP = "192.168.1.109"; //Red Rosa
    //  "172.20.10.5";
     int puerto = 8080;
-    private String id;
     private SharedPreferences loginPreferences;
 
     // ---------------------------------------------------------------------------
     // Constructor
-    // IP, puerto -> ServidorFake() ->
+    // activity -> ServidorFake() ->
     // ---------------------------------------------------------------------------
     public ServidorFake(Activity activity) {
 
@@ -117,49 +116,51 @@ public class ServidorFake {
         queue.add(jsonobj);
     }
 
-    // ---------------------------------------------------------------------------
-    // -> getContaminacion() ->
-    // ---------------------------------------------------------------------------
-    public void getContaminacion() {
-        final Medida medida = new Medida();
-        Log.d("pruebas", "getContaminacion()");
-        String url = "http://"+IP+":"+puerto+"/contaminacion";
+    // ------------------------------------------------------------------------------
+    // desde: N, hasta: N, IdUsuario: N -> getMediaCalidadDelAireDeLaJornada() -> R
+    // ------------------------------------------------------------------------------
+    public void getMediaCalidadDelAireDeLaJornada(long desde, long hasta, int id) {
+        Log.d("pruebas", "getMediaCalidadDelAireDeLaJornada()");
+        String url = "http://"+IP+":"+puerto+"/getMediaCalidadDelAireDeLaJornada";
 
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        // Creamos el intervalo de tiempo
+        JSONObject intervalo = new JSONObject();
+        try {
+            intervalo.put("desde", desde);
+            intervalo.put("hasta", hasta);
+        }
+        catch (JSONException e) {
+            Log.d("pruebas", e.toString());
+        }
+
+        // Anyadimos los datos al json
+        JSONObject datos = new JSONObject();
+        try {
+            datos.put("Intervalo", intervalo);
+            datos.put("IdUsuario", id);
+            Log.d("pruebas json", datos.toString());
+        } catch (JSONException e) {
+            Log.d("pruebas", e.toString());
+        }
+
+        // Hacemos la peticion
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        Log.d("pruebas","Response is: " + response);
-                        JSONObject object;
-                        try {
-                            object = new JSONObject(response);
-                            medida.setMedida((float)object.getDouble("valor"));
-                            medida.setTiempo((long)object.getDouble("tiempo"));
-                            int lati = object.getInt("lat");
-                            int longi = object.getInt("long");
-                            Location posicion = new Location("");
-                            posicion.setLongitude(longi);
-                            posicion.setLatitude(lati);
-                            medida.setPosicion(posicion);
-                           // activity.mostrarDelServidor(medida);
-
-
-                        }catch (JSONException e) {
-                            Log.e("pruebas", e.toString());
-                        }
-
+                    public void onResponse(JSONObject response) {
+                        Log.d("pruebas",response.toString());
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("pruebas","That didn't work! " + error);
-            }
-        });
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("pruebas",error.toString());
+                    }
+                }
+        );
 
         // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        queue.add(jsonobj);
     }
 
 
@@ -394,34 +395,5 @@ public class ServidorFake {
         queue.add(jsonobj);
     }
 
-    /**
-     * Esta función sirve para comparar caracteres, uno a uno de forma que te diga si son o no numericos.
-     *
-     * cadena: string ->
-     *                   isNumeric()
-     *                              -> boolean
-     * @param cadena
-     * @return
-     *
-     *  - Matthew Conde Oltra -
-     */
-    public static boolean isNumeric(String cadena) {
 
-        boolean resultado;
-
-        try {
-            Integer.parseInt(cadena);
-            resultado = true;
-        } catch (NumberFormatException excepcion) {
-            resultado = false;
-        }
-
-        return resultado;
-    }
-    // ---------------------------------------------------------------------------
-    // -> cerrarConexion() ->
-    // ---------------------------------------------------------------------------
-    public void cerrarConexion() {
-
-    }
 }

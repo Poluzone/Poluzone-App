@@ -52,11 +52,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     public String nuestroUUID = "EQUIPO-3XURODIMI";
     ReceptorBLE receptorBLE;
 
-    // Mostrar por pantalla
-    public TextView textView;
-    public TextView textView2;
-    public TextView textViewRecibir;
-
     // Interfaz
     public Button button;
     public Button buttonRecibir;
@@ -65,7 +60,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     public SharedPreferences loginPreferences;
 
     // Servidor
-    ServidorFake servidorFake;
+    public ServidorFake servidorFake;
 
     // Para alarma 1 min
     int contador = 0;
@@ -77,7 +72,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     Handler handler10;
     Runnable runnable10;
 
-    String tipoUser;
+    // Datos del user
+    public String tipoUser;
+    public int idUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +82,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         tipoUser = loginPreferences.getString("tipousuario", "o");
+        idUser = loginPreferences.getInt("idUsuario", 0);
 
         Log.d("pruebasssss", tipoUser);
 
