@@ -35,6 +35,7 @@ import com.leinardi.android.speeddial.SpeedDialView;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -47,6 +48,9 @@ public class InicioConductorFragment extends Fragment implements Callback {
     private InicioConductorViewModel mViewModel;
     private SpeedDialView speedDialView;
     private View root;
+    private Double umbralMal = 163.0;
+    private Double umbralBien = 0.0;
+
 
     public static InicioConductorFragment newInstance() {
         return new InicioConductorFragment();
@@ -187,8 +191,25 @@ public class InicioConductorFragment extends Fragment implements Callback {
     @Override
     public void callbackMediaCalidadAire(double media) {
         Log.d("pruebas", "calidad " + media);
-        TextView porcentaje = root.findViewById(R.id.textViewPorcentaje);
-        porcentaje.setText(Double.toString(media));
+        TextView porcentajeText = root.findViewById(R.id.textViewPorcentaje);
+        ImageView nubeFoto = root.findViewById(R.id.nubecita);
+
+        // Regla de tres inversa para calcular el porcentaje según la media
+        // teniendo en cuenta que el ppm de umbralMal equivale a un 29%
+        Double porcentaje = umbralMal * 29 / media;
+
+        // Si sale mayor que 100 lo ponemos a 100%
+        if (porcentaje > 100) porcentaje = 100.0;
+
+        // Cambiamos formato para no mostrar todas las decimales
+        DecimalFormat df = new DecimalFormat("##.#");
+        porcentajeText.setText(df.format(porcentaje) + "%");
+
+        // Cambiamos la imagen de la nube según el porcentaje
+        if (porcentaje >= 70) nubeFoto.setImageDrawable(getActivity().getDrawable(R.drawable.happ));
+        else if (porcentaje >= 30 && porcentaje < 69) nubeFoto.setImageDrawable(getActivity().getDrawable(R.drawable.meh));
+        else if (porcentaje < 30) nubeFoto.setImageDrawable(getActivity().getDrawable(R.drawable.mal));
+
     }
 
 

@@ -56,7 +56,7 @@
     <string name="mismedidas">Mis medidas</string>
     <string name="activo">Activo</string>
     <string name="inactivo">Inactivo</string>
-    <string name="porciento">70%</string>
+    <string name="porciento">--%</string>
     <string name="nomedidas">No hay medidas disponibles</string>
     <string name="dist">Distancia recorrida:</string>
     <string name="title_activity_maps">Map</string>
@@ -68,8 +68,8 @@
 
     <string name="entendido">Entendido</string>
     <string name="directiva">Los valores límite vienen fijados en el R.D. 1073/2003, transpuesto de la Directiva 1999/30/CE.</string>
-    <string name="calbien">Entre el 70–100%, significa que hay entre 3949–119999 ppm de contaminación en el aire.</string>
-    <string name="calmed">Entre el 30–69%, significa que hay entre 120000–146699 ppm de contaminación en el aire.</string>
-    <string name="calmal">Entre el 0–29%, significa que hay más de 146699 ppm de contaminación en el aire.</string>
+    <string name="calbien">Entre el 70–100%, significa que hay entre 0–67 ppm de contaminación en el aire.</string>
+    <string name="calmed">Entre el 30–69%, significa que hay entre 68–162 ppm de contaminación en el aire.</string>
+    <string name="calmal">Entre el 0–29%, significa que hay más de 163 ppm de contaminación en el aire. <b>NIVEL PELIGROSO</b></string>
 
 </resources>

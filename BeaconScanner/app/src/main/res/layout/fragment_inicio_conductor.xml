@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/nubecita"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
@@ -98,7 +98,7 @@
                 android:padding="0dp"
                 android:text="@string/veinticuatro"
                 android:textColor="@color/common_google_signin_btn_text_dark_default"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
