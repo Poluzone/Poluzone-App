@@ -51,7 +51,7 @@ public class LocalizadorGPS {
                     public void onSuccess(Location location) {
                         if (location != null) {
                             ultimaPosicionMedida = location;
-                            Log.d("pruebas", "localizacion: " + ultimaPosicionMedida.getLatitude() + " " + ultimaPosicionMedida.getLongitude());
+                            //Log.d("pruebas", "localizacion: " + ultimaPosicionMedida.getLatitude() + " " + ultimaPosicionMedida.getLongitude());
                         }
                     }
                 }).addOnFailureListener(activity, new OnFailureListener() {

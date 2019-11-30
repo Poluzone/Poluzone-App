@@ -171,7 +171,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         NavController navController;
         if (tipoUser.equals("Conductor")) {
             navController = Navigation.findNavController(this, R.id.nav_host_fragmentc);
-
         }
         else {
             navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -185,6 +184,8 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     // Enviar las mediciones al servidor
     // -----------------------------------------------------------------------
     public void hayQueActualizarMedicionesYEnviarlasAlServidor() {
+        // calculamos la media
+        receptorBLE.calcularMediaMedidas();
         Medida medida = receptorBLE.obtenerContaminacion();
         Log.d("pruebas", "valor: " + medida.getMedida() + " tiempo: " + medida.getTiempo() + " lati: " + medida.getPosicion().getLatitude());
         servidorFake.insertarMedida(medida);
