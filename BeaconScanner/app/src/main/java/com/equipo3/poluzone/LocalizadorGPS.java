@@ -78,7 +78,6 @@ public class LocalizadorGPS {
     private float calcularDistancia(Location posicionAnterior) {
         // algoritmo con ultimaPosicionMedida
         float distancia = ultimaPosicionMedida.distanceTo(posicionAnterior);
-        Log.d("pruebas", "anterior" + posicionAnterior.toString() + "dsp" + ultimaPosicionMedida.toString());
         return distancia;
     }
 

@@ -84,6 +84,9 @@ public class ReceptorBLE {
                 if (buscarEsteDispositivoBTLE(Utilidades.bytesToString(tramaIBeacon.getUUID()))) {
                //     Log.d("pruebas", "device found: " + nuestroUUID + " major: " + Utilidades.bytesToInt(tramaIBeacon.getMajor()));
 
+                    // Reseteamos el contador de inactividad (porque el nodo ya no está inactivo)
+                    nuestroActivity.contadorInactividad = 0;
+
                     if(!haSalidoYaElToast){
                         Toast.makeText(nuestroActivity, "Conectado al beacon", Toast.LENGTH_SHORT).show();
                         haSalidoYaElToast=true;
