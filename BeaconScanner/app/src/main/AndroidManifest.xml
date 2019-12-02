@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.beaconscanner">
+    package="com.equipo3.poluzone">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -46,15 +46,15 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name="com.equipo3.poluzone.poluzone.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
         <activity
-            android:name=".NavigationDrawerActivity"
+            android:name="com.equipo3.poluzone.poluzone.NavigationDrawerActivity"
             android:label="@string/title_activity_navigation_drawer"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".IntroActivity"
+            android:name="com.equipo3.poluzone.poluzone.IntroActivity"
             android:label="@string/app_intro"
             android:noHistory="true"
             android:screenOrientation="portrait" />
@@ -66,11 +66,11 @@
         </activity>
         -->
         <activity
-            android:name=".RegistrarUsuarioActivity"
+            android:name="com.equipo3.poluzone.poluzone.RegistrarUsuarioActivity"
             android:screenOrientation="portrait"
             android:theme="@style/LoginTheme"></activity>
         <activity
-            android:name=".LoginActivity"
+            android:name="com.equipo3.poluzone.poluzone.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

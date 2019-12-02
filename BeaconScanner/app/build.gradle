@@ -4,7 +4,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.example.beaconscanner"
+        applicationId "com.equipo3.poluzone"
         minSdkVersion 21
         targetSdkVersion 26 //22 cambiado para libreria volley
         versionCode 1
