@@ -29,13 +29,7 @@ public class MapaFragment extends Fragment {
         // acceder speed dial
         speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
         speedDialView.show();
-        //final TextView textView = root.findViewById(R.id.text_home);
-        /*mapaViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
-            }
-        });*/
+
         return root;
     }
 }
