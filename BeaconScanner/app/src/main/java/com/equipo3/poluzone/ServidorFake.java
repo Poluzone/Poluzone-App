@@ -370,7 +370,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     // idUsuario, idSensor -> vincularIDdeUsuarioConSensor() ->
     // ---------------------------------------------------------------------------
-    public void vincularIDdeUsuarioConSensor(int idUsuario, int idSensor) {
+    public void vincularIDdeUsuarioConSensor(int idUsuario, final int idSensor) {
         Log.d("pruebas", "vincularIDdeUsuarioConSensor()");
         String url = "http://"+IP+":"+puerto+"/insertarIdUsuarioConIdsensor";
 
@@ -392,7 +392,8 @@ public class ServidorFake {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("pruebasIDUSuario",response.toString());
-
+                        loginPreferences.edit().putInt("idSensor", idSensor);
+                        loginPreferences.edit().commit();
                     }
                 },
                 new Response.ErrorListener() {

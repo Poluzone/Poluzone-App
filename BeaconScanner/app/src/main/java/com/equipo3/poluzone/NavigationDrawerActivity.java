@@ -198,6 +198,8 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         Medida medida = receptorBLE.obtenerContaminacion();
         Log.d("pruebas", "valor: " + medida.getMedida() + " tiempo: " + medida.getTiempo() + " lati: " + medida.getPosicion().getLatitude());
         servidorFake.insertarMedida(medida);
+        servidorFake.indicarActividadNodo("Activo");
+        receptorBLE.ultimaTramaEncontrada = null;
     }
 
     // -----------------------------------------------------------------------

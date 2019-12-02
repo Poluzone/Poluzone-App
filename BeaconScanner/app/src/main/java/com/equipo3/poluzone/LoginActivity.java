@@ -255,6 +255,9 @@ public class LoginActivity extends AppCompatActivity implements Callback {
                 loginPrefsEditor.putString("passEncriptado", response.getJSONArray("Usuario").getJSONObject(0).get("Password").toString());
                 loginPrefsEditor.putInt("idUsuario", response.getJSONArray("Usuario").getJSONObject(0).getInt("IdUsuario"));
                 loginPrefsEditor.putString("tipousuario", response.getJSONArray("Usuario").getJSONObject(0).get("TipoUsuario").toString());
+                if (response.getJSONArray("Usuario").getJSONObject(0).get("TipoUsuario").toString().equals("Conductor")) {
+                    loginPrefsEditor.putInt("idSensor", Integer.parseInt(response.getJSONArray("Usuario").getJSONObject(0).get("IdSensor").toString()));
+                }
                 
                 // Pass sin encriptar es temporal hasta que implementemos la encriptación de la contrasenya desde el móvil
                 loginPrefsEditor.putString("passSinEncriptar", pass);
