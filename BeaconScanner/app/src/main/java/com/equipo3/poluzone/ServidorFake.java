@@ -1,10 +1,10 @@
 package com.equipo3.poluzone;
 
-import android.app.Activity;
+
+import android.app.FragmentManager;
 import android.content.Context;
 
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.util.Log;
 
 import com.android.volley.NetworkResponse;
@@ -15,8 +15,9 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import com.equipo3.poluzone.ui.inicio.InicioConductorFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,25 +33,25 @@ import org.json.JSONObject;
 
 public class ServidorFake {
 
-    Activity activity;
+    android.app.Activity activity;
 
     RequestQueue queue;
-    CallbackLogin callbackLogin;
+    public Callback callback;
     CallbackRegistro callbackRegistro;
 
     //String IP = "192.168.1.107";
     String URL = "https://juconol.upv.edu.es/"; //Red Matthew
     //String IP = "192.168.1.107"; //Red Rosa
+
    //  "172.20.10.5";
     int puerto = 8080;
-    private String id;
     private SharedPreferences loginPreferences;
 
     // ---------------------------------------------------------------------------
     // Constructor
-    // IP, puerto -> ServidorFake() ->
+    // activity -> ServidorFake() ->
     // ---------------------------------------------------------------------------
-    public ServidorFake(Activity activity) {
+    public ServidorFake(android.app.Activity activity) {
 
 
         Log.d("pruebas", "constructor ServidorFake()");
@@ -60,14 +61,21 @@ public class ServidorFake {
         // Si el servidor se ha creado desde loginactivity buscamos el callback
         if (activity.getClass() == LoginActivity.class) {
             Log.d("pruebas", "issa loginactivity");
-            callbackLogin = (LoginActivity) activity;
+            callback = (LoginActivity) activity;
         }
 
         // Si el servidor se ha creado desde loginactivity buscamos el callback
         if (activity.getClass() == RegistrarUsuarioActivity.class) {
-            Log.d("pruebas", "issa loginactivity");
+            Log.d("pruebas", "issa registrousuarioactivity");
             callbackRegistro = (RegistrarUsuarioActivity) activity;
         }
+
+        // Si el servidor se ha creado desde el inicio buscamos el callback
+    /*    if (activity.getClass() == NavigationDrawerActivity.class) {
+            Log.d("pruebas", "issa navdraweractivity");
+            FragmentManager fragmentManager = activity.getFragmentManager();
+            callback = fragmentManager.findFragmentById(R.id.nav_inicio);
+        }*/
 
         // Instantiate the RequestQueue.
         queue = Volley.newRequestQueue(activity);
@@ -117,49 +125,57 @@ public class ServidorFake {
         queue.add(jsonobj);
     }
 
-    // ---------------------------------------------------------------------------
-    // -> getContaminacion() ->
-    // ---------------------------------------------------------------------------
-    public void getContaminacion() {
-        final Medida medida = new Medida();
-        Log.d("pruebas", "getContaminacion()");
-        String url = URL+"/contaminacion";
+    // ------------------------------------------------------------------------------
+    // desde: N, hasta: N, IdUsuario: N -> getMediaCalidadDelAireDeLaJornada() -> R
+    // ------------------------------------------------------------------------------
+    public void getMediaCalidadDelAireDeLaJornada(long desde, long hasta, int id) {
+        Log.d("pruebas", "getMediaCalidadDelAireDeLaJornada()");
+        String url = URL+"/getMediaCalidadDelAireDeLaJornada";
 
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        // Creamos el intervalo de tiempo
+        JSONObject intervalo = new JSONObject();
+        try {
+            intervalo.put("desde", desde);
+            intervalo.put("hasta", hasta);
+        }
+        catch (JSONException e) {
+            Log.d("pruebas", e.toString());
+        }
+
+        // Anyadimos los datos al json
+        JSONObject datos = new JSONObject();
+        try {
+            datos.put("Intervalo", intervalo);
+            datos.put("IdUsuario", id);
+            Log.d("pruebas json", datos.toString());
+        } catch (JSONException e) {
+            Log.d("pruebas", e.toString());
+        }
+
+        // Hacemos la peticion
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        Log.d("pruebas","Response is: " + response);
-                        JSONObject object;
+                    public void onResponse(JSONObject response) {
+                        Log.d("pruebas",response.toString());
                         try {
-                            object = new JSONObject(response);
-                            medida.setMedida((float)object.getDouble("valor"));
-                            medida.setTiempo((long)object.getDouble("tiempo"));
-                            int lati = object.getInt("lat");
-                            int longi = object.getInt("long");
-                            Location posicion = new Location("");
-                            posicion.setLongitude(longi);
-                            posicion.setLatitude(lati);
-                            medida.setPosicion(posicion);
-                           // activity.mostrarDelServidor(medida);
-
-
-                        }catch (JSONException e) {
-                            Log.e("pruebas", e.toString());
+                            callback.callbackMediaCalidadAire(response.getDouble("media"));
                         }
-
+                        catch (JSONException e) {
+                            Log.d("pruebas", e.toString());
+                        }
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("pruebas","That didn't work! " + error);
-            }
-        });
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("pruebas",error.toString());
+                    }
+                }
+        );
 
         // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        queue.add(jsonobj);
     }
 
 
@@ -203,7 +219,7 @@ public class ServidorFake {
                             Log.d("pruebas", e.toString());
                             callbackRegistro.callbackRegistro(false, null);
                         }
-                    //    callbackLogin.callbackLogin(true, response);
+                    //    callback.callback(true, response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -258,10 +274,10 @@ public class ServidorFake {
                         Log.d("pruebas",response.toString());
                         try {
                             if (response.get("status").equals(true)) {
-                                callbackLogin.callbackLogin(true, response);
+                                callback.callbackLogin(true, response);
                             }
                             else {
-                                callbackLogin.callbackLogin(false, response);
+                                callback.callbackLogin(false, response);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -276,17 +292,17 @@ public class ServidorFake {
                         NetworkResponse networkResponse = error.networkResponse;
                         Log.d("pruebas",error.toString());
                         if (error instanceof NoConnectionError || error instanceof TimeoutError) {
-                            callbackLogin.callbackLogin(false, null);
+                            callback.callbackLogin(false, null);
                         }
                         else if (networkResponse.statusCode == 404){
                             Log.d("pruebas",networkResponse.statusCode + "");
                             JSONObject response = new JSONObject();
-                            callbackLogin.callbackLogin(false, response);
+                            callback.callbackLogin(false, response);
                         }
                         else if (networkResponse.statusCode == 401){
                             JSONObject object = new JSONObject();
                             Log.d("pruebas",networkResponse.statusCode + "");
-                            callbackLogin.callbackLogin(false, object);
+                            callback.callbackLogin(false, object);
                         }
                     }
                 }
@@ -394,34 +410,5 @@ public class ServidorFake {
         queue.add(jsonobj);
     }
 
-    /**
-     * Esta función sirve para comparar caracteres, uno a uno de forma que te diga si son o no numericos.
-     *
-     * cadena: string ->
-     *                   isNumeric()
-     *                              -> boolean
-     * @param cadena
-     * @return
-     *
-     *  - Matthew Conde Oltra -
-     */
-    public static boolean isNumeric(String cadena) {
 
-        boolean resultado;
-
-        try {
-            Integer.parseInt(cadena);
-            resultado = true;
-        } catch (NumberFormatException excepcion) {
-            resultado = false;
-        }
-
-        return resultado;
-    }
-    // ---------------------------------------------------------------------------
-    // -> cerrarConexion() ->
-    // ---------------------------------------------------------------------------
-    public void cerrarConexion() {
-
-    }
 }

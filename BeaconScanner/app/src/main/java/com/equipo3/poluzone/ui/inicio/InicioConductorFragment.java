@@ -2,6 +2,7 @@ package com.equipo3.poluzone.ui.inicio;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.graphics.drawable.Drawable;
@@ -11,11 +12,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import com.equipo3.poluzone.Callback;
+import com.equipo3.poluzone.InfoDialog;
 import com.equipo3.poluzone.Medida;
+import com.equipo3.poluzone.NavigationDrawerActivity;
 import com.equipo3.poluzone.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -24,13 +31,24 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.Utils;
 import com.leinardi.android.speeddial.SpeedDialView;
 
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class InicioConductorFragment extends Fragment {
+public class InicioConductorFragment extends Fragment implements Callback {
 
     private InicioConductorViewModel mViewModel;
     private SpeedDialView speedDialView;
+    private View root;
+    private Double umbralMal = 163.0;
+    private Double umbralBien = 0.0;
+
 
     public static InicioConductorFragment newInstance() {
         return new InicioConductorFragment();
@@ -41,7 +59,7 @@ public class InicioConductorFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         mViewModel =
                 ViewModelProviders.of(this).get(InicioConductorViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_inicio_conductor, container, false);
+        root = inflater.inflate(R.layout.fragment_inicio_conductor, container, false);
 
         // acceder speed dial para esconderlo
         speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
@@ -140,7 +158,85 @@ public class InicioConductorFragment extends Fragment {
         chart.setData(lineData);
         chart.invalidate(); // refresh
 
+
+        // ----------------------------------- INFO DIALOG ---------------------------------------------
+
+        ImageView iconoInfo = root.findViewById(R.id.iconoinfo);
+        iconoInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final InfoDialog infoDialog = new InfoDialog();
+                if (!infoDialog.isAdded()) infoDialog.show(getFragmentManager(),"");
+            }
+        });
+
+
+        // ----------------------------------- MEDIA CALIDAD AIRE --------------------------------------
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getCalidadDelAireDeLaJornada();
+        }
+        NavigationDrawerActivity navigationDrawerActivity = (NavigationDrawerActivity) getParentFragment().getActivity();
+        navigationDrawerActivity.servidorFake.callback = this;
+
         return root;
     }
+
+
+    // ---------------------------------------------------------------------------
+    // calidad: R -> callbackMediaCalidadAire() ->
+    // Muestra la media en el layout
+    // ---------------------------------------------------------------------------
+    @Override
+    public void callbackMediaCalidadAire(double media) {
+        Log.d("pruebas", "calidad " + media);
+        TextView porcentajeText = root.findViewById(R.id.textViewPorcentaje);
+        ImageView nubeFoto = root.findViewById(R.id.nubecita);
+
+        // Regla de tres inversa para calcular el porcentaje según la media
+        // teniendo en cuenta que el ppm de umbralMal equivale a un 29%
+        Double porcentaje = umbralMal * 29 / media;
+
+        // Si sale mayor que 100 lo ponemos a 100%
+        if (porcentaje > 100) porcentaje = 100.0;
+
+        // Cambiamos formato para no mostrar todas las decimales
+        DecimalFormat df = new DecimalFormat("##.#");
+        porcentajeText.setText(df.format(porcentaje) + "%");
+
+        // Cambiamos la imagen de la nube según el porcentaje
+        if (porcentaje >= 70) nubeFoto.setImageDrawable(getActivity().getDrawable(R.drawable.happ));
+        else if (porcentaje >= 30 && porcentaje < 69) nubeFoto.setImageDrawable(getActivity().getDrawable(R.drawable.meh));
+        else if (porcentaje < 30) nubeFoto.setImageDrawable(getActivity().getDrawable(R.drawable.mal));
+
+    }
+
+
+    // ---------------------------------------------------------------------------
+    // -> getCalidadDelAireDeLaJornada() -> calidad: R (callback)
+    // Recoge la media de la calidad del aire de la jornada de trabajo
+    // ---------------------------------------------------------------------------
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void getCalidadDelAireDeLaJornada() {
+        NavigationDrawerActivity navigationDrawerActivity = (NavigationDrawerActivity) getParentFragment().getActivity();
+
+        // Cogemos la hora actual
+        ZonedDateTime now = ZonedDateTime.now();
+
+        // Cogemos la info de hoy a las 7 am
+        ZonedDateTime before = ZonedDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), 7, 0, 0, 0, ZoneId.systemDefault());
+
+        // Lo pasamos a milisegundos
+        Long beforemili = before.toInstant().toEpochMilli();
+
+        // Llamamos al metodo adecuado de servidorFake
+        navigationDrawerActivity.servidorFake.getMediaCalidadDelAireDeLaJornada(beforemili, System.currentTimeMillis(), navigationDrawerActivity.idUser);
+    }
+
+
+    @Override
+    public void callbackLogin(boolean resultadoLogin, JSONObject response) {
+
+    }
+
 
 }

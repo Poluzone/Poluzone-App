@@ -38,6 +38,7 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 // Equipo 3
 // Autor: Iván Romero, Emilia Rosa van der Heide
 // CopyRight:
+// El MainActivity mezclado con el navigation drawer
 // -----------------------------------------------------------------------
 public class NavigationDrawerActivity extends AppCompatActivity {
 
@@ -51,11 +52,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     public String nuestroUUID = "EQUIPO-3XURODIMI";
     ReceptorBLE receptorBLE;
 
-    // Mostrar por pantalla
-    public TextView textView;
-    public TextView textView2;
-    public TextView textViewRecibir;
-
     // Interfaz
     public Button button;
     public Button buttonRecibir;
@@ -64,7 +60,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     public SharedPreferences loginPreferences;
 
     // Servidor
-    ServidorFake servidorFake;
+    public ServidorFake servidorFake;
 
     // Para alarma 1 min
     int contador = 0;
@@ -76,7 +72,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     Handler handler10;
     Runnable runnable10;
 
-    String tipoUser;
+    // Datos del user
+    public String tipoUser;
+    public int idUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +82,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         tipoUser = loginPreferences.getString("tipousuario", "o");
+        idUser = loginPreferences.getInt("idUsuario", 0);
 
         Log.d("pruebasssss", tipoUser);
 
@@ -96,13 +95,12 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         DrawerLayout drawer;
         NavigationView navigationView;
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-
         // Creamos el servidorFake indicando la direccion ip y el puerto
         servidorFake = new ServidorFake(this);
 
         NavController navController;
+
+        // Para los usuarios conductor
         if (tipoUser.equals("Conductor")) {
             setContentView(R.layout.activity_navigation_drawerc);
             toolbar = findViewById(R.id.toolbarc);
@@ -124,6 +122,8 @@ public class NavigationDrawerActivity extends AppCompatActivity {
             alarmaQueSuenaCadaMinuto();
             alarmaQueSuenaCada10Minutos();
         }
+
+        // Para los usuarios normales
         else {
             setContentView(R.layout.activity_navigation_drawer);
             toolbar = findViewById(R.id.toolbar);
@@ -171,7 +171,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         NavController navController;
         if (tipoUser.equals("Conductor")) {
             navController = Navigation.findNavController(this, R.id.nav_host_fragmentc);
-
         }
         else {
             navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -185,6 +184,8 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     // Enviar las mediciones al servidor
     // -----------------------------------------------------------------------
     public void hayQueActualizarMedicionesYEnviarlasAlServidor() {
+        // calculamos la media
+        receptorBLE.calcularMediaMedidas();
         Medida medida = receptorBLE.obtenerContaminacion();
         Log.d("pruebas", "valor: " + medida.getMedida() + " tiempo: " + medida.getTiempo() + " lati: " + medida.getPosicion().getLatitude());
         servidorFake.insertarMedida(medida);

@@ -28,7 +28,7 @@ import org.json.JSONObject;
 // Autor: Emilia Rosa van der Heide
 // CopyRight:
 // -----------------------------------------------------------------------
-public class LoginActivity extends AppCompatActivity implements CallbackLogin {
+public class LoginActivity extends AppCompatActivity implements Callback {
 
     // Servidor
     ServidorFake servidorFake;
@@ -236,7 +236,7 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
 
 
     // ---------------------------------------------------------------------------
-    // resultadoLogin: V/F, respuesta -> callbackLogin() ->
+    // resultadoLogin: V/F, respuesta -> callback() ->
     // ---------------------------------------------------------------------------
     @Override
     public void callbackLogin(boolean resultadoLogin, JSONObject response) {
@@ -276,6 +276,14 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
             // Mostramos los mensajes de error en pantalla
             if (response == null) {
                 Toast.makeText(this, "Error de conexión", Toast.LENGTH_LONG).show();
+
+                // Para pruebas
+                loginPrefsEditor.putString("tipousuario", "Conductor");
+                Intent i = new Intent(this, NavigationDrawerActivity.class);
+                Log.d("pruebas", "intent main");
+                loginPrefsEditor.commit();
+                this.startActivity(i);
+                this.finish();
             }
             else errorLogin();
         }
@@ -298,5 +306,9 @@ public class LoginActivity extends AppCompatActivity implements CallbackLogin {
             botonLogearse.setTextColor(Color.WHITE);
         }
     }
+
+
+    @Override
+    public void callbackMediaCalidadAire(double media) { }
 
 }

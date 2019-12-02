@@ -42,8 +42,13 @@ public class ReceptorBLE {
     public long instante;
     public Location posicion;
 
+    // Calcular media variable
+    private float media;
+    private int contador = 0;
+    private float medidas[] = new float[3000];
+
     //Auxiliares
-    private boolean haSalidoYaElToast=false;//para que el Toast de cuando se conecta el sensor no salga todo el rato
+    private boolean haSalidoYaElToast=false;//para que el Toast de cuando se conecta el sensor no salga constantemente
 
     // -----------------------------------------------------------------------
     // Constructor
@@ -91,13 +96,14 @@ public class ReceptorBLE {
                     posicion = localizadorGPS.getUltimaPosicionMedida();
                     //Log.d("pruebas", Double.toString(posicion.getLatitude()));
 
-                /*    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-                    instante = simpleDateFormat.format(new Date()); */
-
                     instante = System.currentTimeMillis();
 
-                    // !! COMENTAR DESPUES DE LAS PRUEBAS
-                    stopEscanearDispositivosBLE();
+                    // contamos cuántas medidas hemos recibido
+                    if (contador == 3000) contador = 0;
+                    medidas[contador] = Utilidades.bytesToInt(ultimaTramaEncontrada.getMajor());
+                    contador ++;
+
+                    //stopEscanearDispositivosBLE();
                 }
             }
         };
@@ -129,7 +135,6 @@ public class ReceptorBLE {
     // -----------------------------------------------------------------------
     // -> activarBluetooth ->
     // Hace toda la comprobación de permisos
-    // TODO: Que se recargue después de obtener los permisos
     // -----------------------------------------------------------------------
     public void activarBluetooth() {
         // Permisos de bluetooth y localizacion
@@ -184,10 +189,26 @@ public class ReceptorBLE {
     public Medida obtenerContaminacion() {
         Log.d("pruebas", "obtenerContaminacion()");
         Medida medida = new Medida();
-        medida.setMedida(Utilidades.bytesToInt(ultimaTramaEncontrada.getMajor()));
+        medida.setMedida(media);
         medida.setPosicion(posicion);
         medida.setTiempo(instante);
         return medida;
+    }
+
+    // -----------------------------------------------------------------------
+    // Emilia Rosa van der Heide
+    // -> calcularMediaMedidas() ->
+    // -----------------------------------------------------------------------
+    public void calcularMediaMedidas() {
+        Log.d("pruebas", "calcularMediaMedidas()");
+        Log.d("aaaaaaaaaaaaa", "media: " + media);
+        Log.d("aaaaaaaaaaaaa", "contador: " + contador);
+        float sumatorio = 0;
+        for (int i = 0; i < contador; i++) {
+            sumatorio = sumatorio + medidas[i];
+        }
+        media = sumatorio / contador;
+        Log.d("pruebas", "termina calcularMediaMedidas()");
     }
 
 
@@ -196,6 +217,7 @@ public class ReceptorBLE {
     // -----------------------------------------------------------------------
     public void stopEscanearDispositivosBLE() {
         Log.d("pruebas", "stopEscanearDispositivosBLE()");
+        ultimaTramaEncontrada = null;
         BTAdapter.stopLeScan(callbackLeScan);
     }
 
