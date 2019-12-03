@@ -125,11 +125,17 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         } catch (Resources.NotFoundException e) {
             Log.e(TAG, "No se ha encontrado el estilo. Error: ", e);
         }
-
-
-        //map.setMyLocationEnabled(true);
-        //map.setMinZoomPreference(6.0f);
-        //map.setMaxZoomPreference(15.0f);
+        //Configuración inicial del mapa
+        /******************************************************************************
+        *               ----- Configuración inicial del mapa -----
+        *  Eliminamos el compas de la visualización del mapa, y los botones que
+        * aparecen en el mapa al darle a un marker. A parte añadimos la funcionalidad
+        * de que se aleje del mapa al darle a la vez dos veces seguidas con dos dedos.
+         *****************************************************************************/
+        map.getUiSettings().setCompassEnabled(false);
+        map.getUiSettings().setMapToolbarEnabled(false);
+        map.getUiSettings().setMyLocationButtonEnabled(true);
+        map.getUiSettings().setIndoorLevelPickerEnabled(true);
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pp, 15.0f));
 
@@ -193,6 +199,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             MarkerOptions option = new MarkerOptions();
 
 
+            ArrayList<LatLng> list = new ArrayList<LatLng>();
             int length;
             LatLng coords;
             double latitud;
@@ -205,6 +212,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                 // Dibujamos marcadores para cada una de las medidas
                 for (int i = 0; i<length; i++)
                 {
+
                     // Observamos las medidas en el logcat
                     //Log.d("MAPA", medidas.getJSONArray("medidas").getJSONObject(i).toString());
                     //Guardamos cada una de las medidas en una variable auxiliar
@@ -216,6 +224,9 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     latitud = Double.parseDouble(medida.getString("Latitud"));
                     longitud = Double.parseDouble(medida.getString("Longitud"));
                     coords = new LatLng(latitud, longitud);
+
+                    list.add(coords);
+
                     //Log.d(TAG, "Coords: "+coords.toString());
                     // Guardamos el valor de la medida
                     valor = Double.parseDouble(medida.getString("Valor"));
@@ -226,7 +237,12 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                             icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
                     map.addMarker(option);
                 }
-
+                // Create a heat map tile provider, passing it the latlngs of the police stations.
+                HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder()
+                        .data(list)
+                        .build();
+                // Add a tile overlay to the map, using the heat map tile provider.
+                Object mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
