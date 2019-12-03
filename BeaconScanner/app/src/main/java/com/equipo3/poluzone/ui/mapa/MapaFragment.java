@@ -134,7 +134,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         map.setMaxZoomPreference(15.0f);
         map.addMarker(option);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pp, 15.0f));
-        addHeatMap();
+
     }
 
 
@@ -192,6 +192,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         {
             Log.d("MAPA", "Tenemos las medidas.");
             Log.d("MAPA", medidas.toString());
+            addHeatMap();
         }
         else
         {
