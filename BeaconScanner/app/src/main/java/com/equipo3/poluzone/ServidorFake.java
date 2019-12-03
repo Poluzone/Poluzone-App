@@ -60,6 +60,7 @@ public class ServidorFake{
         Log.d("pruebas", "constructor ServidorFake()");
 
         this.activity = activity;
+        loginPreferences = activity.getSharedPreferences("loginPrefs", Context.MODE_PRIVATE);
 
         // Si el servidor se ha creado desde loginactivity buscamos el callback
         if (activity.getClass() == LoginActivity.class) {
@@ -93,7 +94,6 @@ public class ServidorFake{
 
         JSONObject datos = new JSONObject();
 
-        loginPreferences = activity.getSharedPreferences("loginPrefs", Context.MODE_PRIVATE);
         int idUsuario = loginPreferences.getInt("idUsuario", 0);
 
         // Anyadimos los datos al json
@@ -428,7 +428,7 @@ public class ServidorFake{
     // ---------------------------------------------------------------------------
     // idUsuario, idSensor -> vincularIDdeUsuarioConSensor() ->
     // ---------------------------------------------------------------------------
-    public void vincularIDdeUsuarioConSensor(int idUsuario, int idSensor) {
+    public void vincularIDdeUsuarioConSensor(int idUsuario, final int idSensor) {
         Log.d("pruebas", "vincularIDdeUsuarioConSensor()");
         String url = URL+"/insertarIdUsuarioConIdsensor";
 
@@ -450,13 +450,55 @@ public class ServidorFake{
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("pruebasIDUSuario",response.toString());
-
+                        loginPreferences.edit().putInt("idSensor", idSensor);
+                        loginPreferences.edit().commit();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("pruebasIDUSuario",error.toString());
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonobj);
+    }
+
+
+    // ---------------------------------------------------------------------------
+    // activo/inactivo: texto -> indicarActividadNodo() ->
+    // ---------------------------------------------------------------------------
+    public void indicarActividadNodo(String activo) {
+        Log.d("pruebas", "indicarActividadNodo()");
+        String url = "http://"+IP+":"+puerto+"/indicarActividadNodo";
+
+        int idSensor = loginPreferences.getInt("idSensor", 0);
+
+        JSONObject datos = new JSONObject();
+
+        // Anyadimos los datos al json
+        try {
+            datos.put("idSensor", idSensor);
+            datos.put("estado", activo);
+            Log.d("pruebas json", datos.toString());
+        } catch (JSONException e) {
+            Log.d("pruebas", e.toString());
+        }
+
+        // Hacemos la peticion
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("pruebas",response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("pruebas",error.toString());
                     }
                 }
         );

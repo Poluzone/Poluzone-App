@@ -74,6 +74,11 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     Handler handler10;
     Runnable runnable10;
 
+    // Para alarma inactividad
+    int contadorInactividad = 0;
+    Handler handlerInactividad;
+    Runnable runnableInactividad;
+
     // Datos del user
     public String tipoUser;
     public int idUser;
@@ -120,9 +125,13 @@ public class NavigationDrawerActivity extends AppCompatActivity {
             receptorBLE = new ReceptorBLE(this, nuestroUUID);
             Log.d("pruebas", "receptor creado");
 
-            // Empezar temporizadores para mandar al servidor (temporal)
+            // Empezar temporizadores para mandar al servidor
             alarmaQueSuenaCadaMinuto();
             alarmaQueSuenaCada10Minutos();
+
+            // Empezar temporizador para contar cuánto tiempo lleva
+            // inactivo el nodo
+            alarmaQueSuenaCuandoEstaInactivo();
         }
 
         // Para los usuarios normales
@@ -191,6 +200,17 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         Medida medida = receptorBLE.obtenerContaminacion();
         Log.d("pruebas", "valor: " + medida.getMedida() + " tiempo: " + medida.getTiempo() + " lati: " + medida.getPosicion().getLatitude());
         servidorFake.insertarMedida(medida);
+        servidorFake.indicarActividadNodo("Activo");
+        receptorBLE.ultimaTramaEncontrada = null;
+    }
+
+    // -----------------------------------------------------------------------
+    // -> hayQueAvisarDeInactividad ->
+    // Avisar de inactividad del nodo al servidor
+    // -----------------------------------------------------------------------
+    public void hayQueAvisarDeInactividad() {
+        String actividad = "Inactivo";
+        servidorFake.indicarActividadNodo(actividad);
     }
 
     //--------------------------------------------------------------------------
@@ -432,6 +452,39 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
         // Se suma 1 cada 1000 milisegundos
         handler10.postDelayed(runnable10, 1000);
+    }
+
+
+    // -----------------------------------------------------------------------
+    // -> alarmaQueSuenaCuandoEstaInactivo ->
+    // Crea el handler para el timer de hayqueavisardeinactividad
+    // A modo de prueba suena cuando lleva 30s inactivo
+    // -----------------------------------------------------------------------
+    public void alarmaQueSuenaCuandoEstaInactivo() {
+        handlerInactividad = new Handler();
+        runnableInactividad = new Runnable() {
+            @Override
+            public void run() {
+                timerAlarmaQueSuenaCuandoEstaInactivo();
+            }
+        };
+        runnableInactividad.run();
+    }
+
+    // -----------------------------------------------------------------------
+    // -> timerAlarmaQueSuenaCuandoEstaInactivo ->
+    // -----------------------------------------------------------------------
+    public void timerAlarmaQueSuenaCuandoEstaInactivo() {
+        contadorInactividad++;
+        // Cada 30 segundos cambia el estado a inactivo
+        if (contadorInactividad > 30) {
+            Log.d("pruebas", "timerAlarmaQueSuenaCuandoEstaInactivo");
+            hayQueAvisarDeInactividad();
+            contadorInactividad = 0;
+        }
+
+        // Se suma 1 cada 1000 milisegundos
+        handlerInactividad.postDelayed(runnableInactividad, 1000);
     }
 
 }
