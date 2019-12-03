@@ -125,14 +125,11 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             Log.e(TAG, "No se ha encontrado el estilo. Error: ", e);
         }
 
-        MarkerOptions option = new MarkerOptions();
-        option.position(pp).title("UPV").draggable(true).
-                snippet("upv gandia").
-                icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+
         //map.setMyLocationEnabled(true);
-        map.setMinZoomPreference(6.0f);
-        map.setMaxZoomPreference(15.0f);
-        map.addMarker(option);
+        //map.setMinZoomPreference(6.0f);
+        //map.setMaxZoomPreference(15.0f);
+
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pp, 15.0f));
 
     }
@@ -192,7 +189,50 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         {
             Log.d("MAPA", "Tenemos las medidas.");
             Log.d("MAPA", medidas.toString());
-            addHeatMap();
+            MarkerOptions option = new MarkerOptions();
+
+
+            int length;
+            LatLng coords;
+            double latitud;
+            double longitud;
+            int valor;
+            try {
+                //Recogemos el tamaño del array con las medidas en JSON
+                length = medidas.getJSONArray("medidas").length();
+
+                // Dibujamos marcadores para cada una de las medidas
+                for (int i = 0; i<length; i++)
+                {
+                    // Observamos las medidas en el logcat
+                    Log.d("MAPA", medidas.getJSONArray("medidas").getJSONObject(i).toString());
+                    //Guardamos cada una de las medidas en una variable auxiliar
+                    JSONObject medida = medidas.getJSONArray("medidas").getJSONObject(i);
+
+                    Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
+                    Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
+                    // Guardamos la latitud de cada una cogiendo de la medida
+                    latitud = Double.parseDouble(medida.getString("Latitud"));
+                    longitud = Double.parseDouble(medida.getString("Longitud"));
+                    coords = new LatLng(latitud, longitud);
+                    Log.d(TAG, "Coords: "+coords.toString());
+                    // Guardamos el valor de la medida
+                    valor = Integer.parseInt(medida.getString("Valor"));
+                    Log.d(TAG, "Valor: "+medida.getString("Valor"));
+                    //Configuración del marcador
+                    option.position(coords).title("UPV").draggable(true).
+                            snippet("Contaminación:"+valor).
+                            icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                    map.addMarker(option);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
+            //addHeatMap();
         }
         else
         {
