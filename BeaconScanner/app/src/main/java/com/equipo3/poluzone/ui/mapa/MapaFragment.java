@@ -1,3 +1,11 @@
+/**
+ * Autor: Matthew Conde Oltra
+ * Fecha: 28-11-2019
+ *
+ * Fichero creación del mapa, modificación de opciones del fragment del mapa,
+ * de el XML correspondiente.
+ */
+
 package com.equipo3.poluzone.ui.mapa;
 
 import android.content.res.Resources;
@@ -57,6 +65,8 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         speedDialView.show();
 
         /**
+         *  - Matthew Conde Oltra -
+         *
          * CONCEPTO - COMO ENVIAR LOS DATOS CON CALLBACK A UN FRAGMENT DESDE SERVIDORFAKE?
          *
          * 1. Añadimos en el fragment al que vamos a pasarle los datos la referencia a la
@@ -66,6 +76,18 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
          *
          * 2. Dentro del SERVIDORFAKE debemos tener un objeto Callback al que le introducimos la actividad
          * de la cual estamos cogiendo el objeto ServidorFake, en este caso de navigationDrawerActivity.
+         * Por ello hacemos referencia al callback que tenemos en el servidorfake pero de esa actividad, y
+         * le añadimos this - haciendo referencia al método del Callback de este fragment.
+         *
+         *   navigation.servidorFake.callback = this;
+         *
+         * 3. Añadimos el Callback al fragment con un <<implements Callback>>(en este ejemplo se llama Callback,
+         * pero depende del nombre de la INTERFACE que hayas creado para el Callback).
+         *
+         * Por último, dentro de servidorFake necesitamos un objeto de el tipo de Callback que vayamos
+         * a utilizar y llamarlo donde nosotros queramos que devuelva los datos.
+         *
+         * LISTO! YA PUEDES PASAR LOS DATOS!
          *
          */
 
