@@ -40,7 +40,9 @@ public class ServidorFake {
     CallbackRegistro callbackRegistro;
 
     //String IP = "192.168.1.107";
-    String URL = "https://juconol.upv.edu.es/"; //Red Matthew
+    //String URL = "https://juconol.upv.edu.es/"; //Red Matthew
+    String URL = "http://192.168.0.102:8080"; //Red Matthew
+
     //String IP = "192.168.1.107"; //Red Rosa
 
    //  "172.20.10.5";
@@ -311,7 +313,68 @@ public class ServidorFake {
         // Add the request to the RequestQueue.
         queue.add(jsonobj);
     }
+    /**
+     * getTodasLasMedidasPorFecha : devuelve todas las medidas desde, hasta una fecha
+     * desde: N, hasta: N ->
+     *                  getTodasLasMedidasPorFecha()
+     *                                  -> Medidas: JSON
+     *
+     *  - Matthew Conde Oltra -
+     */
+    public void getTodasLasMedidasPorFecha (long desde, long hasta) {
+        Log.d("MEDIDAS", "/GetTodasLasMedidasPorFecha");
+        String url = URL+"/GetTodasLasMedidasPorFecha";
 
+        // Creamos el intervalo de tiempo
+        JSONObject intervalo = new JSONObject();
+
+        try {
+            intervalo.put("desde", desde);
+            intervalo.put("hasta", hasta);
+        }
+        catch (JSONException e) {
+            Log.d("TODASMEDIDAS", e.toString());
+        }
+
+        // Anyadimos los datos al json
+        JSONObject datos = new JSONObject();
+        try {
+            datos.put("Intervalo", intervalo);
+            //datos.put("IdUsuario", id);
+            Log.d("TODASMEDIDAS", datos.toString());
+        } catch (JSONException e) {
+            Log.d("pruebas", e.toString());
+        }
+
+        // Hacemos la peticion
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.d("TODASMEDIDAS",response.toString());
+                        /*if(response == null)
+                        {
+                            // No hace nada
+                        }
+                        else
+                        {
+                            callbackRegistro.callbackUsuario(true, response);
+                        }*/
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        NetworkResponse networkResponse = error.networkResponse;
+                        Log.d("TODASMEDIDAS",error.toString());
+
+                    }
+                }
+        );
+        queue.add(jsonobj);
+    }
     /**
      * getUsuario : devuelve el id del usuario.
      * email: string ->
