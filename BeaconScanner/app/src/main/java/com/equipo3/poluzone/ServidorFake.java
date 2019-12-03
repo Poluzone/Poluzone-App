@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 
 import com.equipo3.poluzone.ui.inicio.InicioConductorFragment;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,10 +39,10 @@ public class ServidorFake {
     RequestQueue queue;
     public Callback callback;
     CallbackRegistro callbackRegistro;
-
+    CallbackMedidas callbackMedidas;
     //String IP = "192.168.1.107";
     //String URL = "https://juconol.upv.edu.es/"; //Red Matthew
-    String URL = "http://192.168.0.102:8080"; //Red Matthew
+    String URL = "http://192.168.43.125:8080"; //Red Matthew
 
     //String IP = "192.168.1.107"; //Red Rosa
 
@@ -323,11 +324,10 @@ public class ServidorFake {
      */
     public void getTodasLasMedidasPorFecha (long desde, long hasta) {
         Log.d("MEDIDAS", "/GetTodasLasMedidasPorFecha");
-        String url = URL+"/GetTodasLasMedidasPorFecha";
+        String url = URL+"/getTodasLasMedidasPorFecha";
 
         // Creamos el intervalo de tiempo
         JSONObject intervalo = new JSONObject();
-
         try {
             intervalo.put("desde", desde);
             intervalo.put("hasta", hasta);
@@ -336,32 +336,22 @@ public class ServidorFake {
             Log.d("TODASMEDIDAS", e.toString());
         }
 
-        // Anyadimos los datos al json
-        JSONObject datos = new JSONObject();
-        try {
-            datos.put("Intervalo", intervalo);
-            //datos.put("IdUsuario", id);
-            Log.d("TODASMEDIDAS", datos.toString());
-        } catch (JSONException e) {
-            Log.d("pruebas", e.toString());
-        }
-
         // Hacemos la peticion
-        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, intervalo,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
                         Log.d("TODASMEDIDAS",response.toString());
-                        /*if(response == null)
+
+                        if(response == null)
                         {
                             // No hace nada
                         }
                         else
                         {
-                            callbackRegistro.callbackUsuario(true, response);
-                        }*/
-
+                            callbackMedidas.callbackMedidas(true, response);
+                        }
                     }
                 },
                 new Response.ErrorListener() {

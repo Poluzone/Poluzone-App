@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.equipo3.poluzone.NavigationDrawerActivity;
 import com.equipo3.poluzone.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -54,7 +55,11 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
         // acceder speed dial
         speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
         speedDialView.show();
+        NavigationDrawerActivity navigation = (NavigationDrawerActivity) getParentFragment().getActivity();
+        long primeraFecha = 0;
+        long fechaActual= 0;
 
+        navigation.servidorFake.getTodasLasMedidasPorFecha(primeraFecha, fechaActual);
         return root;
     }
 
@@ -127,5 +132,22 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
             list.add(new LatLng(lat, lng));
         }
         return list;
+    }
+
+    /**
+     * callbackMedidas()
+     * Función callback que recibe todas las medidas de la BBDD del servidor.
+     *
+     * @param resultado
+     * @param medidas
+     *
+     *  - Matthew Conde Oltra -
+     */
+    @Override
+    public void callbackMedidas(boolean resultado, JSONObject medidas) {
+        if(resultado)
+        {
+            Log.d("TODASMEDIDAS", "Tenemos las medidas");
+        }
     }
 }
