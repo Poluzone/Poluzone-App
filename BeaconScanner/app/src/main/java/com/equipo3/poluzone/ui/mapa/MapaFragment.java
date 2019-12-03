@@ -257,7 +257,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         if(resultado)
         {
             Log.d("MAPA", "Tenemos las estaciones.");
-            Log.d("MAPA", estaciones.toString());
+            //Log.d("MAPA", estaciones.toString());
             MarkerOptions option = new MarkerOptions();
 
 
@@ -274,20 +274,20 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                 for (int i = 0; i<length; i++)
                 {
                     // Observamos las medidas en el logcat
-                    Log.d("MAPA", estaciones.getJSONArray("estaciones").getJSONObject(i).toString());
+                    //Log.d("MAPA", estaciones.getJSONArray("estaciones").getJSONObject(i).toString());
                     //Guardamos cada una de las medidas en una variable auxiliar
                     JSONObject estacion = estaciones.getJSONArray("estaciones").getJSONObject(i);
 
-                    Log.d(TAG, "Latitud: "+estacion.getString("Latitud"));
-                    Log.d(TAG, "Longitud: "+estacion.getString("Longitud"));
+                    //Log.d(TAG, "Latitud: "+estacion.getString("Latitud"));
+                    //Log.d(TAG, "Longitud: "+estacion.getString("Longitud"));
                     // Guardamos la latitud de cada una cogiendo de la medida
                     latitud = Double.parseDouble(estacion.getString("Latitud"));
                     longitud = Double.parseDouble(estacion.getString("Longitud"));
                     coords = new LatLng(latitud, longitud);
-                    Log.d(TAG, "Coords: "+coords.toString());
+                    //Log.d(TAG, "Coords: "+coords.toString());
                     // Guardamos el valor de la estacion
                     nombre = estacion.getString("Nombre");
-                    Log.d(TAG, "Valor: "+nombre);
+                    //Log.d(TAG, "Valor: "+nombre);
                     //Configuración del marcador
                     option.position(coords).title("UPV").draggable(true).
                             snippet("Estación: "+nombre).
