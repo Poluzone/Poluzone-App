@@ -1,6 +1,5 @@
 package com.equipo3.poluzone;
 
-
 import android.app.FragmentManager;
 import android.content.Context;
 
@@ -19,6 +18,7 @@ import com.android.volley.toolbox.Volley;
 
 import com.equipo3.poluzone.ui.inicio.InicioConductorFragment;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,18 +32,18 @@ import org.json.JSONObject;
 // -----------------------------------------------------------------------
 
 
-public class ServidorFake {
+public class ServidorFake{
 
     android.app.Activity activity;
 
     RequestQueue queue;
     public Callback callback;
     CallbackRegistro callbackRegistro;
-    CallbackMedidas callbackMedidas;
+    Callback callbackMedidas;
     //String IP = "192.168.1.107";
     //String URL = "https://juconol.upv.edu.es/"; //Red Matthew
-    String URL = "http://192.168.43.125:8080"; //Red Matthew
-
+    //String URL = "http://192.168.43.125:8080"; //Red Matthew
+    String URL = "http://192.168.0.102:8080";//192.168.0.102
     //String IP = "192.168.1.107"; //Red Rosa
 
    //  "172.20.10.5";
@@ -342,15 +342,17 @@ public class ServidorFake {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        Log.d("TODASMEDIDAS",response.toString());
+                        Log.d("SERVIDOR",response.toString());
 
                         if(response == null)
                         {
                             // No hace nada
+                            Log.d("SERVIDOR", "Response es null");
+                            callback.callbackMedidas(false, response);
                         }
                         else
                         {
-                            callbackMedidas.callbackMedidas(true, response);
+                            callback.callbackMedidas(true, response);
                         }
                     }
                 },
@@ -358,7 +360,7 @@ public class ServidorFake {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         NetworkResponse networkResponse = error.networkResponse;
-                        Log.d("TODASMEDIDAS",error.toString());
+                        Log.d("ERRORSERVIDOR",error.toString());
 
                     }
                 }

@@ -238,5 +238,10 @@ public class InicioConductorFragment extends Fragment implements Callback {
 
     }
 
+    @Override
+    public void callbackMedidas(boolean resultado, JSONObject medidas) {
+
+    }
+
 
 }

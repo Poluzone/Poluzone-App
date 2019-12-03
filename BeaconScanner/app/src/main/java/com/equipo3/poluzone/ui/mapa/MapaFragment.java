@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.equipo3.poluzone.Callback;
 import com.equipo3.poluzone.NavigationDrawerActivity;
 import com.equipo3.poluzone.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,7 +26,6 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
-import com.google.maps.android.heatmaps.WeightedLatLng;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import org.json.JSONArray;
@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class MapaFragment extends Fragment implements OnMapReadyCallback {
+public class MapaFragment extends Fragment implements OnMapReadyCallback, Callback {
     //Etiqueta para el debugging
     String TAG = "MAPA";
     //---------------------------------------------------------------------------
@@ -55,10 +55,24 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
         // acceder speed dial
         speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
         speedDialView.show();
+
+        /**
+         * CONCEPTO - COMO ENVIAR LOS DATOS CON CALLBACK A UN FRAGMENT DESDE SERVIDORFAKE?
+         *
+         * 1. Añadimos en el fragment al que vamos a pasarle los datos la referencia a la
+         * actividad del navigation drawer. Con las siguiente línea:
+         *
+         *   NavigationDrawerActivity navigation = (NavigationDrawerActivity) getParentFragment().getActivity();
+         *
+         * 2. Dentro del SERVIDORFAKE debemos tener un objeto Callback al que le introducimos la actividad
+         * de la cual estamos cogiendo el objeto ServidorFake, en este caso de navigationDrawerActivity.
+         *
+         */
+
         NavigationDrawerActivity navigation = (NavigationDrawerActivity) getParentFragment().getActivity();
+        navigation.servidorFake.callback = this;
         long primeraFecha = 0;
         long fechaActual= 0;
-
         navigation.servidorFake.getTodasLasMedidasPorFecha(primeraFecha, fechaActual);
         return root;
     }
@@ -134,6 +148,11 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
         return list;
     }
 
+    @Override
+    public void callbackLogin(boolean resultadoLogin, JSONObject response) {
+
+    }
+
     /**
      * callbackMedidas()
      * Función callback que recibe todas las medidas de la BBDD del servidor.
@@ -145,9 +164,21 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
      */
     @Override
     public void callbackMedidas(boolean resultado, JSONObject medidas) {
+        Log.d("MAPA", "Estamos en el callback medidas");
+
         if(resultado)
         {
-            Log.d("TODASMEDIDAS", "Tenemos las medidas");
+            Log.d("MAPA", "Tenemos las medidas.");
+            Log.d("MAPA", medidas.toString());
         }
+        else
+        {
+            Log.d("MAPA", "Las medidas no existen.");
+        }
+    }
+
+    @Override
+    public void callbackMediaCalidadAire(double media) {
+
     }
 }
