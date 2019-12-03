@@ -472,8 +472,8 @@ public class ServidorFake{
     // ---------------------------------------------------------------------------
     public void indicarActividadNodo(String activo) {
         Log.d("pruebas", "indicarActividadNodo()");
-        String url = "http://"+IP+":"+puerto+"/indicarActividadNodo";
-
+        //String url = "http://"+IP+":"+puerto+"/indicarActividadNodo";
+        String url = URL+"/indicarActividadNodo";
         int idSensor = loginPreferences.getInt("idSensor", 0);
 
         JSONObject datos = new JSONObject();
