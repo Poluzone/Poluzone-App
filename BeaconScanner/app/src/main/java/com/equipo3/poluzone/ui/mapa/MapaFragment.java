@@ -96,6 +96,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         long primeraFecha = 0;
         long fechaActual= 0;
         navigation.servidorFake.getTodasLasMedidasPorFecha(primeraFecha, fechaActual);
+        navigation.servidorFake.getEstacionesOficiales();
         return root;
     }
 
@@ -188,7 +189,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         if(resultado)
         {
             Log.d("MAPA", "Tenemos las medidas.");
-            Log.d("MAPA", medidas.toString());
+            //Log.d("MAPA", medidas.toString());
             MarkerOptions option = new MarkerOptions();
 
 
@@ -205,20 +206,20 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                 for (int i = 0; i<length; i++)
                 {
                     // Observamos las medidas en el logcat
-                    Log.d("MAPA", medidas.getJSONArray("medidas").getJSONObject(i).toString());
+                    //Log.d("MAPA", medidas.getJSONArray("medidas").getJSONObject(i).toString());
                     //Guardamos cada una de las medidas en una variable auxiliar
                     JSONObject medida = medidas.getJSONArray("medidas").getJSONObject(i);
 
-                    Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
-                    Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
+                    //Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
+                    //Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
                     // Guardamos la latitud de cada una cogiendo de la medida
                     latitud = Double.parseDouble(medida.getString("Latitud"));
                     longitud = Double.parseDouble(medida.getString("Longitud"));
                     coords = new LatLng(latitud, longitud);
-                    Log.d(TAG, "Coords: "+coords.toString());
+                    //Log.d(TAG, "Coords: "+coords.toString());
                     // Guardamos el valor de la medida
                     valor = Double.parseDouble(medida.getString("Valor"));
-                    Log.d(TAG, "Valor: "+medida.getString("Valor"));
+                    //Log.d(TAG, "Valor: "+medida.getString("Valor"));
                     //Configuración del marcador
                     option.position(coords).title("UPV").draggable(true).
                             snippet("Contaminación:"+valor).
@@ -237,6 +238,74 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         else
         {
             Log.d("MAPA", "Las medidas no existen.");
+        }
+    }
+
+    /**
+     * callbackEstaciones()
+     * Función callback que recibe todas las medidas de la BBDD del servidor.
+     *
+     * @param resultado
+     * @param estaciones
+     *
+     *  - Matthew Conde Oltra -
+     */
+    @Override
+    public void callbackEstaciones(boolean resultado, JSONObject estaciones) {
+        Log.d("MAPA", "Estamos en el callback estaciones");
+
+        if(resultado)
+        {
+            Log.d("MAPA", "Tenemos las estaciones.");
+            Log.d("MAPA", estaciones.toString());
+            MarkerOptions option = new MarkerOptions();
+
+
+            int length;
+            LatLng coords;
+            double latitud;
+            double longitud;
+            String nombre;
+            try {
+                //Recogemos el tamaño del array con las medidas en JSON
+                length = estaciones.getJSONArray("estaciones").length();
+
+                // Dibujamos marcadores para cada una de las medidas
+                for (int i = 0; i<length; i++)
+                {
+                    // Observamos las medidas en el logcat
+                    Log.d("MAPA", estaciones.getJSONArray("estaciones").getJSONObject(i).toString());
+                    //Guardamos cada una de las medidas en una variable auxiliar
+                    JSONObject estacion = estaciones.getJSONArray("estaciones").getJSONObject(i);
+
+                    Log.d(TAG, "Latitud: "+estacion.getString("Latitud"));
+                    Log.d(TAG, "Longitud: "+estacion.getString("Longitud"));
+                    // Guardamos la latitud de cada una cogiendo de la medida
+                    latitud = Double.parseDouble(estacion.getString("Latitud"));
+                    longitud = Double.parseDouble(estacion.getString("Longitud"));
+                    coords = new LatLng(latitud, longitud);
+                    Log.d(TAG, "Coords: "+coords.toString());
+                    // Guardamos el valor de la estacion
+                    nombre = estacion.getString("Nombre");
+                    Log.d(TAG, "Valor: "+nombre);
+                    //Configuración del marcador
+                    option.position(coords).title("UPV").draggable(true).
+                            snippet("Estación: "+nombre).
+                            icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    map.addMarker(option);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
+            //addHeatMap();
+        }
+        else
+        {
+            Log.d("MAPA", "Las estaciones no existen.");
         }
     }
 

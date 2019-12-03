@@ -296,6 +296,11 @@ public class LoginActivity extends AppCompatActivity implements Callback {
     @Override
     public void callbackMedidas(boolean resultado, JSONObject medidas) {}
 
+    @Override
+    public void callbackEstaciones(boolean resultado, JSONObject estaciones) {
+
+    }
+
     // ---------------------------------------------------------------------------
     // V/F -> mostrarProgress() ->
     // Es la ruedecita de carga que se muestra si mostrar = true

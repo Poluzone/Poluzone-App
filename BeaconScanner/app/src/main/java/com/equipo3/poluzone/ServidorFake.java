@@ -367,6 +367,50 @@ public class ServidorFake{
         );
         queue.add(jsonobj);
     }
+
+    /**
+     * getEstacionesOficiales : devuelve estaciones oficiales de la BBDD
+     *
+     * getEstacionesOficiales() -> Estaciones: JSON
+     *
+     *  - Matthew Conde Oltra -
+     */
+    public void getEstacionesOficiales () {
+        Log.d("MEDIDAS", "/GetEstacionesOficiales");
+        String url = URL+"/getEstacionesOficiales";
+
+
+        // Hacemos la peticion
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.d("SERVIDOR",response.toString());
+
+                        if(response == null)
+                        {
+                            // No hace nada
+                            Log.d("SERVIDOR", "Response es null");
+                            callback.callbackEstaciones(false, response);
+                        }
+                        else
+                        {
+                            callback.callbackEstaciones(true, response);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        NetworkResponse networkResponse = error.networkResponse;
+                        Log.d("ERRORSERVIDOR",error.toString());
+
+                    }
+                }
+        );
+        queue.add(jsonobj);
+    }
     /**
      * getUsuario : devuelve el id del usuario.
      * email: string ->
