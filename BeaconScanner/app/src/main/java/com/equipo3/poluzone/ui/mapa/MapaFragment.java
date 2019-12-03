@@ -196,7 +196,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             LatLng coords;
             double latitud;
             double longitud;
-            int valor;
+            double valor;
             try {
                 //Recogemos el tamaño del array con las medidas en JSON
                 length = medidas.getJSONArray("medidas").length();
@@ -217,7 +217,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     coords = new LatLng(latitud, longitud);
                     Log.d(TAG, "Coords: "+coords.toString());
                     // Guardamos el valor de la medida
-                    valor = Integer.parseInt(medida.getString("Valor"));
+                    valor = Double.parseDouble(medida.getString("Valor"));
                     Log.d(TAG, "Valor: "+medida.getString("Valor"));
                     //Configuración del marcador
                     option.position(coords).title("UPV").draggable(true).
