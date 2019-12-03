@@ -289,7 +289,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     nombre = estacion.getString("Nombre");
                     //Log.d(TAG, "Valor: "+nombre);
                     //Configuración del marcador
-                    option.position(coords).title("UPV").draggable(true).
+                    option.position(coords).title("Estación oficial").draggable(true).
                             snippet("Estación: "+nombre).
                             icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                     map.addMarker(option);
