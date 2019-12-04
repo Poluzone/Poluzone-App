@@ -171,6 +171,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             double lng = object.getDouble("lng");
             list.add(new LatLng(lat, lng));
         }
+        //Log.d(TAG, "HeatMap"+list.toString());
         return list;
     }
 
@@ -199,12 +200,13 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             MarkerOptions option = new MarkerOptions();
 
 
-            ArrayList<LatLng> list = new ArrayList<LatLng>();
+
             int length;
             LatLng coords;
             double latitud;
             double longitud;
             double valor;
+            List<LatLng> list = new ArrayList<LatLng>();
             try {
                 //Recogemos el tamaño del array con las medidas en JSON
                 length = medidas.getJSONArray("medidas").length();
@@ -221,8 +223,8 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     //Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
                     //Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
                     // Guardamos la latitud de cada una cogiendo de la medida
-                    latitud = Double.parseDouble(medida.getString("Latitud"));
-                    longitud = Double.parseDouble(medida.getString("Longitud"));
+                    latitud = formatearDecimales(Double.parseDouble(medida.getString("Latitud")),6);
+                    longitud = formatearDecimales(Double.parseDouble(medida.getString("Longitud")), 6);
                     coords = new LatLng(latitud, longitud);
 
                     list.add(coords);
@@ -237,19 +239,19 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                             icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
                     map.addMarker(option);
                 }
-                // Create a heat map tile provider, passing it the latlngs of the police stations.
-                HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder()
-                        .data(list)
-                        .build();
-                // Add a tile overlay to the map, using the heat map tile provider.
-                Object mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            Log.d(TAG, list.toString());
+            // Create a heat map tile provider, passing it the latlngs of the police stations.
+            HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder()
+                    .data(list)
+                    .build();
+            // Add a tile overlay to the map, using the heat map tile provider.
+            Object mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
 
-
-
-            //addHeatMap();
+            addHeatMap();
         }
         else
         {
@@ -257,6 +259,9 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         }
     }
 
+    public static Double formatearDecimales(Double numero, Integer numeroDecimales) {
+        return Math.round(numero * Math.pow(10, numeroDecimales)) / Math.pow(10, numeroDecimales);
+    }
     /**
      * callbackEstaciones()
      * Función callback que recibe todas las medidas de la BBDD del servidor.
