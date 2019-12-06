@@ -16,6 +16,12 @@ public class Medida {
     private long tiempo;
     private Location posicion;
 
+    public Medida() {
+    }
+
+    public Medida(float medida) {
+        this.medida = medida;
+    }
     public float getMedida() {
         return medida;
     }

@@ -13,27 +13,36 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MainMisMedidas extends Fragment {
-    RecyclerView recyclerView;
+import java.util.ArrayList;
+
+public class MainMisMedidas extends AppCompatActivity {
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_recyclerview_listamedidas, container, false);
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_recyclerview_listamedidas);
 
-        initRecyclerView(rootView);
-        return rootView;
+        ArrayList<Medida> mValores = new ArrayList<>();
+        mValores.add(new Medida(654));
+        mValores.add(new Medida(452));
+        mValores.add(new Medida(655434));
+        mValores.add(new Medida(654524));
+        
+
+        mRecyclerView = findViewById(R.id.recyclerview_medidas);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new AdapterRecyclerViewMisMedidas(mValores , this);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
-    private void initRecyclerView(View view){
 
 
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_medidas);
-        AdapterRecyclerViewMisMedidas adapter = new AdapterRecyclerViewMisMedidas(this.getContext());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-
-
-    }
 
 }

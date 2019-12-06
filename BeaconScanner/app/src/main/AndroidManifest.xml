@@ -53,6 +53,12 @@
             android:label="@string/title_activity_navigation_drawer"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity
+            android:name=".MainMisMedidas"
+            android:label="@string/mismedidas"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".IntroActivity"
             android:label="@string/app_intro"
