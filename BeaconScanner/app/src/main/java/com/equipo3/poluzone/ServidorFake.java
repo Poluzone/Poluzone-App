@@ -41,9 +41,9 @@ public class ServidorFake{
     CallbackRegistro callbackRegistro;
     Callback callbackMedidas;
     //String IP = "192.168.1.107";
-    //String URL = "https://juconol.upv.edu.es/"; //Red Matthew
+    String URL = "https://juconol.upv.edu.es/"; //Red Matthew
     //String URL = "http://192.168.43.125:8080"; //Red Matthew
-    String URL = "http://192.168.0.102:8080";//192.168.0.102
+    //String URL = "http://192.168.0.102:8080";//192.168.0.102
     //String IP = "192.168.1.107"; //Red Rosa
 
    //  "172.20.10.5";

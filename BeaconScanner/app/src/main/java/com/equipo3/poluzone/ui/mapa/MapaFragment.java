@@ -3,12 +3,13 @@
  * Fecha: 28-11-2019
  *
  * Fichero creación del mapa, modificación de opciones del fragment del mapa,
- * de el XML correspondiente.
+ * del XML correspondiente.
  */
 
 package com.equipo3.poluzone.ui.mapa;
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.equipo3.poluzone.Callback;
 import com.equipo3.poluzone.NavigationDrawerActivity;
 import com.equipo3.poluzone.R;
+import com.github.mikephil.charting.data.DataSet;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,7 +34,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.leinardi.android.speeddial.SpeedDialView;
 
@@ -42,10 +46,55 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
 public class MapaFragment extends Fragment implements OnMapReadyCallback, Callback {
+
+    /**
+     * Alternative radius for convolution
+     */
+    private static final int ALT_HEATMAP_RADIUS = 10;
+
+    /**
+     * Alternative opacity of heatmap overlay
+     */
+    private static final double ALT_HEATMAP_OPACITY = 0.4;
+
+    /**
+     * Alternative heatmap gradient (blue -> red)
+     * Copied from Javascript version
+     */
+    private static final int[] ALT_HEATMAP_GRADIENT_COLORS = {
+            Color.argb(0, 0, 255, 255),// transparent
+            Color.argb(255 / 3 * 2, 0, 255, 255),
+            Color.rgb(0, 191, 255),
+            Color.rgb(0, 0, 127),
+            Color.rgb(255, 0, 0)
+    };
+
+    public static final float[] ALT_HEATMAP_GRADIENT_START_POINTS = {
+            0.0f, 0.10f, 0.20f, 0.60f, 1.0f
+    };
+
+    public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(ALT_HEATMAP_GRADIENT_COLORS,
+            ALT_HEATMAP_GRADIENT_START_POINTS);
+
+    private HeatmapTileProvider mProvider;
+    private TileOverlay mOverlay;
+
+    private boolean mDefaultGradient = true;
+    private boolean mDefaultRadius = true;
+    private boolean mDefaultOpacity = true;
+
+    /**
+     * Maps name of data set to data (list of LatLngs)
+     * Also maps to the URL of the data set for attribution
+     */
+    private HashMap<String, DataSet> mLists = new HashMap<>();
+
+
     //Etiqueta para el debugging
     String TAG = "MAPA";
     //---------------------------------------------------------------------------
@@ -153,11 +202,11 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         }
 
         // Create a heat map tile provider, passing it the latlngs of the police stations.
-        HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder()
+        mProvider = new HeatmapTileProvider.Builder()
                 .data(list)
                 .build();
         // Add a tile overlay to the map, using the heat map tile provider.
-        Object mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+        mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
     }
 
     private ArrayList<LatLng> readItems(int resource) throws JSONException {
@@ -171,7 +220,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             double lng = object.getDouble("lng");
             list.add(new LatLng(lat, lng));
         }
-        //Log.d(TAG, "HeatMap"+list.toString());
+        Log.d(TAG, "HeatMap: "+list.toString());
         return list;
     }
 
@@ -223,8 +272,8 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     //Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
                     //Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
                     // Guardamos la latitud de cada una cogiendo de la medida
-                    latitud = formatearDecimales(Double.parseDouble(medida.getString("Latitud")),6);
-                    longitud = formatearDecimales(Double.parseDouble(medida.getString("Longitud")), 6);
+                    latitud = formatearDecimales(Double.parseDouble(medida.getString("Latitud")),4);
+                    longitud = formatearDecimales(Double.parseDouble(medida.getString("Longitud")), 4);
                     coords = new LatLng(latitud, longitud);
 
                     list.add(coords);
@@ -244,14 +293,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                 e.printStackTrace();
             }
             Log.d(TAG, list.toString());
-            // Create a heat map tile provider, passing it the latlngs of the police stations.
-            HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder()
-                    .data(list)
-                    .build();
-            // Add a tile overlay to the map, using the heat map tile provider.
-            Object mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
-
-            addHeatMap();
+            //addHeatMap();
         }
         else
         {
@@ -260,7 +302,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
     }
 
     public static Double formatearDecimales(Double numero, Integer numeroDecimales) {
-        return Math.round(numero * Math.pow(10, numeroDecimales)) / Math.pow(10, numeroDecimales);
+        return (numero * Math.pow(10, numeroDecimales))/(Math.pow(10, numeroDecimales));
     }
     /**
      * callbackEstaciones()
@@ -312,7 +354,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     //Configuración del marcador
                     option.position(coords).title("Estación oficial").draggable(true).
                             snippet("Estación: "+nombre).
-                            icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                            icon(BitmapDescriptorFactory.fromFile("pin_estacion"));
                     map.addMarker(option);
                 }
 
