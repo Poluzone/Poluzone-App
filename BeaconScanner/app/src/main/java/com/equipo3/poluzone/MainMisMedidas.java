@@ -13,9 +13,11 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-public class MainMisMedidas extends AppCompatActivity {
+public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedidas {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -43,6 +45,8 @@ public class MainMisMedidas extends AppCompatActivity {
     }
 
 
+    @Override
+    public void callbackMisMedidas(JSONObject response) {
 
-
+    }
 }

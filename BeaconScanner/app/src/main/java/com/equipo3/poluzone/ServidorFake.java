@@ -36,6 +36,7 @@ public class ServidorFake {
     RequestQueue queue;
     public Callback callback;
     CallbackRegistro callbackRegistro;
+    CallbackMisMedidas callbackMisMedidas;
 
     //String IP = "192.168.1.107";
     //String IP = "192.168.43.125"; //Red Matthew
@@ -66,6 +67,11 @@ public class ServidorFake {
         if (activity.getClass() == RegistrarUsuarioActivity.class) {
             Log.d("pruebas", "issa registrousuarioactivity");
             callbackRegistro = (RegistrarUsuarioActivity) activity;
+        }
+        // Si el servidor se ha creado desde loginactivity buscamos el callback
+        if (activity.getClass() == MainMisMedidas.class) {
+            Log.d("pruebas", "issa registrousuarioactivity");
+            callbackMisMedidas = (MainMisMedidas) activity;
         }
 
         // Si el servidor se ha creado desde el inicio buscamos el callback
@@ -174,7 +180,59 @@ public class ServidorFake {
         // Add the request to the RequestQueue.
         queue.add(jsonobj);
     }
+    // ------------------------------------------------------------------------------
+    // desde: N, hasta: N, IdUsuario: N -> getMediaCalidadDelAireDeLaJornada() -> R
+    // ------------------------------------------------------------------------------
+    public void getMedidasPorUsuario(long desde, long hasta, int id) {
+        Log.d("pruebas", "getMedidasDeEsteUsuarioPorFecha()");
+        String url = "http://"+IP+":"+puerto+"/getMedidasDeEsteUsuarioPorFecha";
 
+        // Creamos el intervalo de tiempo
+        JSONObject intervalo = new JSONObject();
+        try {
+            intervalo.put("desde", desde);
+            intervalo.put("hasta", hasta);
+        }
+        catch (JSONException e) {
+            Log.d("pruebas", e.toString());
+        }
+
+        // Anyadimos los datos al json
+        JSONObject datos = new JSONObject();
+        try {
+            datos.put("Intervalo", intervalo);
+            datos.put("IdUsuario", id);
+            Log.d("pruebas json", datos.toString());
+        } catch (JSONException e) {
+            Log.d("pruebas", e.toString());
+        }
+
+        // Hacemos la peticion
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("pruebas",response.toString());
+                        /*
+                        try {
+                            callbackMisMedidas.callbackMisMedidas(response);
+                        }
+                        catch (JSONException e) {
+                            Log.d("pruebas", e.toString());
+                        }*/
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("pruebas",error.toString());
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonobj);
+    }
 
 
     // ---------------------------------------------------------------------------
