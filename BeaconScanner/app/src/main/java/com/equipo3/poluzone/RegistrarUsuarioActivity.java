@@ -296,7 +296,7 @@ public class RegistrarUsuarioActivity extends android.app.Activity implements Ca
 
             try
             {
-                loginPrefsEditor.putString("idUsuario", usuario.getJSONArray("Usuario").getJSONObject(0).get("IdUsuario").toString());
+                loginPrefsEditor.putInt("idUsuario", usuario.getJSONArray("Usuario").getJSONObject(0).getInt("IdUsuario"));
                 loginPrefsEditor.putString("email", usuario.getJSONArray("Usuario").getJSONObject(0).get("Email").toString());
                 loginPrefsEditor.putString("passEncriptado", usuario.getJSONArray("Usuario").getJSONObject(0).get("Password").toString());
                 loginPrefsEditor.putString("telefono", usuario.getJSONArray("Usuario").getJSONObject(0).get("Telefono").toString());
