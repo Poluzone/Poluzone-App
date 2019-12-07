@@ -9,7 +9,11 @@
 package com.equipo3.poluzone.ui.mapa;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.LevelListDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,6 +53,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+
 
 public class MapaFragment extends Fragment implements OnMapReadyCallback, Callback {
 
@@ -351,10 +356,12 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     // Guardamos el valor de la estacion
                     nombre = estacion.getString("Nombre");
                     //Log.d(TAG, "Valor: "+nombre);
+
                     //Configuración del marcador
                     option.position(coords).title("Estación oficial").draggable(true).
                             snippet("Estación: "+nombre).
-                            icon(BitmapDescriptorFactory.fromFile("pin_estacion"));
+                            draggable(true).
+                            icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                     map.addMarker(option);
                 }
 
