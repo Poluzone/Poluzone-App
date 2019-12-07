@@ -17,7 +17,8 @@ public class AdapterRecyclerViewMisMedidas extends RecyclerView.Adapter<AdapterR
     private static final String TAG = "AdapterRecyclerMisMedidas";
 
     private ArrayList<Medida> ListaValores = new ArrayList<>();
-   // private ArrayList<String> ListaTipoMedidas = new ArrayList<>();
+    private ArrayList<Medida> ListaTipoMedidas = new ArrayList<>();
+    private ArrayList<Medida> ListaIdMedida = new ArrayList<>();
     private Context mContext;
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -43,7 +44,6 @@ public class AdapterRecyclerViewMisMedidas extends RecyclerView.Adapter<AdapterR
 
     public AdapterRecyclerViewMisMedidas(ArrayList<Medida> listaV, Context mContext) {
         this.ListaValores = listaV;
-        //this.ListaTipoMedidas = listaTM;
         this.mContext = mContext;
     }
 
@@ -60,7 +60,8 @@ public class AdapterRecyclerViewMisMedidas extends RecyclerView.Adapter<AdapterR
           Medida ex = ListaValores.get(position);
 
          holder.valorMedida.setText(Double.toString(ex.getMedida()));
-        //holder.tipoMedida.setText(ListaTipoMedidas.get(position));
+         holder.tipoMedida.setText(Integer.toString(ex.getTipoMedida()));
+         holder.idMedida.setText(Integer.toString(ex.getIdMedida()));
 
 
     }

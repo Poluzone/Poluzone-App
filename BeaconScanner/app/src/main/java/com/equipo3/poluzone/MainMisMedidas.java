@@ -25,6 +25,8 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
     private RecyclerView.LayoutManager mLayoutManager;
     ServidorFake servidorFake;
     ArrayList<Medida> mValores;
+    ArrayList<Medida> mTipoMedida;
+    ArrayList<Medida> mIdMedida;
 
 
 
@@ -34,6 +36,8 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
         setContentView(R.layout.fragment_recyclerview_listamedidas);
 
         mValores = new ArrayList<>();
+        mTipoMedida = new ArrayList<>();
+        mIdMedida = new ArrayList<>();
 
         servidorFake = new ServidorFake(this);
         long hasta = 1575741203368L;
@@ -49,14 +53,16 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
     @Override
     public void callbackMisMedidas(JSONObject response) {
 
-        Log.d("Funciono?",response.toString());
         try {
             for (int i = 0;i<response.getJSONArray("medidas").length();i++){
 
                 JSONObject medidas = response.getJSONArray("medidas").getJSONObject(i);
                 Medida medida = new Medida();
                 medida.setMedida(Float.parseFloat(medidas.getString("Valor")));
+                medida.setTipoMedida(Integer.parseInt(medidas.getString("IdTipoMedida")));
+                medida.setIdMedida(Integer.parseInt(medidas.getString("IdMedida")));
                 mValores.add(medida);
+
 
             }
 
@@ -67,7 +73,7 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
         }
 
 
-        mAdapter = new AdapterRecyclerViewMisMedidas(mValores , this);
+        mAdapter = new AdapterRecyclerViewMisMedidas(mValores ,this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);

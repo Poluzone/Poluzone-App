@@ -15,6 +15,8 @@ public class Medida {
     private float medida;
     private long tiempo;
     private Location posicion;
+    private int tipoMedida;
+    private int idMedida;
 
     public Medida() {
     }
@@ -46,4 +48,11 @@ public class Medida {
         this.posicion = posicion;
     }
 
+    public int getIdMedida() { return idMedida; }
+
+    public void setIdMedida(int idMedida) { this.idMedida = idMedida; }
+
+    public int getTipoMedida() { return tipoMedida; }
+
+    public void setTipoMedida(int tipoMedida) { this.tipoMedida = tipoMedida; }
 }
