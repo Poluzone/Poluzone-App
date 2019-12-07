@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     ServidorFake servidorFake;
+    ArrayList<Medida> mValores;
+
 
 
     @Override
@@ -30,11 +33,8 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_recyclerview_listamedidas);
 
-        ArrayList<Medida> mValores = new ArrayList<>();
-        mValores.add(new Medida(654));
-        mValores.add(new Medida(452));
-        mValores.add(new Medida(655434));
-        mValores.add(new Medida(654524));
+        mValores = new ArrayList<>();
+
         servidorFake = new ServidorFake(this);
         long hasta = 1575741203368L;
         servidorFake.getMedidasPorUsuario(0,hasta,15);
@@ -42,10 +42,7 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
         mRecyclerView = findViewById(R.id.recyclerview_medidas);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new AdapterRecyclerViewMisMedidas(mValores , this);
 
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
     }
 
 
@@ -53,6 +50,27 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
     public void callbackMisMedidas(JSONObject response) {
 
         Log.d("Funciono?",response.toString());
+        try {
+            for (int i = 0;i<response.getJSONArray("medidas").length();i++){
+
+                JSONObject medidas = response.getJSONArray("medidas").getJSONObject(i);
+                Medida medida = new Medida();
+                medida.setMedida(Float.parseFloat(medidas.getString("Valor")));
+                mValores.add(medida);
+
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("Funciono?",e.toString());
+        }
+
+
+        mAdapter = new AdapterRecyclerViewMisMedidas(mValores , this);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
 
     }
 }
