@@ -40,7 +40,7 @@ public class ServidorFake {
 
     //String IP = "192.168.1.107";
     //String IP = "192.168.43.125"; //Red Matthew
-    String IP = "192.168.1.109"; //Red Rosa
+    String IP = "192.168.0.58"; //Red Rosa
    //  "172.20.10.5";
     int puerto = 8080;
     private SharedPreferences loginPreferences;
@@ -213,13 +213,10 @@ public class ServidorFake {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("pruebas",response.toString());
-                        /*
-                        try {
-                            callbackMisMedidas.callbackMisMedidas(response);
-                        }
-                        catch (JSONException e) {
-                            Log.d("pruebas", e.toString());
-                        }*/
+
+                        callbackMisMedidas.callbackMisMedidas(response);
+
+
                     }
                 },
                 new Response.ErrorListener() {

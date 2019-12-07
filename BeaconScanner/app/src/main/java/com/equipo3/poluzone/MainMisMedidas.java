@@ -1,6 +1,7 @@
 package com.equipo3.poluzone;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    ServidorFake servidorFake;
 
 
     @Override
@@ -33,7 +35,9 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
         mValores.add(new Medida(452));
         mValores.add(new Medida(655434));
         mValores.add(new Medida(654524));
-        
+        servidorFake = new ServidorFake(this);
+        long hasta = 1575741203368L;
+        servidorFake.getMedidasPorUsuario(0,hasta,15);
 
         mRecyclerView = findViewById(R.id.recyclerview_medidas);
         mRecyclerView.setHasFixedSize(true);
@@ -47,6 +51,8 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
 
     @Override
     public void callbackMisMedidas(JSONObject response) {
+
+        Log.d("Funciono?",response.toString());
 
     }
 }
