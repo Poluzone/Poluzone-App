@@ -34,6 +34,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -42,6 +43,7 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
+import com.google.maps.android.heatmaps.WeightedLatLng;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import org.json.JSONArray;
@@ -82,9 +84,26 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
     public static final float[] ALT_HEATMAP_GRADIENT_START_POINTS = {
             0.0f, 0.10f, 0.20f, 0.60f, 1.0f
     };
+    // GREEN -> RED
+    public static final int[] COLORS = {
+            Color.argb(0, 0, 255, 0),// transparent
+            Color.argb(255 / 3 * 2, 0, 255, 0),
+            Color.rgb(100, 191, 0),
+            Color.rgb(180, 127, 0),
+            Color.rgb(255, 0, 0)
+    };
 
-    public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(ALT_HEATMAP_GRADIENT_COLORS,
-            ALT_HEATMAP_GRADIENT_START_POINTS);
+    public static final float[] START_POINTS = {
+            0.0f,    //0-50
+            0.1f,   //51-100
+            0.2f,   //101-150
+            0.3f,   //151-200
+            0.4f,    //201-300
+    };
+
+    //public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(ALT_HEATMAP_GRADIENT_COLORS,
+      //      ALT_HEATMAP_GRADIENT_START_POINTS);
+    public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(COLORS, START_POINTS);
 
     private HeatmapTileProvider mProvider;
     private TileOverlay mOverlay;
@@ -92,6 +111,9 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
     private boolean mDefaultGradient = true;
     private boolean mDefaultRadius = true;
     private boolean mDefaultOpacity = true;
+
+    //
+
 
     /**
      * Maps name of data set to data (list of LatLngs)
@@ -108,6 +130,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
     GoogleMap map;
     private MapaViewModel mapaViewModel;
     private SpeedDialView speedDialView;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -179,7 +202,6 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         } catch (Resources.NotFoundException e) {
             Log.e(TAG, "No se ha encontrado el estilo. Error: ", e);
         }
-        //Configuración inicial del mapa
         /******************************************************************************
         *               ----- Configuración inicial del mapa -----
         *  Eliminamos el compas de la visualización del mapa, y los botones que
@@ -193,40 +215,6 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pp, 15.0f));
 
-    }
-
-
-    private void addHeatMap() {
-        List<LatLng> list = null;
-        // Get the data: latitude/longitude positions of police stations.
-        try {
-            list = readItems(R.raw.police_stations);
-
-        } catch (JSONException e) {
-            Toast.makeText(this.getActivity(), "Problem reading list of locations.", Toast.LENGTH_LONG).show();
-        }
-
-        // Create a heat map tile provider, passing it the latlngs of the police stations.
-        mProvider = new HeatmapTileProvider.Builder()
-                .data(list)
-                .build();
-        // Add a tile overlay to the map, using the heat map tile provider.
-        mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
-    }
-
-    private ArrayList<LatLng> readItems(int resource) throws JSONException {
-        ArrayList<LatLng> list = new ArrayList<LatLng>();
-        InputStream inputStream = getResources().openRawResource(resource);
-        String json = new Scanner(inputStream).useDelimiter("\\A").next();
-        JSONArray array = new JSONArray(json);
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            double lat = object.getDouble("lat");
-            double lng = object.getDouble("lng");
-            list.add(new LatLng(lat, lng));
-        }
-        Log.d(TAG, "HeatMap: "+list.toString());
-        return list;
     }
 
     @Override
@@ -252,15 +240,14 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             Log.d("MAPA", "Tenemos las medidas.");
             //Log.d("MAPA", medidas.toString());
             MarkerOptions option = new MarkerOptions();
-
-
-
             int length;
             LatLng coords;
             double latitud;
             double longitud;
             double valor;
-            List<LatLng> list = new ArrayList<LatLng>();
+            List<WeightedLatLng> list = new ArrayList<WeightedLatLng>();
+
+
             try {
                 //Recogemos el tamaño del array con las medidas en JSON
                 length = medidas.getJSONArray("medidas").length();
@@ -281,24 +268,33 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     longitud = formatearDecimales(Double.parseDouble(medida.getString("Longitud")), 4);
                     coords = new LatLng(latitud, longitud);
 
-                    list.add(coords);
-
                     //Log.d(TAG, "Coords: "+coords.toString());
                     // Guardamos el valor de la medida
-                    valor = Double.parseDouble(medida.getString("Valor"));
+                    valor = Integer.parseInt(medida.getString("Valor"));
+                    list.add(new WeightedLatLng(coords,valor));
                     //Log.d(TAG, "Valor: "+medida.getString("Valor"));
                     //Configuración del marcador
                     option.position(coords).title("UPV").draggable(true).
                             snippet("Contaminación:"+valor).
                             icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
-                    map.addMarker(option);
+                    //map.addMarker(option);
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             Log.d(TAG, list.toString());
-            //addHeatMap();
+
+            // Create a heat map tile provider, passing it the latlngs of the police stations.
+            mProvider = new HeatmapTileProvider.Builder()
+                    .weightedData(list)
+                    .radius(20)
+                    .gradient(ALT_HEATMAP_GRADIENT)
+                    .build();
+            // Add a tile overlay to the map, using the heat map tile provider.
+            mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+
+
         }
         else
         {
@@ -328,7 +324,11 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             //Log.d("MAPA", estaciones.toString());
             MarkerOptions option = new MarkerOptions();
 
-
+            int height = 120;
+            int width = 80;
+            Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.pin_estacion);
+            Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+            BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);
             int length;
             LatLng coords;
             double latitud;
@@ -360,8 +360,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     //Configuración del marcador
                     option.position(coords).title("Estación oficial").draggable(true).
                             snippet("Estación: "+nombre).
-                            draggable(true).
-                            icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                            icon(smallMarkerIcon);
                     map.addMarker(option);
                 }
 
