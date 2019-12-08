@@ -72,6 +72,7 @@
     <string name="calmed">Entre el 30–69%, significa que hay entre 68–162 ppm de contaminación en el aire.</string>
     <string name="calmal">Entre el 0–29%, significa que hay más de 163 ppm de contaminación en el aire. <b>NIVEL PELIGROSO</b></string>
     <string name="hola">Hola</string>
+    <string name="mis_mediciones">Mis Mediciones</string>
 
 
 </resources>
