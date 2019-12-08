@@ -40,8 +40,9 @@ public class ServidorFake {
 
     //String IP = "192.168.1.107";
     //String IP = "192.168.43.125"; //Red Matthew
-    String IP = "192.168.43.18"; //Red Rosa
-   //  "172.20.10.5";
+    //String IP = "192.168.43.18"; //Red Rosa
+    String URL = "https://juconol.upv.edu.es/"; //Red Matthew
+    //  "172.20.10.5";
     int puerto = 8080;
     private SharedPreferences loginPreferences;
 
@@ -90,7 +91,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void insertarMedida(Medida medidaContaminacion)  {
         Log.d("pruebas", "guardarContaminacion()");
-        String url = "http://"+IP+":"+puerto+"/insertarMedida/"; /*+medidaContaminacion.getMedida(); */
+        String url = URL+"/insertarMedida/"; /*+medidaContaminacion.getMedida(); */
 
         JSONObject datos = new JSONObject();
 
@@ -133,7 +134,7 @@ public class ServidorFake {
     // ------------------------------------------------------------------------------
     public void getMediaCalidadDelAireDeLaJornada(long desde, long hasta, int id) {
         Log.d("pruebas", "getMediaCalidadDelAireDeLaJornada()");
-        String url = "http://"+IP+":"+puerto+"/getMediaCalidadDelAireDeLaJornada";
+        String url = URL+"/getMediaCalidadDelAireDeLaJornada";
 
         // Creamos el intervalo de tiempo
         JSONObject intervalo = new JSONObject();
@@ -185,7 +186,7 @@ public class ServidorFake {
     // ------------------------------------------------------------------------------
     public void getMedidasPorUsuario(long desde, long hasta, int id) {
         Log.d("pruebas", "getMedidasDeEsteUsuarioPorFecha()");
-        String url = "http://"+IP+":"+puerto+"/getMedidasDeEsteUsuarioPorFecha";
+        String url = URL+"/getMedidasDeEsteUsuarioPorFecha";
 
         // Creamos el intervalo de tiempo
         JSONObject intervalo = new JSONObject();
@@ -236,7 +237,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void insertarUsuario(String email, String password, int telefono,String tipoUsuario) {
         Log.d("pruebas", "insertarUsuario()");
-        String url = "http://"+IP+":"+puerto+"/insertarUsuario/";
+        String url = URL+"/insertarUsuario/";
 
         JSONObject datos = new JSONObject();
 
@@ -303,7 +304,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void comprobarUsuarioPorEmail (String email, String pass) {
         Log.d("pruebas", "GetUsuarioPorEmail()");
-        String url = "http://"+IP+":"+puerto+"/ComprobarLogin";
+        String url = URL+"/ComprobarLogin";
 
         JSONObject datos = new JSONObject();
 
@@ -375,7 +376,7 @@ public class ServidorFake {
      */
     public void getUsuario (String email) {
         Log.d("GETUSUARIO", "GetUsuario() con"+email);
-        String url = "http://"+IP+":"+puerto+"/GetUsuarioPorEmail";
+        String url = URL+"/GetUsuarioPorEmail";
 
         JSONObject datos = new JSONObject();
 
@@ -426,7 +427,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void vincularIDdeUsuarioConSensor(int idUsuario, final int idSensor) {
         Log.d("pruebas", "vincularIDdeUsuarioConSensor()");
-        String url = "http://"+IP+":"+puerto+"/insertarIdUsuarioConIdsensor";
+        String url = URL+"/insertarIdUsuarioConIdsensor";
 
         JSONObject datos = new JSONObject();
 
@@ -468,7 +469,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void indicarActividadNodo(String activo) {
         Log.d("pruebas", "indicarActividadNodo()");
-        String url = "http://"+IP+":"+puerto+"/indicarActividadNodo";
+        String url = URL+"/indicarActividadNodo";
 
         int idSensor = loginPreferences.getInt("idSensor", 0);
 
