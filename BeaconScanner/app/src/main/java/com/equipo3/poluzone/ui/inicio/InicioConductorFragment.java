@@ -42,7 +42,9 @@ import com.leinardi.android.speeddial.SpeedDialView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -57,7 +59,6 @@ public class InicioConductorFragment extends Fragment implements Callback, Callb
     private View root;
     private Double umbralMal = 163.0;
     private LineChart chart;
-    private LineDataSet dataSet;
 
 
     public static InicioConductorFragment newInstance() {
@@ -91,59 +92,6 @@ public class InicioConductorFragment extends Fragment implements Callback, Callb
         chart = root.findViewById(R.id.chart);
         navigationDrawerActivity.servidorFake.getMedidasPorUsuario(beforemili, System.currentTimeMillis(), navigationDrawerActivity.idUser);
 
-        // Cambiar el estilo
-        dataSet.setColor(R.color.colorAccent); // color
-        chart.setNoDataText(getString(R.string.nomedidas)); // texto que se muestra cuando no hay datos
-
-        // Curvado
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        dataSet.setLineWidth(2);
-
-        // Tamanyo texto
-        dataSet.setValueTextSize(15);
-
-        // Quitar lineas on click a dato
-        dataSet.setDrawHighlightIndicators(false);
-        // Apagar zoom
-        chart.setPinchZoom(false);
-        chart.setDoubleTapToZoomEnabled(false);
-
-        // Quitar el grid
-        chart.getAxisRight().setDrawGridLines(false);
-        chart.getAxisLeft().setDrawGridLines(false);
-        chart.getXAxis().setDrawGridLines(false);
-
-        // Quitar las líneas
-        chart.getAxisLeft().setEnabled(false);
-        chart.getAxisRight().setEnabled(false);
-        chart.getXAxis().setEnabled(false);
-
-        // Quitar textos
-        chart.setDescription(null);
-        chart.setDrawMarkers(false);
-        chart.setDrawBorders(false);
-        chart.getLegend().setEnabled(false);
-
-        chart.setDragEnabled(true);
-        chart.setHighlightPerDragEnabled(true);
-
-        // Quitar los circulitos
-        dataSet.setDrawCircles(false);
-
-        // Hacer el relleno gradient
-        dataSet.setDrawFilled(true);
-        if (Utils.getSDKInt() >= 18) {
-            // fill drawable only supported on api level 18 and above
-            Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.gradient_naranja);
-            dataSet.setFillDrawable(drawable);
-        }
-        else {
-            dataSet.setFillColor(getContext().getColor(R.color.colorAccent));
-        }
-
-        // Color de la línea
-        dataSet.setColor(getContext().getColor(R.color.colorAccent));
-
 
         // ----------------------------------- INFO DIALOG ---------------------------------------------
 
@@ -173,6 +121,7 @@ public class InicioConductorFragment extends Fragment implements Callback, Callb
             getCalidadDelAireDeLaJornada();
         }
         navigationDrawerActivity.servidorFake.callback = this;
+        navigationDrawerActivity.servidorFake.callbackMisMedidas = this;
 
         return root;
     }
@@ -241,32 +190,97 @@ public class InicioConductorFragment extends Fragment implements Callback, Callb
 
         // Anyadir las medidas a la gráfica
         Medida[] dataObjects = new Medida[10];
-
+        int j = 0;
         try {
-            for (int i = 0;i<response.getJSONArray("medidas").length();i++) {
+            for (int i = response.getJSONArray("medidas").length()-1;i>response.getJSONArray("medidas").length()-11;i--) {
                 JSONObject medidas = response.getJSONArray("medidas").getJSONObject(i);
                 Medida medida = new Medida();
                 medida.setMedida(Float.parseFloat(medidas.getString("Valor")));
-                medida.setTiempo(Integer.parseInt(medidas.getString("Tiempo")));
-                dataObjects[i] = medida;
+                medida.setTiempo(Long.parseLong(medidas.getString("Tiempo")));
+                dataObjects[j] = medida;
+                j++;
             }
+
+            DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm");
+
+            List<Entry> entries = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+
+                // Creating date from milliseconds
+                // using Date() constructor
+               // Date result = new Date(dataObjects[i].getTiempo());
+                entries.add(new Entry(i, dataObjects[i].getMedida()));
+            }
+
+            LineDataSet dataSet = new LineDataSet(entries, "Medidas"); // add entries to dataset
+
+            // Cambiar el estilo
+            dataSet.setColor(R.color.colorAccent); // color
+            chart.setNoDataText(getString(R.string.nomedidas)); // texto que se muestra cuando no hay datos
+
+            // Curvado
+            dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+            dataSet.setLineWidth(2);
+
+            // Tamanyo texto
+            dataSet.setValueTextSize(15);
+
+            // Quitar lineas on click a dato
+            dataSet.setDrawHighlightIndicators(false);
+            // Apagar zoom
+            chart.setPinchZoom(false);
+            chart.setDoubleTapToZoomEnabled(false);
+
+            // Quitar el grid
+            chart.getAxisRight().setDrawGridLines(false);
+            chart.getAxisLeft().setDrawGridLines(false);
+            chart.getXAxis().setDrawGridLines(false);
+
+            // Quitar las líneas
+            chart.getAxisLeft().setEnabled(false);
+            chart.getAxisRight().setEnabled(false);
+            chart.getXAxis().setEnabled(false);
+
+            // Quitar textos
+            chart.setDescription(null);
+            chart.setDrawMarkers(false);
+            chart.setDrawBorders(false);
+            chart.getLegend().setEnabled(false);
+
+            chart.setDragEnabled(true);
+            chart.setHighlightPerDragEnabled(true);
+
+            // Quitar los circulitos
+            dataSet.setCircleHoleColor(R.color.colorAccent);
+            dataSet.setCircleColor(R.color.colorAccent);
+            //dataSet.setDrawCircles(false);
+
+            // Hacer el relleno gradient
+            dataSet.setDrawFilled(true);
+            if (Utils.getSDKInt() >= 18) {
+                // fill drawable only supported on api level 18 and above
+                Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.gradient_naranja);
+                dataSet.setFillDrawable(drawable);
+            }
+            else {
+                dataSet.setFillColor(getContext().getColor(R.color.colorAccent));
+            }
+
+            // Color de la línea
+            dataSet.setColor(getContext().getColor(R.color.colorAccent));
+
+
+            // Asignar to do a la gráfica
+            LineData lineData = new LineData(dataSet);
+            chart.setData(lineData);
+            chart.invalidate(); // refresh
 
         } catch (JSONException e) {
             e.printStackTrace();
             Log.d("Pruebas?",e.toString());
         }
 
-        List<Entry> entries = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            entries.add(new Entry(dataObjects[i].getTiempo(), dataObjects[i].getMedida()));
-        }
 
-        dataSet = new LineDataSet(entries, "Medidas"); // add entries to dataset
-
-        // Asignar to do a la gráfica
-        LineData lineData = new LineData(dataSet);
-        chart.setData(lineData);
-        chart.invalidate(); // refresh
 
     }
 }
