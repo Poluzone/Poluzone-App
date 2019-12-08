@@ -62,16 +62,15 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
     /**
      * Alternative radius for convolution
      */
-    private static final int ALT_HEATMAP_RADIUS = 10;
+    private static final int ALT_HEATMAP_RADIUS = 28;
 
     /**
      * Alternative opacity of heatmap overlay
      */
-    private static final double ALT_HEATMAP_OPACITY = 0.4;
+    private static final double ALT_HEATMAP_OPACITY = 0.5;
 
     /**
      * Alternative heatmap gradient (blue -> red)
-     * Copied from Javascript version
      */
     private static final int[] ALT_HEATMAP_GRADIENT_COLORS = {
             Color.argb(0, 0, 255, 255),// transparent
@@ -84,26 +83,32 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
     public static final float[] ALT_HEATMAP_GRADIENT_START_POINTS = {
             0.0f, 0.10f, 0.20f, 0.60f, 1.0f
     };
-    // GREEN -> RED
+
+    /**
+     * Other alternative heatmap gradient (green -> red)
+     */
     public static final int[] COLORS = {
             Color.argb(0, 0, 255, 0),// transparent
-            Color.argb(255 / 3 * 2, 0, 255, 0),
-            Color.rgb(100, 191, 0),
-            Color.rgb(180, 127, 0),
-            Color.rgb(255, 0, 0)
+            //Color.argb(255 / 3 * 2, 0, 255, 0),
+            Color.rgb(0, 255, 0), // green
+            Color.rgb(255, 255, 0), // yellow
+            //Color.rgb(207, 174, 72), // brown
+            Color.rgb(255, 190, 0), // orange
+            Color.rgb(255, 0, 0) // red
     };
 
     public static final float[] START_POINTS = {
             0.0f,    //0-50
-            0.1f,   //51-100
-            0.2f,   //101-150
-            0.3f,   //151-200
-            0.4f,    //201-300
+            0.20f,   //101-150
+            0.40f,   //201-250
+            0.60f,   //301-350
+            0.80f,   //401-450
+            1.0f     //501-550
     };
 
     //public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(ALT_HEATMAP_GRADIENT_COLORS,
       //      ALT_HEATMAP_GRADIENT_START_POINTS);
-    public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(COLORS, START_POINTS);
+    public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(COLORS, ALT_HEATMAP_GRADIENT_START_POINTS);
 
     private HeatmapTileProvider mProvider;
     private TileOverlay mOverlay;
@@ -288,8 +293,9 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             // Create a heat map tile provider, passing it the latlngs of the police stations.
             mProvider = new HeatmapTileProvider.Builder()
                     .weightedData(list)
-                    .radius(20)
+                    .radius(ALT_HEATMAP_RADIUS)
                     .gradient(ALT_HEATMAP_GRADIENT)
+                    .opacity(ALT_HEATMAP_OPACITY)
                     .build();
             // Add a tile overlay to the map, using the heat map tile provider.
             mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
