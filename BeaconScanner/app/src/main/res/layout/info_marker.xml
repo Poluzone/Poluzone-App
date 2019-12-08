@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="5dp" >
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:text="Estacion oficial"
+        android:layout_alignParentTop="true"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/info_nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:paddingLeft="5dp"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/info_SO2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/info_nombre"
+        android:paddingLeft="5dp" />
+
+    <TextView
+        android:id="@+id/info_CO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/info_SO2"
+        android:paddingLeft="5dp" />
+
+
+
+    <TextView
+        android:id="@+id/info_NO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/info_CO"
+        android:paddingLeft="5dp" />
+
+    <TextView
+        android:id="@+id/info_NO2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/info_NO"
+        android:paddingLeft="5dp" />
+    <TextView
+        android:id="@+id/info_NOX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/info_NO2"
+        android:paddingLeft="5dp" />
+    <TextView
+        android:id="@+id/info_O3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/info_NOX"
+        android:paddingLeft="5dp" />
+
+</RelativeLayout>

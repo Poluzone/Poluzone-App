@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.equipo3.poluzone.Callback;
+import com.equipo3.poluzone.CustomInfoWindowAdapter;
 import com.equipo3.poluzone.NavigationDrawerActivity;
 import com.equipo3.poluzone.R;
 import com.github.mikephil.charting.data.DataSet;
@@ -135,7 +136,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
     GoogleMap map;
     private MapaViewModel mapaViewModel;
     private SpeedDialView speedDialView;
-
+    CustomInfoWindowAdapter infoWindow;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -145,6 +146,8 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         // acceder speed dial
         speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
         speedDialView.show();
+        //Ventana para la información de los markers
+        infoWindow = new CustomInfoWindowAdapter(LayoutInflater.from(getActivity()));
 
         /**
          *  - Matthew Conde Oltra -
@@ -175,10 +178,13 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
 
         NavigationDrawerActivity navigation = (NavigationDrawerActivity) getParentFragment().getActivity();
         navigation.servidorFake.callback = this;
+
         long primeraFecha = 0;
         long fechaActual= 0;
+
         navigation.servidorFake.getTodasLasMedidasPorFecha(primeraFecha, fechaActual);
         navigation.servidorFake.getEstacionesOficiales();
+
         return root;
     }
 
@@ -219,7 +225,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         map.getUiSettings().setIndoorLevelPickerEnabled(true);
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pp, 15.0f));
-
+        map.setInfoWindowAdapter(infoWindow);
     }
 
     @Override
@@ -275,7 +281,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
 
                     //Log.d(TAG, "Coords: "+coords.toString());
                     // Guardamos el valor de la medida
-                    valor = Integer.parseInt(medida.getString("Valor"));
+                    valor = Double.parseDouble(medida.getString("Valor"));
                     list.add(new WeightedLatLng(coords,valor));
                     //Log.d(TAG, "Valor: "+medida.getString("Valor"));
                     //Configuración del marcador
@@ -334,7 +340,6 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
     @Override
     public void callbackEstaciones(boolean resultado, JSONObject estaciones) {
         Log.d("MAPA", "Estamos en el callback estaciones");
-
         if(resultado)
         {
             Log.d("MAPA", "Tenemos las estaciones.");
@@ -351,6 +356,13 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             double latitud;
             double longitud;
             String nombre;
+            String info;
+            String so2;
+            String co;
+            String nox;
+            String no;
+            String no2;
+            String o3;
             try {
                 //Recogemos el tamaño del array con las medidas en JSON
                 length = estaciones.getJSONArray("estaciones").length();
@@ -362,7 +374,32 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     //Log.d("MAPA", estaciones.getJSONArray("estaciones").getJSONObject(i).toString());
                     //Guardamos cada una de las medidas en una variable auxiliar
                     JSONObject estacion = estaciones.getJSONArray("estaciones").getJSONObject(i);
+                    JSONObject medida;
+                    // Guardamos el valor de la estacion
+                    nombre = estacion.getString("Nombre");
+                    Log.d(TAG, "Nombre: "+nombre);
 
+                    if(estacion.getInt("ID")==50)
+                    {
+                        medida = estacion.getJSONObject("Medidas");
+                        Log.d(TAG, medida.toString());
+                        so2 = "SO2: "+medida.getString("s02")+"ppm";
+                        co = "CO: "+medida.getString("co")+"ppm";
+                        no = "NO: "+medida.getString("no")+"ppm";
+                        no2 = "NO2: "+medida.getString("no2")+"ppm";
+                        nox = "NOX: "+medida.getString("nox")+"ppm";
+                        o3 = "O3: "+medida.getString("o3")+"ppm";
+
+                        // Añadimos el texto a la ventana de infoWindowAdapter
+                        infoWindow.n = nombre;
+                        infoWindow.s = so2;
+                        infoWindow.c = co;
+                        infoWindow.no = no;
+                        infoWindow.no2 = no2;
+                        infoWindow.nox = nox;
+                        infoWindow.o = o3;
+
+                    }
                     //Log.d(TAG, "Latitud: "+estacion.getString("Latitud"));
                     //Log.d(TAG, "Longitud: "+estacion.getString("Longitud"));
                     // Guardamos la latitud de cada una cogiendo de la medida
@@ -370,14 +407,14 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     longitud = Double.parseDouble(estacion.getString("Longitud"));
                     coords = new LatLng(latitud, longitud);
                     //Log.d(TAG, "Coords: "+coords.toString());
-                    // Guardamos el valor de la estacion
-                    nombre = estacion.getString("Nombre");
-                    //Log.d(TAG, "Valor: "+nombre);
+
 
                     //Configuración del marcador
-                    option.position(coords).title("Estación oficial").draggable(true).
-                            snippet("Estación: "+nombre).
-                            icon(smallMarkerIcon);
+                    option.position(coords)
+                            .draggable(true)
+                            //.snippet(nombre)
+                            .icon(smallMarkerIcon);
+
                     map.addMarker(option);
                 }
 

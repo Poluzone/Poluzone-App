@@ -48,7 +48,19 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
     SpeedDialView speedDialView;
 
-    Integer[] showOnMap = new Integer[4];
+    /*
+       Variable donde guardamos si los items del menu del filtro
+       están activos o no.
+    */
+    public Integer[] showOnMap = new Integer[4];
+    public PopupMenu popup;
+
+    // Tipos de medida, seleccionados en el filtro.
+    public boolean checkCO2 = true;
+    public boolean checkRespIrr = true;
+    public boolean checkCalidad = true;
+    public boolean checkSO2 = true;
+    public boolean checkNOX = true;
 
     // Bluetooth
     public String nuestroUUID = "EQUIPO-3XURODIMI";
@@ -308,7 +320,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     // view -> showFilterMenu -> v/f
     // -----------------------------------------------------------------------
     public boolean showFilterMenu(View anchor) {
-        PopupMenu popup = new PopupMenu(this, anchor, R.style.FilterPopup);
+        popup = new PopupMenu(this, anchor, R.style.FilterPopup);
         popup.getMenuInflater().inflate(R.menu.filter_menu, popup.getMenu());
         // Antes de mostrar el menu del popup miramos si estaba checked o no, y lo mostramos como tal
         for (int i = 0; i < showOnMap.length; i++) {
@@ -323,7 +335,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                // cambia el checked del item cuando es pulsado
+                // Cambia el checked del item cuando es pulsado
                 item.setChecked(!item.isChecked());
 
                 // Keep the popup menu open -------------------------------------------------------
@@ -346,20 +358,38 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                 // -- falta implementar el filtrado real de los contenedores
                 switch (item.getItemId()) {
                     case R.id.ozonoFilter:
-                        if (item.isChecked()) showOnMap[0] = 1;
-                        else showOnMap[0] = 0;
+                        if (item.isChecked())
+                        {
+                            showOnMap[0] = 1;
+                        }
+                        else{
+                            showOnMap[0] = 0;
+                        }
                         return false;
                     case R.id.irritantesFilter:
-                        if (item.isChecked()) showOnMap[1] = 1;
-                        else showOnMap[1] = 0;
+                        if (item.isChecked())
+                        {
+                            showOnMap[1] = 1;
+                        }
+                        else{
+                            showOnMap[1] = 0;
+                        }
                         return false;
                     case R.id.calidadFilter:
-                        if (item.isChecked()) showOnMap[2] = 1;
-                        else showOnMap[2] = 0;
+                        if (item.isChecked()){
+                            showOnMap[2] = 1;
+                        }
+                        else{
+                            showOnMap[2] = 0;
+                        }
                         return false;
                     case R.id.so2Filter:
-                        if (item.isChecked()) showOnMap[3] = 1;
-                        else showOnMap[3] = 0;
+                        if (item.isChecked()){
+                            showOnMap[3] = 1;
+                        }
+                        else{
+                            showOnMap[3] = 0;
+                        }
                         return false;
                     default:
                         return false;
@@ -379,7 +409,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
             showOnMap[i] = 1;
         }
     }
-
     // -----------------------------------------------------------------------
     // -> alarmaQueSuenaCadaMinuto ->
     // Crea el handler para el timer de hayqueactualizarmediciones
