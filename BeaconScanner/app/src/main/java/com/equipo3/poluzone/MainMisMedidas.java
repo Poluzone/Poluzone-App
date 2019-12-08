@@ -63,7 +63,6 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
                 medida.setIdMedida(Integer.parseInt(medidas.getString("IdMedida")));
                 mValores.add(medida);
 
-
             }
 
 

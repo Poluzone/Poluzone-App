@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.equipo3.poluzone.Callback;
+import com.equipo3.poluzone.CallbackMisMedidas;
 import com.equipo3.poluzone.InfoDialog;
 
 import com.equipo3.poluzone.MainMisMedidas;
@@ -38,6 +39,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.Utils;
 import com.leinardi.android.speeddial.SpeedDialView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -48,63 +50,46 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class InicioConductorFragment extends Fragment implements Callback{
+public class InicioConductorFragment extends Fragment implements Callback, CallbackMisMedidas {
 
     private InicioConductorViewModel mViewModel;
     private SpeedDialView speedDialView;
     private View root;
     private Double umbralMal = 163.0;
-    private Double umbralBien = 0.0;
+    private LineChart chart;
+    private LineDataSet dataSet;
 
 
     public static InicioConductorFragment newInstance() {
         return new InicioConductorFragment();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mViewModel =
                 ViewModelProviders.of(this).get(InicioConductorViewModel.class);
         root = inflater.inflate(R.layout.fragment_inicio_conductor, container, false);
 
+        NavigationDrawerActivity navigationDrawerActivity = (NavigationDrawerActivity) getParentFragment().getActivity();
+
         // acceder speed dial para esconderlo
         speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
         speedDialView.hide();
 
 
-        // ------------------------ CHART --------------------------------------------------
-        LineChart chart = root.findViewById(R.id.chart);
+        // ------------------------------------ CHART --------------------------------------------------
+        // Cogemos la hora actual
+        ZonedDateTime now = ZonedDateTime.now();
 
-        // Anyadir las medidas a la gráfica
-        Medida[] dataObjects = new Medida[10];
-        Medida medida = new Medida();
-        medida.setMedida(9);
-        medida.setTiempo(9891);
+        // Cogemos la info de hoy a las 7 am
+        ZonedDateTime before = ZonedDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), 7, 0, 0, 0, ZoneId.systemDefault());
 
-        Medida medida1 = new Medida();
-        medida1.setMedida(10);
-        medida1.setTiempo(9892);
+        // Lo pasamos a milisegundos
+        Long beforemili = before.toInstant().toEpochMilli();
 
-        Medida medida2 = new Medida();
-        medida2.setMedida(11);
-        medida2.setTiempo(9893);
-
-        Medida medida3 = new Medida();
-        medida3.setMedida(10);
-        medida3.setTiempo(9894);
-
-        dataObjects[0] = medida;
-        dataObjects[1] = medida1;
-        dataObjects[2] = medida2;
-        dataObjects[3] = medida3;
-
-        List<Entry> entries = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            entries.add(new Entry(dataObjects[i].getTiempo(), dataObjects[i].getMedida()));
-        }
-
-        LineDataSet dataSet = new LineDataSet(entries, "Medidas"); // add entries to dataset
+        chart = root.findViewById(R.id.chart);
+        navigationDrawerActivity.servidorFake.getMedidasPorUsuario(beforemili, System.currentTimeMillis(), navigationDrawerActivity.idUser);
 
         // Cambiar el estilo
         dataSet.setColor(R.color.colorAccent); // color
@@ -160,12 +145,6 @@ public class InicioConductorFragment extends Fragment implements Callback{
         dataSet.setColor(getContext().getColor(R.color.colorAccent));
 
 
-        // Asignar to do a la gráfica
-        LineData lineData = new LineData(dataSet);
-        chart.setData(lineData);
-        chart.invalidate(); // refresh
-
-
         // ----------------------------------- INFO DIALOG ---------------------------------------------
 
         ImageView iconoInfo = root.findViewById(R.id.iconoinfo);
@@ -193,7 +172,6 @@ public class InicioConductorFragment extends Fragment implements Callback{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getCalidadDelAireDeLaJornada();
         }
-        NavigationDrawerActivity navigationDrawerActivity = (NavigationDrawerActivity) getParentFragment().getActivity();
         navigationDrawerActivity.servidorFake.callback = this;
 
         return root;
@@ -257,4 +235,38 @@ public class InicioConductorFragment extends Fragment implements Callback{
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void callbackMisMedidas(JSONObject response) {
+
+        // Anyadir las medidas a la gráfica
+        Medida[] dataObjects = new Medida[10];
+
+        try {
+            for (int i = 0;i<response.getJSONArray("medidas").length();i++) {
+                JSONObject medidas = response.getJSONArray("medidas").getJSONObject(i);
+                Medida medida = new Medida();
+                medida.setMedida(Float.parseFloat(medidas.getString("Valor")));
+                medida.setTiempo(Integer.parseInt(medidas.getString("Tiempo")));
+                dataObjects[i] = medida;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("Pruebas?",e.toString());
+        }
+
+        List<Entry> entries = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            entries.add(new Entry(dataObjects[i].getTiempo(), dataObjects[i].getMedida()));
+        }
+
+        dataSet = new LineDataSet(entries, "Medidas"); // add entries to dataset
+
+        // Asignar to do a la gráfica
+        LineData lineData = new LineData(dataSet);
+        chart.setData(lineData);
+        chart.invalidate(); // refresh
+
+    }
 }
