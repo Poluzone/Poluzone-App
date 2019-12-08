@@ -1,6 +1,7 @@
 package com.equipo3.poluzone;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class AdapterRecyclerViewMisMedidas extends RecyclerView.Adapter<AdapterRecyclerViewMisMedidas.ViewHolder> {
@@ -26,15 +28,15 @@ public class AdapterRecyclerViewMisMedidas extends RecyclerView.Adapter<AdapterR
         TextView idMedida;
         TextView fechaMedida;
         TextView valorMedida;
-        TextView tipoMedida;
-        RelativeLayout itemLayout;
+        //TextView tipoMedida;
+        //RelativeLayout itemLayout;
 
         public ViewHolder(View itemView){
             super(itemView);
-            itemLayout = itemView.findViewById(R.id.item_layout);
+            //itemLayout = itemView.findViewById(R.id.item_layout);
             fechaMedida = itemView.findViewById(R.id.fechamedida);
             valorMedida = itemView.findViewById(R.id.valormedida);
-            tipoMedida = itemView.findViewById(R.id.tipomedida);
+           // tipoMedida = itemView.findViewById(R.id.tipomedida);
             idMedida = itemView.findViewById(R.id.idmedida);
 
 
@@ -59,9 +61,21 @@ public class AdapterRecyclerViewMisMedidas extends RecyclerView.Adapter<AdapterR
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
           Medida ex = ListaValores.get(position);
 
-         holder.valorMedida.setText(Double.toString(ex.getMedida()));
-         holder.tipoMedida.setText(Integer.toString(ex.getTipoMedida()));
-         holder.idMedida.setText(Integer.toString(ex.getIdMedida()));
+        DecimalFormat df = new DecimalFormat("#.0");
+
+        if(ex.getMedida()<67){
+            holder.valorMedida.setTextColor(Color.parseColor("#A8F7AF"));
+        }
+        if(ex.getMedida()>68 && ex.getMedida()<162){
+            holder.valorMedida.setTextColor(Color.parseColor("#FFB200"));
+        }
+        if(ex.getMedida()>163){
+            holder.valorMedida.setTextColor(Color.parseColor("#FF0000"));
+        }
+
+         holder.valorMedida.setText(df.format(ex.getMedida()));
+         //holder.tipoMedida.setText(Integer.toString(ex.getTipoMedida()));
+         holder.idMedida.setText("ID: "+Integer.toString(ex.getIdMedida()));
 
 
     }
