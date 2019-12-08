@@ -58,7 +58,7 @@
             android:name=".MainMisMedidas"
             android:label="@string/mismedidas"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".IntroActivity"
             android:label="@string/app_intro"

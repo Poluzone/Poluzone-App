@@ -1,6 +1,7 @@
 package com.equipo3.poluzone;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,16 @@ public class AdapterRecyclerViewMisMedidas extends RecyclerView.Adapter<AdapterR
           Medida ex = ListaValores.get(position);
 
         DecimalFormat df = new DecimalFormat("#.0");
+
+        if(ex.getMedida()<67){
+            holder.valorMedida.setTextColor(Color.parseColor("#A8F7AF"));
+        }
+        if(ex.getMedida()>68 && ex.getMedida()<162){
+            holder.valorMedida.setTextColor(Color.parseColor("#FFB200"));
+        }
+        if(ex.getMedida()>163){
+            holder.valorMedida.setTextColor(Color.parseColor("#FF0000"));
+        }
 
          holder.valorMedida.setText(df.format(ex.getMedida()));
          //holder.tipoMedida.setText(Integer.toString(ex.getTipoMedida()));
