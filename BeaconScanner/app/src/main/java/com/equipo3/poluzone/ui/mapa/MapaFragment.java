@@ -60,33 +60,21 @@ import java.util.Scanner;
 public class MapaFragment extends Fragment implements OnMapReadyCallback, Callback {
 
     /**
-     * Alternative radius for convolution
+     * Radius alternativo
      */
     private static final int ALT_HEATMAP_RADIUS = 28;
 
     /**
-     * Alternative opacity of heatmap overlay
+     * Opacidad alternativa
      */
     private static final double ALT_HEATMAP_OPACITY = 0.5;
 
-    /**
-     * Alternative heatmap gradient (blue -> red)
-     */
-    private static final int[] ALT_HEATMAP_GRADIENT_COLORS = {
-            Color.argb(0, 0, 255, 255),// transparent
-            Color.argb(255 / 3 * 2, 0, 255, 255),
-            Color.rgb(0, 191, 255),
-            Color.rgb(0, 0, 127),
-            Color.rgb(255, 0, 0)
-    };
-
-    public static final float[] ALT_HEATMAP_GRADIENT_START_POINTS = {
-            0.0f, 0.10f, 0.20f, 0.60f, 1.0f
-    };
-
-    /**
-     * Other alternative heatmap gradient (green -> red)
-     */
+    /****************************************************************
+     *
+     *          Gradiente alternativo (green -> red) 5 niveles
+     *
+     *                         ESTÁ EN USO!
+     ****************************************************************/
     public static final int[] COLORS = {
             Color.argb(0, 0, 255, 0),// transparent
             //Color.argb(255 / 3 * 2, 0, 255, 0),
@@ -96,19 +84,31 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             Color.rgb(255, 190, 0), // orange
             Color.rgb(255, 0, 0) // red
     };
-
     public static final float[] START_POINTS = {
+            0.0f,
+            0.10f,
+            0.20f,
+            0.60f,
+            1.0f
+    };
+
+    /*private static final int[] COLORS = {
+            Color.argb(0, 0, 255, 255),// transparent
+            Color.argb(255 / 3 * 2, 0, 255, 255),
+            Color.rgb(0, 191, 255),
+            Color.rgb(0, 0, 127),
+            Color.rgb(255, 0, 0)
+    };*/
+    /*public static final float[] START_POINTS = {
             0.0f,    //0-50
             0.20f,   //101-150
             0.40f,   //201-250
             0.60f,   //301-350
             0.80f,   //401-450
             1.0f     //501-550
-    };
+    };*/
 
-    //public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(ALT_HEATMAP_GRADIENT_COLORS,
-      //      ALT_HEATMAP_GRADIENT_START_POINTS);
-    public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(COLORS, ALT_HEATMAP_GRADIENT_START_POINTS);
+    public static final Gradient HEATMAP_GRADIENT = new Gradient(COLORS, START_POINTS);
 
     private HeatmapTileProvider mProvider;
     private TileOverlay mOverlay;
@@ -269,8 +269,8 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     //Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
                     //Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
                     // Guardamos la latitud de cada una cogiendo de la medida
-                    latitud = formatearDecimales(Double.parseDouble(medida.getString("Latitud")),4);
-                    longitud = formatearDecimales(Double.parseDouble(medida.getString("Longitud")), 4);
+                    latitud = Double.parseDouble(medida.getString("Latitud"));
+                    longitud = Double.parseDouble(medida.getString("Longitud"));
                     coords = new LatLng(latitud, longitud);
 
                     //Log.d(TAG, "Coords: "+coords.toString());
@@ -288,19 +288,9 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
             Log.d(TAG, list.toString());
-
-            // Create a heat map tile provider, passing it the latlngs of the police stations.
-            mProvider = new HeatmapTileProvider.Builder()
-                    .weightedData(list)
-                    .radius(ALT_HEATMAP_RADIUS)
-                    .gradient(ALT_HEATMAP_GRADIENT)
-                    .opacity(ALT_HEATMAP_OPACITY)
-                    .build();
-            // Add a tile overlay to the map, using the heat map tile provider.
-            mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
-
-
+            addHeatMap(list);
         }
         else
         {
@@ -308,9 +298,30 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         }
     }
 
-    public static Double formatearDecimales(Double numero, Integer numeroDecimales) {
-        return (numero * Math.pow(10, numeroDecimales))/(Math.pow(10, numeroDecimales));
+    /**
+     * Lista -> addHeatMap()
+     *
+     *   Creación del mapa de calor, introduciendo una lista de valores, dichos contienen
+     * colecciones formadas por las coordenadas y el valor de cada una de ellas.
+     *
+     * @param l
+     *
+     * - Matthew Conde Oltra -
+     */
+
+    public void addHeatMap(List<WeightedLatLng> l)
+    {
+        // Creación del mapa de calor con sus coordenadas(latlng) y los valores de cada uno
+        mProvider = new HeatmapTileProvider.Builder()
+                .weightedData(l)
+                .radius(ALT_HEATMAP_RADIUS)
+                .gradient(HEATMAP_GRADIENT)
+                .opacity(ALT_HEATMAP_OPACITY)
+                .build();
+        // Agregando superposición al mapa
+        mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
     }
+
     /**
      * callbackEstaciones()
      * Función callback que recibe todas las medidas de la BBDD del servidor.
