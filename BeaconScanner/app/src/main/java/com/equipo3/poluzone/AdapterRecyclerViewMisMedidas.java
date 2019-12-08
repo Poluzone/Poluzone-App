@@ -64,7 +64,7 @@ public class AdapterRecyclerViewMisMedidas extends RecyclerView.Adapter<AdapterR
         DecimalFormat df = new DecimalFormat("#.0");
 
         if(ex.getMedida()<67){
-            holder.valorMedida.setTextColor(Color.parseColor("#A8F7AF"));
+            holder.valorMedida.setTextColor(Color.parseColor("#CAFECF"));
         }
         if(ex.getMedida()>68 && ex.getMedida()<162){
             holder.valorMedida.setTextColor(Color.parseColor("#FFB200"));

@@ -73,8 +73,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#808080"
-                    android:textSize="15dp"
-                    android:text="Valor: "></TextView>
+                    android:textSize="13dp"
+                    android:text="Valor:"></TextView>
 
                 <TextView
                     android:id="@+id/valormedida"
@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="#808080"
                     android:textSize="15dp"
-                    android:text="bp"></TextView>
+                    android:text="ppb"></TextView>
 
                 <RelativeLayout
                     android:layout_width="match_parent"

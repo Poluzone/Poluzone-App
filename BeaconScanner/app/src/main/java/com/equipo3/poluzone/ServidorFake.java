@@ -40,7 +40,7 @@ public class ServidorFake {
 
     //String IP = "192.168.1.107";
     //String IP = "192.168.43.125"; //Red Matthew
-    String IP = "192.168.0.58"; //Red Rosa
+    String IP = "192.168.43.18"; //Red Rosa
    //  "172.20.10.5";
     int puerto = 8080;
     private SharedPreferences loginPreferences;
