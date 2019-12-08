@@ -54,8 +54,6 @@ public class InicioConductorFragment extends Fragment implements Callback{
     private SpeedDialView speedDialView;
     private View root;
     private Double umbralMal = 163.0;
-    private Double umbralBien = 0.0;
-
 
     public static InicioConductorFragment newInstance() {
         return new InicioConductorFragment();

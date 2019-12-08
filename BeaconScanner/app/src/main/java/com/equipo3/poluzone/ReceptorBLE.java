@@ -48,7 +48,7 @@ public class ReceptorBLE {
     private float medidas[] = new float[3000];
 
     //Auxiliares
-    private boolean haSalidoYaElToast=false;//para que el Toast de cuando se conecta el sensor no salga constantemente
+    public boolean haSalidoYaElToast=false;//para que el Toast de cuando se conecta el sensor no salga constantemente
 
     // -----------------------------------------------------------------------
     // Constructor
@@ -204,8 +204,7 @@ public class ReceptorBLE {
     // -----------------------------------------------------------------------
     public void calcularMediaMedidas() {
         Log.d("pruebas", "calcularMediaMedidas()");
-        Log.d("aaaaaaaaaaaaa", "media: " + media);
-        Log.d("aaaaaaaaaaaaa", "contador: " + contador);
+        Log.d("pruebas", "media: " + media);
         float sumatorio = 0;
         for (int i = 0; i < contador; i++) {
             sumatorio = sumatorio + medidas[i];
