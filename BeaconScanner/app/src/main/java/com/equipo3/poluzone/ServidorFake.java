@@ -36,11 +36,13 @@ public class ServidorFake {
     RequestQueue queue;
     public Callback callback;
     CallbackRegistro callbackRegistro;
+    CallbackMisMedidas callbackMisMedidas;
 
     //String IP = "192.168.1.107";
     //String IP = "192.168.43.125"; //Red Matthew
-    String IP = "192.168.1.109"; //Red Rosa
-   //  "172.20.10.5";
+    //String IP = "192.168.43.18"; //Red Rosa
+    String URL = "https://juconol.upv.edu.es/"; //Red Matthew
+    //  "172.20.10.5";
     int puerto = 8080;
     private SharedPreferences loginPreferences;
 
@@ -67,6 +69,11 @@ public class ServidorFake {
             Log.d("pruebas", "issa registrousuarioactivity");
             callbackRegistro = (RegistrarUsuarioActivity) activity;
         }
+        // Si el servidor se ha creado desde loginactivity buscamos el callback
+        if (activity.getClass() == MainMisMedidas.class) {
+            Log.d("pruebas", "issa registrousuarioactivity");
+            callbackMisMedidas = (MainMisMedidas) activity;
+        }
 
         // Si el servidor se ha creado desde el inicio buscamos el callback
     /*    if (activity.getClass() == NavigationDrawerActivity.class) {
@@ -84,7 +91,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void insertarMedida(Medida medidaContaminacion)  {
         Log.d("pruebas", "guardarContaminacion()");
-        String url = "http://"+IP+":"+puerto+"/insertarMedida/"; /*+medidaContaminacion.getMedida(); */
+        String url = URL+"/insertarMedida/"; /*+medidaContaminacion.getMedida(); */
 
         JSONObject datos = new JSONObject();
 
@@ -127,7 +134,7 @@ public class ServidorFake {
     // ------------------------------------------------------------------------------
     public void getMediaCalidadDelAireDeLaJornada(long desde, long hasta, int id) {
         Log.d("pruebas", "getMediaCalidadDelAireDeLaJornada()");
-        String url = "http://"+IP+":"+puerto+"/getMediaCalidadDelAireDeLaJornada";
+        String url = URL+"/getMediaCalidadDelAireDeLaJornada";
 
         // Creamos el intervalo de tiempo
         JSONObject intervalo = new JSONObject();
@@ -174,7 +181,55 @@ public class ServidorFake {
         // Add the request to the RequestQueue.
         queue.add(jsonobj);
     }
+    // ------------------------------------------------------------------------------
+    // desde: N, hasta: N, IdUsuario: N -> getMediaCalidadDelAireDeLaJornada() -> R
+    // ------------------------------------------------------------------------------
+    public void getMedidasPorUsuario(long desde, long hasta, int id) {
+        Log.d("pruebas", "getMedidasDeEsteUsuarioPorFecha()");
+        String url = URL+"/getMedidasDeEsteUsuarioPorFecha";
 
+        // Creamos el intervalo de tiempo
+        JSONObject intervalo = new JSONObject();
+        try {
+            intervalo.put("desde", desde);
+            intervalo.put("hasta", hasta);
+        }
+        catch (JSONException e) {
+            Log.d("pruebas", e.toString());
+        }
+
+        // Anyadimos los datos al json
+        JSONObject datos = new JSONObject();
+        try {
+            datos.put("Intervalo", intervalo);
+            datos.put("IdUsuario", id);
+            Log.d("pruebas json", datos.toString());
+        } catch (JSONException e) {
+            Log.d("pruebas", e.toString());
+        }
+
+        // Hacemos la peticion
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("pruebas",response.toString());
+
+                        callbackMisMedidas.callbackMisMedidas(response);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("pruebas",error.toString());
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonobj);
+    }
 
 
     // ---------------------------------------------------------------------------
@@ -182,7 +237,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void insertarUsuario(String email, String password, int telefono,String tipoUsuario) {
         Log.d("pruebas", "insertarUsuario()");
-        String url = "http://"+IP+":"+puerto+"/insertarUsuario/";
+        String url = URL+"/insertarUsuario/";
 
         JSONObject datos = new JSONObject();
 
@@ -249,7 +304,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void comprobarUsuarioPorEmail (String email, String pass) {
         Log.d("pruebas", "GetUsuarioPorEmail()");
-        String url = "http://"+IP+":"+puerto+"/ComprobarLogin";
+        String url = URL+"/ComprobarLogin";
 
         JSONObject datos = new JSONObject();
 
@@ -321,7 +376,7 @@ public class ServidorFake {
      */
     public void getUsuario (String email) {
         Log.d("GETUSUARIO", "GetUsuario() con"+email);
-        String url = "http://"+IP+":"+puerto+"/GetUsuarioPorEmail";
+        String url = URL+"/GetUsuarioPorEmail";
 
         JSONObject datos = new JSONObject();
 
@@ -372,7 +427,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void vincularIDdeUsuarioConSensor(int idUsuario, final int idSensor) {
         Log.d("pruebas", "vincularIDdeUsuarioConSensor()");
-        String url = "http://"+IP+":"+puerto+"/insertarIdUsuarioConIdsensor";
+        String url = URL+"/insertarIdUsuarioConIdsensor";
 
         JSONObject datos = new JSONObject();
 
@@ -414,7 +469,7 @@ public class ServidorFake {
     // ---------------------------------------------------------------------------
     public void indicarActividadNodo(String activo) {
         Log.d("pruebas", "indicarActividadNodo()");
-        String url = "http://"+IP+":"+puerto+"/indicarActividadNodo";
+        String url = URL+"/indicarActividadNodo";
 
         int idSensor = loginPreferences.getInt("idSensor", 0);
 
