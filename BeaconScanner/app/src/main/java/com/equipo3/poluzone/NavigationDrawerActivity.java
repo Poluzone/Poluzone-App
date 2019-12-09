@@ -213,6 +213,8 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         Log.d("pruebas", "valor: " + medida.getMedida() + " tiempo: " + medida.getTiempo() + " lati: " + medida.getPosicion().getLatitude());
         servidorFake.insertarMedida(medida);
         servidorFake.indicarActividadNodo("Activo");
+        TextView activoNodo = findViewById(R.id.texviewactivonodo);
+        if (activoNodo != null) activoNodo.setText(R.string.activo);
         receptorBLE.ultimaTramaEncontrada = null;
     }
 
@@ -222,6 +224,8 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     // -----------------------------------------------------------------------
     public void hayQueAvisarDeInactividad() {
         String actividad = "Inactivo";
+        TextView activoNodo = findViewById(R.id.texviewactivonodo);
+        if (activoNodo != null) activoNodo.setText(R.string.inactivo);
         servidorFake.indicarActividadNodo(actividad);
     }
 

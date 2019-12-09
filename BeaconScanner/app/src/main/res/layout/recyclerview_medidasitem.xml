@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/item_layout">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#FFD58C"
+        android:layout_marginTop="5dp"
+        app:cardCornerRadius="3dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/idmedida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#808080"
+                android:textSize="20dp"
+                android:text="ID: 47882"></TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#808080"
+                android:textSize="15dp"
+                android:text="Posicion: Gandía"></TextView>
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="800dp"
+                    android:layout_height="800dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/co2"></ImageView>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#808080"
+                    android:textSize="13dp"
+                    android:text="Valor:"></TextView>
+
+                <TextView
+                    android:id="@+id/valormedida"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#808080"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="30dp"
+                    android:text="253"></TextView>
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#808080"
+                    android:textSize="15dp"
+                    android:text="ppb"></TextView>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/fechamedida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginStart="23dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Fecha: 20/07/2019               "
+                        android:textColor="#808080"></TextView>
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+
+</LinearLayout>

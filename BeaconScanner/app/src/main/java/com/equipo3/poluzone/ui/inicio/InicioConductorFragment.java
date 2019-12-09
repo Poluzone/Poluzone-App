@@ -2,9 +2,12 @@ package com.equipo3.poluzone.ui.inicio;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,11 +19,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.equipo3.poluzone.Callback;
 import com.equipo3.poluzone.InfoDialog;
+
+import com.equipo3.poluzone.MainMisMedidas;
 import com.equipo3.poluzone.Medida;
 import com.equipo3.poluzone.NavigationDrawerActivity;
 import com.equipo3.poluzone.R;
@@ -41,14 +47,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class InicioConductorFragment extends Fragment implements Callback {
+public class InicioConductorFragment extends Fragment implements Callback{
 
     private InicioConductorViewModel mViewModel;
     private SpeedDialView speedDialView;
     private View root;
     private Double umbralMal = 163.0;
-    private Double umbralBien = 0.0;
-
 
     public static InicioConductorFragment newInstance() {
         return new InicioConductorFragment();
@@ -167,6 +171,17 @@ public class InicioConductorFragment extends Fragment implements Callback {
             public void onClick(View v) {
                 final InfoDialog infoDialog = new InfoDialog();
                 if (!infoDialog.isAdded()) infoDialog.show(getFragmentManager(),"");
+            }
+        });
+
+        // ----------------------------------- MIS MEDIDAS ---------------------------------------------
+
+        Button botonMisMedidas = root.findViewById(R.id.botonVerMedidas);
+        botonMisMedidas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(getActivity(),MainMisMedidas.class);
+                startActivity(in);
             }
         });
 
