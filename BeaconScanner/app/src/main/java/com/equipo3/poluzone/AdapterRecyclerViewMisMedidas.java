@@ -39,7 +39,6 @@ public class AdapterRecyclerViewMisMedidas extends RecyclerView.Adapter<AdapterR
            // tipoMedida = itemView.findViewById(R.id.tipomedida);
             idMedida = itemView.findViewById(R.id.idmedida);
 
-
         }
 
     }
@@ -59,7 +58,7 @@ public class AdapterRecyclerViewMisMedidas extends RecyclerView.Adapter<AdapterR
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-          Medida ex = ListaValores.get(position);
+        Medida ex = ListaValores.get(position);
 
         DecimalFormat df = new DecimalFormat("#.0");
 

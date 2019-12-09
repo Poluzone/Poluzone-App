@@ -45,6 +45,13 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
 
         mValores = new ArrayList<>();
 
+        mRecyclerView = findViewById(R.id.recyclerview_medidas);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        mAdapter = new AdapterRecyclerViewMisMedidas(mValores, this);
+        mRecyclerView.setAdapter(mAdapter);
+
         calidadAlta = new ArrayList<>();
         calidadMedia = new ArrayList<>();
         calidadBaja = new ArrayList<>();
@@ -115,12 +122,6 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
         servidorFake = new ServidorFake(this);
         long hasta = 1575741203368L;
         servidorFake.getMedidasPorUsuario(0,hasta,15);
-
-        mRecyclerView = findViewById(R.id.recyclerview_medidas);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-
-
     }
 
 
@@ -146,9 +147,8 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
         }
 
         mAdapter = new AdapterRecyclerViewMisMedidas(mValores ,this);
-
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+        //mRecyclerView.setAdapter(mAdapter);
 
     }
 
@@ -167,21 +167,18 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
         mAdapter.notifyDataSetChanged();
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
 
 
     }
 
     private void filtrarPorCalidadMedia(ArrayList<Medida> Valores){
-
         for (int i = 0;i<Valores.size();i++){
-
             if(Valores.get(i).getMedida() >= 68 && Valores.get(i).getMedida() <= 162){
 
                 calidadMedia.add(Valores.get(i));
-
             }
         }
-
         mAdapter = new AdapterRecyclerViewMisMedidas(calidadMedia ,this);
         mAdapter.notifyDataSetChanged();
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -191,13 +188,9 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
     }
 
     private void filtrarPorCalidadBaja(ArrayList<Medida> Valores){
-
         for (int i = 0;i<Valores.size();i++){
-
             if(Valores.get(i).getMedida() > 163){
-
                 calidadBaja.add(Valores.get(i));
-
             }
         }
 
@@ -205,7 +198,5 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
         mAdapter.notifyDataSetChanged();
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-
-
     }
 }
