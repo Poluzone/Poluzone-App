@@ -54,12 +54,12 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     */
     public Integer[] showOnMap = new Integer[4];
     public PopupMenu popup;
+
     // Tipos de medida, seleccionados en el filtro.
     public boolean checkCO2 = true;
     public boolean checkRespIrr = true;
     public boolean checkCalidad = true;
     public boolean checkSO2 = true;
-    public boolean checkO3 = true;
     public boolean checkNOX = true;
 
     // Bluetooth
@@ -361,42 +361,34 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                         if (item.isChecked())
                         {
                             showOnMap[0] = 1;
-                            checkO3 = true;
                         }
                         else{
                             showOnMap[0] = 0;
-                            checkO3 = false;
                         }
                         return false;
                     case R.id.irritantesFilter:
                         if (item.isChecked())
                         {
                             showOnMap[1] = 1;
-                            checkRespIrr = true;
                         }
                         else{
                             showOnMap[1] = 0;
-                            checkRespIrr = false;
                         }
                         return false;
                     case R.id.calidadFilter:
                         if (item.isChecked()){
                             showOnMap[2] = 1;
-                            checkCalidad = true;
                         }
                         else{
                             showOnMap[2] = 0;
-                            checkCalidad = false;
                         }
                         return false;
                     case R.id.so2Filter:
                         if (item.isChecked()){
                             showOnMap[3] = 1;
-                            checkSO2 = true;
                         }
                         else{
                             showOnMap[3] = 0;
-                            checkSO2 = false;
                         }
                         return false;
                     default:
