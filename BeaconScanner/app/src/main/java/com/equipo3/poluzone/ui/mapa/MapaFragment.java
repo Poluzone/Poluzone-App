@@ -146,6 +146,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         // acceder speed dial
         speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
         speedDialView.show();
+        //speedDialView.
         //Ventana para la información de los markers
         infoWindow = new CustomInfoWindowAdapter(LayoutInflater.from(getActivity()));
 
