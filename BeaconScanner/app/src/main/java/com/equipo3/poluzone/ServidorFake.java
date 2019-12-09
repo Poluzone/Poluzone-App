@@ -324,7 +324,7 @@ public class ServidorFake{
      */
     public void getTodasLasMedidasPorFecha (long desde, long hasta) {
         Log.d("MEDIDAS", "/GetTodasLasMedidasPorFecha");
-        String url = URL+"/getTodasLasMedidasPorFecha";
+        String url = URL+"/GetTodasLasMedidasPorFecha";
 
         // Creamos el intervalo de tiempo
         JSONObject intervalo = new JSONObject();

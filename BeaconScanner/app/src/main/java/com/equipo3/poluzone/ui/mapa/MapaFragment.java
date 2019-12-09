@@ -93,39 +93,10 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             1.0f
     };
 
-    /*private static final int[] COLORS = {
-            Color.argb(0, 0, 255, 255),// transparent
-            Color.argb(255 / 3 * 2, 0, 255, 255),
-            Color.rgb(0, 191, 255),
-            Color.rgb(0, 0, 127),
-            Color.rgb(255, 0, 0)
-    };*/
-    /*public static final float[] START_POINTS = {
-            0.0f,    //0-50
-            0.20f,   //101-150
-            0.40f,   //201-250
-            0.60f,   //301-350
-            0.80f,   //401-450
-            1.0f     //501-550
-    };*/
-
     public static final Gradient HEATMAP_GRADIENT = new Gradient(COLORS, START_POINTS);
 
     private HeatmapTileProvider mProvider;
     private TileOverlay mOverlay;
-
-    private boolean mDefaultGradient = true;
-    private boolean mDefaultRadius = true;
-    private boolean mDefaultOpacity = true;
-
-    //
-
-
-    /**
-     * Maps name of data set to data (list of LatLngs)
-     * Also maps to the URL of the data set for attribution
-     */
-    private HashMap<String, DataSet> mLists = new HashMap<>();
 
 
     //Etiqueta para el debugging
@@ -258,7 +229,6 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             double valor;
             List<WeightedLatLng> list = new ArrayList<WeightedLatLng>();
 
-
             try {
                 //Recogemos el tamaño del array con las medidas en JSON
                 length = medidas.getJSONArray("medidas").length();
@@ -268,7 +238,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                 {
 
                     // Observamos las medidas en el logcat
-                    //Log.d("MAPA", medidas.getJSONArray("medidas").getJSONObject(i).toString());
+                    Log.d("MAPA", medidas.getJSONArray("medidas").getJSONObject(i).toString());
                     //Guardamos cada una de las medidas en una variable auxiliar
                     JSONObject medida = medidas.getJSONArray("medidas").getJSONObject(i);
 
@@ -283,7 +253,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     // Guardamos el valor de la medida
                     valor = Double.parseDouble(medida.getString("Valor"));
                     list.add(new WeightedLatLng(coords,valor));
-                    //Log.d(TAG, "Valor: "+medida.getString("Valor"));
+                    Log.d(TAG, "Valor: "+medida.getString("Valor"));
                     //Configuración del marcador
                     option.position(coords).title("UPV").draggable(true).
                             snippet("Contaminación:"+valor).
