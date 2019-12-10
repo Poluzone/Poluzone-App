@@ -78,19 +78,15 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
      ****************************************************************/
     public static final int[] COLORS = {
             Color.argb(0, 0, 255, 0),// transparent
-            //Color.argb(255 / 3 * 2, 0, 255, 0),
             Color.rgb(0, 255, 0), // green
             Color.rgb(255, 255, 0), // yellow
-            //Color.rgb(207, 174, 72), // brown
-            Color.rgb(255, 190, 0), // orange
             Color.rgb(255, 0, 0) // red
     };
     public static final float[] START_POINTS = {
-            0.0f,
-            0.10f,
-            0.20f,
-            0.60f,
-            1.0f
+            0.0f,  //0-50 //transparent
+            0.005f, //51-100 //green
+            0.01f, //101-150 //yellow
+            0.015f, //151-200 //red
     };
 
     public static final Gradient HEATMAP_GRADIENT = new Gradient(COLORS, START_POINTS);

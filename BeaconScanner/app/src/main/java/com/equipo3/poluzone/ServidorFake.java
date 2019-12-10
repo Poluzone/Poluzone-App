@@ -39,7 +39,7 @@ public class ServidorFake{
     RequestQueue queue;
     public Callback callback;
     CallbackRegistro callbackRegistro;
-    Callback callbackMedidas;
+    //Callback callbackMedidas;
     CallbackMisMedidas callbackMisMedidas;
 
     //String IP = "192.168.1.107";

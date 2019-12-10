@@ -213,6 +213,8 @@ public class InicioConductorFragment extends Fragment implements Callback{
 
         // Si sale mayor que 100 lo ponemos a 100%
         if (porcentaje > 100) porcentaje = 100.0;
+        if (porcentaje < 0) porcentaje = 0.0;
+
 
         // Cambiamos formato para no mostrar todas las decimales
         DecimalFormat df = new DecimalFormat("##.#");
