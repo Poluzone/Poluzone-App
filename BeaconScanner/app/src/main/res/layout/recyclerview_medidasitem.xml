@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#FFD58C"
+        app:cardBackgroundColor="@color/colorAccent"
         android:layout_marginTop="5dp"
         app:cardCornerRadius="3dp">
 
@@ -34,14 +34,14 @@
                 android:id="@+id/idmedida"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#808080"
+                android:textColor="#FFFFFF"
                 android:textSize="20dp"
                 android:text="ID: 47882"></TextView>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#808080"
+                android:textColor="#FFFFFF"
                 android:textSize="15dp"
                 android:text="Posicion: Gandía"></TextView>
             </LinearLayout>
@@ -72,7 +72,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#808080"
+                    android:textColor="#FFFFFF"
                     android:textSize="13dp"
                     android:text="Valor:"></TextView>
 
@@ -80,7 +80,7 @@
                     android:id="@+id/valormedida"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#808080"
+                    android:textColor="#FFFFFF"
                     android:layout_marginLeft="5dp"
                     android:textSize="30dp"
                     android:text="253"></TextView>
@@ -89,7 +89,7 @@
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#808080"
+                    android:textColor="#FFFFFF"
                     android:textSize="15dp"
                     android:text="ppb"></TextView>
 
@@ -106,7 +106,7 @@
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="10dp"
                         android:text="Fecha: 20/07/2019               "
-                        android:textColor="#808080"></TextView>
+                        android:textColor="#FFFFFF"></TextView>
 
                 </RelativeLayout>
 
