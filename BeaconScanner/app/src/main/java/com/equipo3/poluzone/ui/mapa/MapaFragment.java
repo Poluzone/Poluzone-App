@@ -93,6 +93,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
 
     private HeatmapTileProvider mProvider;
     private TileOverlay mOverlay;
+    private NavigationDrawerActivity navigation;
 
 
     //Etiqueta para el debugging
@@ -143,7 +144,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
          *
          */
 
-        NavigationDrawerActivity navigation = (NavigationDrawerActivity) getParentFragment().getActivity();
+        navigation = (NavigationDrawerActivity) getParentFragment().getActivity();
         navigation.servidorFake.callback = this;
 
         long primeraFecha = 0;
@@ -230,39 +231,44 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                 length = medidas.getJSONArray("medidas").length();
 
                 // Dibujamos marcadores para cada una de las medidas
-                for (int i = 0; i<length; i++)
-                {
-
+                for (int i = 0; i<length; i++) {
                     // Observamos las medidas en el logcat
                     Log.d("MAPA", medidas.getJSONArray("medidas").getJSONObject(i).toString());
                     //Guardamos cada una de las medidas en una variable auxiliar
                     JSONObject medida = medidas.getJSONArray("medidas").getJSONObject(i);
 
-                    //Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
-                    //Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
-                    // Guardamos la latitud de cada una cogiendo de la medida
-                    latitud = Double.parseDouble(medida.getString("Latitud"));
-                    longitud = Double.parseDouble(medida.getString("Longitud"));
-                    coords = new LatLng(latitud, longitud);
+                    // SO2
+                    if (navigation.showOnMap[3] && medida.getInt("IdTipoMedida") == 4) {
+                        Log.d("pruebas", "valor showOnMap 1 "+ navigation.showOnMap[3]);
+                        //Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
+                        //Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
+                        // Guardamos la latitud de cada una cogiendo de la medida
+                        latitud = Double.parseDouble(medida.getString("Latitud"));
+                        longitud = Double.parseDouble(medida.getString("Longitud"));
+                        coords = new LatLng(latitud, longitud);
 
-                    //Log.d(TAG, "Coords: "+coords.toString());
-                    // Guardamos el valor de la medida
-                    valor = Double.parseDouble(medida.getString("Valor"));
-                    list.add(new WeightedLatLng(coords,valor));
-                    Log.d(TAG, "Valor: "+medida.getString("Valor"));
-                    //Configuración del marcador
-                    option.position(coords).title("UPV").draggable(true).
-                            snippet("Contaminación:"+valor).
-                            icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
-                    //map.addMarker(option);
+                        //Log.d(TAG, "Coords: "+coords.toString());
+                        // Guardamos el valor de la medida
+                        valor = Double.parseDouble(medida.getString("Valor"));
+                        list.add(new WeightedLatLng(coords, valor));
+                        Log.d(TAG, "Valor: " + medida.getString("Valor"));
+                        //Configuración del marcador
+                        option.position(coords).title("UPV").draggable(true).
+                                snippet("Contaminación:" + valor).
+                                icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                        //map.addMarker(option);
+                    }
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            Log.d(TAG, list.toString());
-            addHeatMap(list);
+            if (!list.isEmpty()) {
+                Log.d(TAG, list.toString());
+                addHeatMap(list);
+            }
+
         }
         else
         {

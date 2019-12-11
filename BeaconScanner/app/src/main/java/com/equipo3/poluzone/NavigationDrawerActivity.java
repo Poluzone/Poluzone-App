@@ -52,15 +52,8 @@ public class NavigationDrawerActivity extends AppCompatActivity {
        Variable donde guardamos si los items del menu del filtro
        están activos o no.
     */
-    public Integer[] showOnMap = new Integer[4];
+    public Boolean[] showOnMap = new Boolean[4];
     public PopupMenu popup;
-
-    // Tipos de medida, seleccionados en el filtro.
-    public boolean checkCO2 = true;
-    public boolean checkRespIrr = true;
-    public boolean checkCalidad = true;
-    public boolean checkSO2 = true;
-    public boolean checkNOX = true;
 
     // Bluetooth
     public String nuestroUUID = "EQUIPO-3XURODIMI";
@@ -104,9 +97,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         idUser = loginPreferences.getInt("idUsuario", 0);
 
         Log.d("pruebasssss", tipoUser);
-
-        //Funcion que redondea la imagen del menú
-        //redondearImagen();
 
         // Codigo relacionado con el navigation drawer
         Toolbar toolbar;
@@ -256,6 +246,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     // -> crearFabSpeedDial ->
     // -----------------------------------------------------------------------
     private void crearFabSpeedDial() {
+        Log.d("pruebas", "crearFabSpeedDial()");
         // ---------- FAB SPEED DIAL -----------------------------------------
 
         // acceder speed dial
@@ -324,17 +315,17 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     // view -> showFilterMenu -> v/f
     // -----------------------------------------------------------------------
     public boolean showFilterMenu(View anchor) {
+        Log.d("pruebas", "showFilterMenu()");
         popup = new PopupMenu(this, anchor, R.style.FilterPopup);
         popup.getMenuInflater().inflate(R.menu.filter_menu, popup.getMenu());
         // Antes de mostrar el menu del popup miramos si estaba checked o no, y lo mostramos como tal
         for (int i = 0; i < showOnMap.length; i++) {
-            if (showOnMap[i] == 1) {
+            if (showOnMap[i]) {
                 // Mostramos que sea checked
                 popup.getMenu().getItem(i).setChecked(true);
             }
         }
         popup.show();
-
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -364,35 +355,35 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     case R.id.ozonoFilter:
                         if (item.isChecked())
                         {
-                            showOnMap[0] = 1;
+                            showOnMap[0] = true;
                         }
                         else{
-                            showOnMap[0] = 0;
+                            showOnMap[0] = false;
                         }
                         return false;
                     case R.id.irritantesFilter:
                         if (item.isChecked())
                         {
-                            showOnMap[1] = 1;
+                            showOnMap[1] = true;
                         }
                         else{
-                            showOnMap[1] = 0;
+                            showOnMap[1] = false;
                         }
                         return false;
                     case R.id.calidadFilter:
                         if (item.isChecked()){
-                            showOnMap[2] = 1;
+                            showOnMap[2] = true;
                         }
                         else{
-                            showOnMap[2] = 0;
+                            showOnMap[2] = false;
                         }
                         return false;
                     case R.id.so2Filter:
                         if (item.isChecked()){
-                            showOnMap[3] = 1;
+                            showOnMap[3] = true;
                         }
                         else{
-                            showOnMap[3] = 0;
+                            showOnMap[3] = false;
                         }
                         return false;
                     default:
@@ -409,8 +400,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     // Hacemos checked todos los filtros al iniciar la app (aparecen todos los tipos de gas)
     // -----------------------------------------------------------------------
     public void mostrarTodosLosGases() {
+        Log.d("pruebas", "mostrarTodosLosGases()");
         for (int i = 0; i < showOnMap.length; i++) {
-            showOnMap[i] = 1;
+            showOnMap[i] = true;
         }
     }
     // -----------------------------------------------------------------------

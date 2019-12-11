@@ -283,6 +283,7 @@ public class LoginActivity extends AppCompatActivity implements Callback {
 
                 // Para pruebas
                 loginPrefsEditor.putString("tipousuario", "Conductor");
+                loginPrefsEditor.putInt("idUsuario", 15);
                 Intent i = new Intent(this, NavigationDrawerActivity.class);
                 Log.d("pruebas", "intent main");
                 loginPrefsEditor.commit();
