@@ -26,7 +26,6 @@ public class InfoDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.popup_info_calidadaire,container,false);
         getDialog().setTitle(R.string.calidad);
 
-
         Button ententido = (Button) view.findViewById(R.id.botonCerrarDialogInfos);
         ententido.setOnClickListener(doneAction);
         return view;

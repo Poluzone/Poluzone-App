@@ -33,8 +33,6 @@ import android.widget.TextView;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
-import org.json.JSONObject;
-
 // -----------------------------------------------------------------------
 // NavigationDrawerActivity.java
 // Equipo 3
@@ -51,6 +49,10 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     /*
        Variable donde guardamos si los items del menu del filtro
        están activos o no.
+       CO = 0
+       NOX = 1
+       SO2 = 2
+       Ozono = 3
     */
     public Boolean[] showOnMap = new Boolean[4];
     public PopupMenu popup;
@@ -352,7 +354,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                 // El switch cambia el checked del item dependiendo del item
                 // -- falta implementar el filtrado real de los contenedores
                 switch (item.getItemId()) {
-                    case R.id.ozonoFilter:
+                    case R.id.coFilter:
                         if (item.isChecked())
                         {
                             showOnMap[0] = true;
@@ -361,7 +363,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                             showOnMap[0] = false;
                         }
                         return false;
-                    case R.id.irritantesFilter:
+                    case R.id.noxFilter:
                         if (item.isChecked())
                         {
                             showOnMap[1] = true;
@@ -370,7 +372,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                             showOnMap[1] = false;
                         }
                         return false;
-                    case R.id.calidadFilter:
+                    case R.id.azufreFilter:
                         if (item.isChecked()){
                             showOnMap[2] = true;
                         }
@@ -378,7 +380,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                             showOnMap[2] = false;
                         }
                         return false;
-                    case R.id.so2Filter:
+                    case R.id.ozonoFilter:
                         if (item.isChecked()){
                             showOnMap[3] = true;
                         }

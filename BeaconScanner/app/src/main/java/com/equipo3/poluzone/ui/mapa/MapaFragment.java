@@ -237,9 +237,36 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     //Guardamos cada una de las medidas en una variable auxiliar
                     JSONObject medida = medidas.getJSONArray("medidas").getJSONObject(i);
 
-                    // SO2
-                    if (navigation.showOnMap[3] && medida.getInt("IdTipoMedida") == 4) {
-                        Log.d("pruebas", "valor showOnMap 1 "+ navigation.showOnMap[3]);
+                    /*CO = 0
+                    NOX = 1
+                    SO2 = 2
+                    Ozono = 3 */
+
+                    // CO
+                    if (navigation.showOnMap[0] && medida.getInt("IdTipoMedida") == 2) {
+                        Log.d("pruebas", "valor showOnMap 0 "+ navigation.showOnMap[0]);
+                        //Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
+                        //Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
+                        // Guardamos la latitud de cada una cogiendo de la medida
+                        latitud = Double.parseDouble(medida.getString("Latitud"));
+                        longitud = Double.parseDouble(medida.getString("Longitud"));
+                        coords = new LatLng(latitud, longitud);
+
+                        //Log.d(TAG, "Coords: "+coords.toString());
+                        // Guardamos el valor de la medida
+                        valor = Double.parseDouble(medida.getString("Valor"));
+                        list.add(new WeightedLatLng(coords, valor));
+                        Log.d(TAG, "Valor: " + medida.getString("Valor"));
+                        //Configuración del marcador
+                        option.position(coords).title("UPV").draggable(true).
+                                snippet("Contaminación:" + valor).
+                                icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                        //map.addMarker(option);
+                    }
+
+                    // NOX
+                    if (navigation.showOnMap[1] && medida.getInt("IdTipoMedida") == 3) {
+                        Log.d("pruebas", "valor showOnMap 1 "+ navigation.showOnMap[1]);
                         //Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
                         //Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
                         // Guardamos la latitud de cada una cogiendo de la medida
