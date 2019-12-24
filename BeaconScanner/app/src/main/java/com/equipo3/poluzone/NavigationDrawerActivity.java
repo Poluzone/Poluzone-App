@@ -18,7 +18,17 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.equipo3.poluzone.ui.mapa.MapaFragment;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.material.navigation.NavigationView;
+import com.google.maps.android.heatmaps.Gradient;
+import com.google.maps.android.heatmaps.HeatmapTileProvider;
+import com.google.maps.android.heatmaps.WeightedLatLng;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
@@ -32,6 +42,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // -----------------------------------------------------------------------
 // NavigationDrawerActivity.java
@@ -63,7 +79,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
     // Interfaz
     public Button button;
-    public Button buttonRecibir;
 
     // Para recordar que se ha logeado
     public SharedPreferences loginPreferences;
@@ -89,6 +104,12 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     // Datos del user
     public String tipoUser;
     public int idUser;
+
+    public JSONObject medidas;
+    public GoogleMap map;
+    public HeatmapTileProvider mProvider;
+    public TileOverlay mOverlay;
+    List<WeightedLatLng> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,11 +175,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        // /Codigo relacionado con el navigation drawer
+        // Codigo relacionado con el navigation drawer
 
         crearFabSpeedDial();
-        mostrarTodosLosGases();
-
     }
 
     //------------------------------------------------------------------------------
@@ -220,28 +239,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         if (activoNodo != null) activoNodo.setText(R.string.inactivo);
         servidorFake.indicarActividadNodo(actividad);
     }
-
-    //--------------------------------------------------------------------------
-    //En el caso de tener que redondear la imagen de perfil. No está comprobada la funcionalidad de este método porque todavía no ha surgido el problema
-    //--------------------------------------------------------------------------
-    /*void redondearImagen (){
-
-        //extraemos el drawable en un bitmap
-        Drawable originalDrawable = getResources().getDrawable(R.drawable.perfil);
-        Bitmap originalBitmap = ((BitmapDrawable) originalDrawable).getBitmap();
-
-        //creamos el drawable redondeado
-        RoundedBitmapDrawable roundedDrawable =
-                RoundedBitmapDrawableFactory.create(getResources(), originalBitmap);
-
-        //asignamos el CornerRadius
-        roundedDrawable.setCornerRadius(originalBitmap.getHeight());
-
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
-
-        imageView.setImageDrawable(roundedDrawable);
-
-    }*/
 
 
     // -----------------------------------------------------------------------
@@ -352,41 +349,43 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                 // --------------------------------------------------------------------------------
 
                 // El switch cambia el checked del item dependiendo del item
-                // -- falta implementar el filtrado real de los contenedores
                 switch (item.getItemId()) {
                     case R.id.coFilter:
-                        if (item.isChecked())
-                        {
+                        if (item.isChecked()) {
                             showOnMap[0] = true;
                         }
                         else{
                             showOnMap[0] = false;
+                            // borrar esas medidas
                         }
+                        refrescarHeatMap();
                         return false;
                     case R.id.noxFilter:
-                        if (item.isChecked())
-                        {
+                        if (item.isChecked()) {
                             showOnMap[1] = true;
                         }
                         else{
                             showOnMap[1] = false;
                         }
+                        refrescarHeatMap();
                         return false;
                     case R.id.azufreFilter:
-                        if (item.isChecked()){
+                        if (item.isChecked()) {
                             showOnMap[2] = true;
                         }
                         else{
                             showOnMap[2] = false;
                         }
+                        refrescarHeatMap();
                         return false;
                     case R.id.ozonoFilter:
-                        if (item.isChecked()){
+                        if (item.isChecked()) {
                             showOnMap[3] = true;
                         }
                         else{
                             showOnMap[3] = false;
                         }
+                        refrescarHeatMap();
                         return false;
                     default:
                         return false;
@@ -406,6 +405,11 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         for (int i = 0; i < showOnMap.length; i++) {
             showOnMap[i] = true;
         }
+        mostrarMedidasDeEsteTipoDeGas(2);
+        mostrarMedidasDeEsteTipoDeGas(3);
+        mostrarMedidasDeEsteTipoDeGas(4);
+        mostrarMedidasDeEsteTipoDeGas(5);
+        addHeatMap(list);
     }
     // -----------------------------------------------------------------------
     // -> alarmaQueSuenaCadaMinuto ->
@@ -513,5 +517,151 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         // Se suma 1 cada 1000 milisegundos
         handlerInactividad.postDelayed(runnableInactividad, 1000);
     }
+
+    // -----------------------------------------------------------------------
+    // idTipoDeGas: N -> mostrarMedidasDeEsteTipoDeGas ->
+    // -----------------------------------------------------------------------
+    public void mostrarMedidasDeEsteTipoDeGas(int idTipoDeGas) {
+        int length;
+        MarkerOptions option = new MarkerOptions();
+        LatLng coords;
+        double latitud;
+        double longitud;
+        double valor;
+
+        try {
+            //Recogemos el tamaño del array con las medidas en JSON
+            length = medidas.getJSONArray("medidas").length();
+
+            // Dibujamos marcadores para cada una de las medidas
+            for (int i = 0; i<length; i++) {
+
+                //Log.d("pruebas", medidas.getJSONArray("medidas").getJSONObject(i).toString());
+
+                //Guardamos cada una de las medidas en una variable auxiliar
+                JSONObject medida = medidas.getJSONArray("medidas").getJSONObject(i);
+
+                if (medida.getInt("IdTipoMedida") == idTipoDeGas) {
+                    //Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
+                    //Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
+                    // Guardamos la latitud de cada una cogiendo de la medida
+                    latitud = Double.parseDouble(medida.getString("Latitud"));
+                    longitud = Double.parseDouble(medida.getString("Longitud"));
+                    coords = new LatLng(latitud, longitud);
+
+                    // Guardamos el valor de la medida
+                    valor = Double.parseDouble(medida.getString("Valor"));
+                    list.add(new WeightedLatLng(coords, valor));
+                    //Log.d("pruebas", "Valor: " + medida.getString("Valor"));
+                    //Configuración del marcador
+                    option.position(coords).title("UPV").draggable(true).
+                            snippet("Contaminación:" + valor).
+                            icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                    //map.addMarker(option);
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // -> refrescarHeatMap ->
+    // -----------------------------------------------------------------------
+    public void refrescarHeatMap() {
+        list.clear();
+        // CO
+        if (showOnMap[0]) {
+            mostrarMedidasDeEsteTipoDeGas(2);
+        }
+        // NOX
+        if (showOnMap[1]) {
+            mostrarMedidasDeEsteTipoDeGas(3);
+        }
+        // SO2
+        if (showOnMap[2]) {
+            mostrarMedidasDeEsteTipoDeGas(4);
+        }
+        // OZONO
+        if (showOnMap[3]) {
+            mostrarMedidasDeEsteTipoDeGas(5);
+        }
+        if (!list.isEmpty()) {
+            mProvider.setWeightedData(list);
+            mOverlay.clearTileCache();
+        }
+        else {
+            mOverlay.remove();
+        }
+    }
+
+    /**
+     * Lista -> addHeatMap()
+     *
+     *   Creación del mapa de calor, introduciendo una lista de valores, dichos contienen
+     * colecciones formadas por las coordenadas y el valor de cada una de ellas.
+     *
+     * @param l
+     *
+     * - Matthew Conde Oltra -
+     */
+
+    public void addHeatMap(List<WeightedLatLng> l) {
+        // Radius alternativo
+        final int ALT_HEATMAP_RADIUS = 28;
+
+        // Opacidad alternativa
+        final double ALT_HEATMAP_OPACITY = 0.3;
+
+        //Gradiente alternativo (green -> red) 5 niveles
+        final int[] COLORS = {
+                Color.argb(0, 0, 255, 0),// transparent
+                Color.rgb(0, 255, 0), // green
+                Color.rgb(255, 255, 0), // yellow
+                Color.rgb(255, 0, 0) // red
+        };
+        final float[] START_POINTS = {
+                0.0f,  //0-50 //transparent
+                0.005f, //51-100 //green
+                0.01f, //101-150 //yellow
+                0.015f, //151-200 //red
+        };
+
+        final Gradient HEATMAP_GRADIENT = new Gradient(COLORS, START_POINTS);
+        // Creación del mapa de calor con sus coordenadas(latlng) y los valores de cada uno
+        mProvider = new HeatmapTileProvider.Builder()
+                .weightedData(l)
+                .radius(ALT_HEATMAP_RADIUS)
+                .gradient(HEATMAP_GRADIENT)
+                .opacity(ALT_HEATMAP_OPACITY)
+                .build();
+
+        // Agregando superposición al mapa
+        mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+    }
+
+
+    //--------------------------------------------------------------------------
+    //En el caso de tener que redondear la imagen de perfil. No está comprobada la funcionalidad de este método porque todavía no ha surgido el problema
+    //--------------------------------------------------------------------------
+    /*void redondearImagen (){
+
+        //extraemos el drawable en un bitmap
+        Drawable originalDrawable = getResources().getDrawable(R.drawable.perfil);
+        Bitmap originalBitmap = ((BitmapDrawable) originalDrawable).getBitmap();
+
+        //creamos el drawable redondeado
+        RoundedBitmapDrawable roundedDrawable =
+                RoundedBitmapDrawableFactory.create(getResources(), originalBitmap);
+
+        //asignamos el CornerRadius
+        roundedDrawable.setCornerRadius(originalBitmap.getHeight());
+
+        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+
+        imageView.setImageDrawable(roundedDrawable);
+
+    }*/
 
 }

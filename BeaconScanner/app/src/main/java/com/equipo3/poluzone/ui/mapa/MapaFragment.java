@@ -120,8 +120,6 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         /**
          *  - Matthew Conde Oltra -
          *
-         * CONCEPTO - COMO ENVIAR LOS DATOS CON CALLBACK A UN FRAGMENT DESDE SERVIDORFAKE?
-         *
          * 1. Añadimos en el fragment al que vamos a pasarle los datos la referencia a la
          * actividad del navigation drawer. Con las siguiente línea:
          *
@@ -165,7 +163,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
+        navigation.map = googleMap;
         LatLng pp = new LatLng(38.996100, -0.166439);
 
         try {
@@ -187,13 +185,13 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         * aparecen en el mapa al darle a un marker. A parte añadimos la funcionalidad
         * de que se aleje del mapa al darle a la vez dos veces seguidas con dos dedos.
          *****************************************************************************/
-        map.getUiSettings().setCompassEnabled(false);
-        map.getUiSettings().setMapToolbarEnabled(false);
-        map.getUiSettings().setMyLocationButtonEnabled(true);
-        map.getUiSettings().setIndoorLevelPickerEnabled(true);
+        navigation.map.getUiSettings().setCompassEnabled(false);
+        navigation.map.getUiSettings().setMapToolbarEnabled(false);
+        navigation.map.getUiSettings().setMyLocationButtonEnabled(true);
+        navigation.map.getUiSettings().setIndoorLevelPickerEnabled(true);
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(pp, 15.0f));
-        map.setInfoWindowAdapter(infoWindow);
+        navigation.map.moveCamera(CameraUpdateFactory.newLatLngZoom(pp, 15.0f));
+        navigation.map.setInfoWindowAdapter(infoWindow);
     }
 
     @Override
@@ -214,11 +212,13 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
     public void callbackMedidas(boolean resultado, JSONObject medidas) {
         Log.d("MAPA", "Estamos en el callback medidas");
 
-        if(resultado)
-        {
+        if(resultado) {
             Log.d("MAPA", "Tenemos las medidas.");
             //Log.d("MAPA", medidas.toString());
-            MarkerOptions option = new MarkerOptions();
+            navigation.medidas = medidas;
+            navigation.mostrarTodosLosGases();
+        }
+         /*   MarkerOptions option = new MarkerOptions();
             int length;
             LatLng coords;
             double latitud;
@@ -243,7 +243,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     Ozono = 3 */
 
                     // CO
-                    if (navigation.showOnMap[0] && medida.getInt("IdTipoMedida") == 2) {
+           /*         if (navigation.showOnMap[0] && medida.getInt("IdTipoMedida") == 2) {
                         Log.d("pruebas", "valor showOnMap 0 "+ navigation.showOnMap[0]);
                         //Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
                         //Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
@@ -296,7 +296,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                 addHeatMap(list);
             }
 
-        }
+        }*/
         else
         {
             Log.d("MAPA", "Las medidas no existen.");
@@ -376,12 +376,12 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     JSONObject medida;
                     // Guardamos el valor de la estacion
                     nombre = estacion.getString("Nombre");
-                    Log.d(TAG, "Nombre: "+nombre);
+                 //   Log.d(TAG, "Nombre: "+nombre);
 
                     if(estacion.getInt("ID")==50)
                     {
                         medida = estacion.getJSONObject("Medidas");
-                        Log.d(TAG, medida.toString());
+                  //      Log.d(TAG, medida.toString());
                         so2 = "SO2: "+medida.getString("s02")+"ppm";
                         co = "CO: "+medida.getString("co")+"ppm";
                         no = "NO: "+medida.getString("no")+"ppm";
@@ -414,7 +414,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                             //.snippet(nombre)
                             .icon(smallMarkerIcon);
 
-                    map.addMarker(option);
+                    navigation.map.addMarker(option);
                 }
 
             } catch (JSONException e) {
