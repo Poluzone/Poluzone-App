@@ -68,7 +68,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
     /**
      * Opacidad alternativa
      */
-    private static final double ALT_HEATMAP_OPACITY = 0.5;
+    private static final double ALT_HEATMAP_OPACITY = 0.3;
 
     /****************************************************************
      *
