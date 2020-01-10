@@ -4,8 +4,11 @@ import android.app.FragmentManager;
 import android.content.Context;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.util.Base64;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
@@ -14,14 +17,22 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.equipo3.poluzone.ui.inicio.InicioConductorFragment;
 
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Map;
 
 // -----------------------------------------------------------------------
 // ServidorFake.java
@@ -32,7 +43,7 @@ import org.json.JSONObject;
 // -----------------------------------------------------------------------
 
 
-public class ServidorFake{
+public class ServidorFake {
 
     android.app.Activity activity;
 
@@ -45,7 +56,8 @@ public class ServidorFake{
     //String IP = "192.168.1.107";
     //String IP = "192.168.43.125"; //Red Matthew
     //String IP = "192.168.43.18"; //Red Rosa
-    String URL = "https://juconol.upv.edu.es"; //Red Matthew
+    String URL = "http://192.168.1.21:8081";
+    //String URL = "https://juconol.upv.edu.es"; //Red Matthew
     //  "172.20.10.5";
     int puerto = 8080;
     private SharedPreferences loginPreferences;
@@ -93,9 +105,9 @@ public class ServidorFake{
     // ---------------------------------------------------------------------------
     // Medida -> insertarMedida() ->
     // ---------------------------------------------------------------------------
-    public void insertarMedida(Medida medidaContaminacion)  {
+    public void insertarMedida(Medida medidaContaminacion) {
         Log.d("pruebas", "guardarContaminacion()");
-        String url = URL+"/insertarMedida/"; /*+medidaContaminacion.getMedida(); */
+        String url = URL + "/insertarMedida/"; /*+medidaContaminacion.getMedida(); */
 
         JSONObject datos = new JSONObject();
 
@@ -115,17 +127,17 @@ public class ServidorFake{
         }
 
         // Hacemos la peticion
-        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url,datos,
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("pruebas",response.toString());
+                        Log.d("pruebas", response.toString());
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("pruebas",error.toString());
+                        Log.d("pruebas", error.toString());
                     }
                 }
         );
@@ -138,15 +150,14 @@ public class ServidorFake{
     // ------------------------------------------------------------------------------
     public void getMediaCalidadDelAireDeLaJornada(long desde, long hasta, int id) {
         Log.d("pruebas", "getMediaCalidadDelAireDeLaJornada()");
-        String url = URL+"/getMediaCalidadDelAireDeLaJornada";
+        String url = URL + "/getMediaCalidadDelAireDeLaJornada";
 
         // Creamos el intervalo de tiempo
         JSONObject intervalo = new JSONObject();
         try {
             intervalo.put("desde", desde);
             intervalo.put("hasta", hasta);
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             Log.d("pruebas", e.toString());
         }
 
@@ -165,11 +176,10 @@ public class ServidorFake{
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("pruebas",response.toString());
+                        Log.d("pruebas", response.toString());
                         try {
                             callback.callbackMediaCalidadAire(response.getDouble("media"));
-                        }
-                        catch (JSONException e) {
+                        } catch (JSONException e) {
                             Log.d("pruebas", e.toString());
                         }
                     }
@@ -177,7 +187,7 @@ public class ServidorFake{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("pruebas",error.toString());
+                        Log.d("pruebas", error.toString());
                     }
                 }
         );
@@ -185,20 +195,20 @@ public class ServidorFake{
         // Add the request to the RequestQueue.
         queue.add(jsonobj);
     }
+
     // ------------------------------------------------------------------------------
     // desde: N, hasta: N, IdUsuario: N -> getMediaCalidadDelAireDeLaJornada() -> R
     // ------------------------------------------------------------------------------
     public void getMedidasPorUsuario(long desde, long hasta, int id) {
         Log.d("pruebas", "getMedidasDeEsteUsuarioPorFecha()");
-        String url = URL+"/getMedidasDeEsteUsuarioPorFecha";
+        String url = URL + "/getMedidasDeEsteUsuarioPorFecha";
 
         // Creamos el intervalo de tiempo
         JSONObject intervalo = new JSONObject();
         try {
             intervalo.put("desde", desde);
             intervalo.put("hasta", hasta);
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             Log.d("pruebas", e.toString());
         }
 
@@ -217,7 +227,7 @@ public class ServidorFake{
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("pruebas",response.toString());
+                        Log.d("pruebas", response.toString());
 
                         callbackMisMedidas.callbackMisMedidas(response);
 
@@ -226,7 +236,7 @@ public class ServidorFake{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("pruebas",error.toString());
+                        Log.d("pruebas", error.toString());
                     }
                 }
         );
@@ -239,9 +249,9 @@ public class ServidorFake{
     // ---------------------------------------------------------------------------
     // mail:texto, password:texto, telefono:N -> insertarUsuario() ->
     // ---------------------------------------------------------------------------
-    public void insertarUsuario(String email, String password, int telefono,String tipoUsuario) {
+    public void insertarUsuario(String email, String password, int telefono, String tipoUsuario) {
         Log.d("pruebas", "insertarUsuario()");
-        String url = URL+"/insertarUsuario/";
+        String url = URL + "/insertarUsuario/";
 
         JSONObject datos = new JSONObject();
 
@@ -258,16 +268,15 @@ public class ServidorFake{
         }
 
         // Hacemos la peticion
-        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url,datos,
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("pruebas",response.toString());
+                        Log.d("pruebas", response.toString());
                         try {
                             if (response.get("status").equals(true)) {
                                 callbackRegistro.callbackRegistro(true, response);
-                            }
-                            else {
+                            } else {
                                 callbackRegistro.callbackRegistro(false, response);
                             }
                         } catch (JSONException e) {
@@ -275,24 +284,22 @@ public class ServidorFake{
                             Log.d("pruebas", e.toString());
                             callbackRegistro.callbackRegistro(false, null);
                         }
-                    //    callback.callback(true, response);
+                        //    callback.callback(true, response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         NetworkResponse networkResponse = error.networkResponse;
-                        Log.d("pruebas",error.toString());
+                        Log.d("pruebas", error.toString());
                         if (error instanceof NoConnectionError || error instanceof TimeoutError) {
                             callbackRegistro.callbackRegistro(false, null);
-                        }
-                        else if (networkResponse.statusCode == 404){
-                            Log.d("pruebas",networkResponse.statusCode + "");
+                        } else if (networkResponse.statusCode == 404) {
+                            Log.d("pruebas", networkResponse.statusCode + "");
                             callbackRegistro.callbackRegistro(false, null);
 
-                        }
-                        else if (networkResponse.statusCode == 401){
-                            Log.d("pruebas",networkResponse.statusCode + "");
+                        } else if (networkResponse.statusCode == 401) {
+                            Log.d("pruebas", networkResponse.statusCode + "");
                             callbackRegistro.callbackRegistro(false, null);
                         }
                     }
@@ -306,9 +313,9 @@ public class ServidorFake{
     // ---------------------------------------------------------------------------
     // email, pass -> comprobarUsuarioPorEmail() ->
     // ---------------------------------------------------------------------------
-    public void comprobarUsuarioPorEmail (String email, String pass) {
+    public void comprobarUsuarioPorEmail(String email, String pass) {
         Log.d("pruebas", "GetUsuarioPorEmail()");
-        String url = URL+"/ComprobarLogin";
+        String url = URL + "/ComprobarLogin";
 
         JSONObject datos = new JSONObject();
 
@@ -327,12 +334,11 @@ public class ServidorFake{
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("pruebas",response.toString());
+                        Log.d("pruebas", response.toString());
                         try {
                             if (response.get("status").equals(true)) {
                                 callback.callbackLogin(true, response);
-                            }
-                            else {
+                            } else {
                                 callback.callbackLogin(false, response);
                             }
                         } catch (JSONException e) {
@@ -346,18 +352,16 @@ public class ServidorFake{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         NetworkResponse networkResponse = error.networkResponse;
-                        Log.d("pruebas",error.toString());
+                        Log.d("pruebas", error.toString());
                         if (error instanceof NoConnectionError || error instanceof TimeoutError) {
                             callback.callbackLogin(false, null);
-                        }
-                        else if (networkResponse.statusCode == 404){
-                            Log.d("pruebas",networkResponse.statusCode + "");
+                        } else if (networkResponse.statusCode == 404) {
+                            Log.d("pruebas", networkResponse.statusCode + "");
                             JSONObject response = new JSONObject();
                             callback.callbackLogin(false, response);
-                        }
-                        else if (networkResponse.statusCode == 401){
+                        } else if (networkResponse.statusCode == 401) {
                             JSONObject object = new JSONObject();
-                            Log.d("pruebas",networkResponse.statusCode + "");
+                            Log.d("pruebas", networkResponse.statusCode + "");
                             callback.callbackLogin(false, object);
                         }
                     }
@@ -367,25 +371,25 @@ public class ServidorFake{
         // Add the request to the RequestQueue.
         queue.add(jsonobj);
     }
+
     /**
      * getTodasLasMedidasPorFecha : devuelve todas las medidas desde, hasta una fecha
      * desde: N, hasta: N ->
-     *                  getTodasLasMedidasPorFecha()
-     *                                  -> Medidas: JSON
-     *
-     *  - Matthew Conde Oltra -
+     * getTodasLasMedidasPorFecha()
+     * -> Medidas: JSON
+     * <p>
+     * - Matthew Conde Oltra -
      */
-    public void getTodasLasMedidasPorFecha (long desde, long hasta) {
+    public void getTodasLasMedidasPorFecha(long desde, long hasta) {
         Log.d("MEDIDAS", "/GetTodasLasMedidasPorFecha");
-        String url = URL+"/GetTodasLasMedidasPorFecha";
+        String url = URL + "/GetTodasLasMedidasPorFecha";
 
         // Creamos el intervalo de tiempo
         JSONObject intervalo = new JSONObject();
         try {
             intervalo.put("desde", desde);
             intervalo.put("hasta", hasta);
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             Log.d("TODASMEDIDAS", e.toString());
         }
 
@@ -395,16 +399,13 @@ public class ServidorFake{
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        Log.d("SERVIDOR",response.toString());
+                        Log.d("SERVIDOR", response.toString());
 
-                        if(response == null)
-                        {
+                        if (response == null) {
                             // No hace nada
                             Log.d("SERVIDOR", "Response es null");
                             callback.callbackMedidas(false, response);
-                        }
-                        else
-                        {
+                        } else {
                             callback.callbackMedidas(true, response);
                         }
                     }
@@ -413,7 +414,7 @@ public class ServidorFake{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         NetworkResponse networkResponse = error.networkResponse;
-                        Log.d("ERRORSERVIDOR",error.toString());
+                        Log.d("ERRORSERVIDOR", error.toString());
 
                     }
                 }
@@ -423,14 +424,14 @@ public class ServidorFake{
 
     /**
      * getEstacionesOficiales : devuelve estaciones oficiales de la BBDD
-     *
+     * <p>
      * getEstacionesOficiales() -> Estaciones: JSON
-     *
-     *  - Matthew Conde Oltra -
+     * <p>
+     * - Matthew Conde Oltra -
      */
-    public void getEstacionesOficiales () {
+    public void getEstacionesOficiales() {
         Log.d("MEDIDAS", "/GetEstacionesOficiales");
-        String url = URL+"/getEstacionesOficiales";
+        String url = URL + "/getEstacionesOficiales";
 
 
         // Hacemos la peticion
@@ -439,16 +440,13 @@ public class ServidorFake{
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        Log.d("SERVIDOR",response.toString());
+                        Log.d("SERVIDOR", response.toString());
 
-                        if(response == null)
-                        {
+                        if (response == null) {
                             // No hace nada
                             Log.d("SERVIDOR", "Response es null");
                             callback.callbackEstaciones(false, response);
-                        }
-                        else
-                        {
+                        } else {
                             callback.callbackEstaciones(true, response);
                         }
                     }
@@ -457,7 +455,7 @@ public class ServidorFake{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         NetworkResponse networkResponse = error.networkResponse;
-                        Log.d("ERRORSERVIDOR",error.toString());
+                        Log.d("ERRORSERVIDOR", error.toString());
 
                     }
                 }
@@ -468,16 +466,14 @@ public class ServidorFake{
     /**
      * getUsuario : devuelve el id del usuario.
      * email: string ->
-     *                  getUsuario()
-     *                                  -> idUsuario: N
+     * getUsuario()
+     * -> idUsuario: N
      *
-     * @param email
-     *
-     *  - Matthew Conde Oltra -
+     * @param email - Matthew Conde Oltra -
      */
-    public void getUsuario (String email) {
-        Log.d("GETUSUARIO", "GetUsuario() con"+email);
-        String url = URL+"/GetUsuarioPorEmail";
+    public void getUsuario(String email) {
+        Log.d("GETUSUARIO", "GetUsuario() con" + email);
+        String url = URL + "/GetUsuarioPorEmail";
 
         JSONObject datos = new JSONObject();
 
@@ -487,7 +483,7 @@ public class ServidorFake{
 
             Log.d("GETUSUARIO", datos.toString());
         } catch (JSONException e) {
-            Log.d("GETUSUARIOERROR", "Error de email:"+e.toString());
+            Log.d("GETUSUARIOERROR", "Error de email:" + e.toString());
         }
 
         // Hacemos la peticion
@@ -496,13 +492,10 @@ public class ServidorFake{
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        Log.d("GETUSUARIO",response.toString());
-                        if(response == null)
-                        {
+                        Log.d("GETUSUARIO", response.toString());
+                        if (response == null) {
                             // No hace nada
-                        }
-                        else
-                        {
+                        } else {
                             callbackRegistro.callbackUsuario(true, response);
                         }
 
@@ -512,7 +505,7 @@ public class ServidorFake{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         NetworkResponse networkResponse = error.networkResponse;
-                        Log.d("GETUSUARIO",error.toString());
+                        Log.d("GETUSUARIO", error.toString());
 
                     }
                 }
@@ -523,12 +516,13 @@ public class ServidorFake{
         //Log.d("GETUSUARIO", id);
         //return id;
     }
+
     // ---------------------------------------------------------------------------
     // idUsuario, idSensor -> vincularIDdeUsuarioConSensor() ->
     // ---------------------------------------------------------------------------
     public void vincularIDdeUsuarioConSensor(int idUsuario, final int idSensor) {
         Log.d("pruebas", "vincularIDdeUsuarioConSensor()");
-        String url = URL+"/insertarIdUsuarioConIdsensor";
+        String url = URL + "/insertarIdUsuarioConIdsensor";
 
         JSONObject datos = new JSONObject();
 
@@ -547,7 +541,7 @@ public class ServidorFake{
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("pruebasIDUSuario",response.toString());
+                        Log.d("pruebasIDUSuario", response.toString());
                         loginPreferences.edit().putInt("idSensor", idSensor);
                         loginPreferences.edit().commit();
                     }
@@ -555,7 +549,7 @@ public class ServidorFake{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("pruebasIDUSuario",error.toString());
+                        Log.d("pruebasIDUSuario", error.toString());
                     }
                 }
         );
@@ -570,7 +564,7 @@ public class ServidorFake{
     // ---------------------------------------------------------------------------
     public void indicarActividadNodo(String activo) {
         Log.d("pruebas", "indicarActividadNodo()");
-        String url = URL+"/indicarActividadNodo";
+        String url = URL + "/indicarActividadNodo";
 
         int idSensor = loginPreferences.getInt("idSensor", 0);
 
@@ -590,13 +584,13 @@ public class ServidorFake{
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("pruebas",response.toString());
+                        Log.d("pruebas", response.toString());
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("pruebas",error.toString());
+                        Log.d("pruebas", error.toString());
                     }
                 }
         );
@@ -605,5 +599,56 @@ public class ServidorFake{
         queue.add(jsonobj);
     }
 
+    // ---------------------------------------------------------------------------
+    // imagen -> insertarImagen() ->
+    // ---------------------------------------------------------------------------
+    public void insertarImagen(Bitmap imageBitmap) throws IOException {
+        //create a file to write bitmap data
+        File f = new File(activity.getBaseContext().getCacheDir(), "imagen.png");
+        f.createNewFile();
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        // Comprimimos la imagen
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos);
+        byte[] bitmapdata = bos.toByteArray();
+        final String encodedImage = Base64.encodeToString(bitmapdata, Base64.DEFAULT);
+
+        //write the bytes in file
+        FileOutputStream fos = new FileOutputStream(f);
+        fos.write(bitmapdata);
+        fos.flush();
+        fos.close();
+
+        String url = URL + "/insertarImagen/";
+        Log.d("pruebas", url);
+
+        JSONObject datos = new JSONObject();
+
+        // Anyadimos los datos al json
+        try {
+            datos.put("imagen", encodedImage);
+            Log.d("pruebas json", datos.toString());
+        } catch (JSONException e) {
+            Log.d("pruebas", e.toString());
+        }
+
+        // Hacemos la peticion
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, datos,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("pruebas", response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("pruebas", error.toString());
+                    }
+                }
+        );
+
+        queue.add(jsonobj);
+    }
 
 }

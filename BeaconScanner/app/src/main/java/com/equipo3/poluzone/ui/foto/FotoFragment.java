@@ -19,8 +19,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.AuthFailureError;
+import com.equipo3.poluzone.NavigationDrawerActivity;
 import com.equipo3.poluzone.R;
 import com.leinardi.android.speeddial.SpeedDialView;
+
+import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -33,12 +37,13 @@ public class FotoFragment extends Fragment {
     private ImageView foto;
     private ImageButton botonCamera;
     private SpeedDialView speedDialView;
+    public NavigationDrawerActivity navigationDrawerActivity;
 
     //---------------------------------------------------------------------------
     // Metodo llamado al crear la actividad
     //---------------------------------------------------------------------------
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             final ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_foto, container, false);
         
@@ -56,11 +61,12 @@ public class FotoFragment extends Fragment {
         botonCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Log.d("pruebas", "Abrir camara");
                 abrirCamara();
-
             }
         });
+        navigationDrawerActivity = (NavigationDrawerActivity) getParentFragment().getActivity();
+      //  navigationDrawerActivity.servidorFake.callback = this;
 
         return root;
     }
@@ -134,6 +140,11 @@ public class FotoFragment extends Fragment {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 foto.setImageBitmap(imageBitmap);
+                try {
+                    navigationDrawerActivity.servidorFake.insertarImagen(imageBitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
     }
 
