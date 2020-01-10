@@ -81,5 +81,10 @@
     <string name="_163"><![CDATA[>163]]></string>
     <string name="_67"><![CDATA[<67]]></string>
 
+    <string name="infoCo">Hola texto vacio predeterminado</string>
+    <string name="infoNOX">Hola texto vacio predeterminado</string>
+    <string name="infoDioxi">Hola texto vacio predeterminado</string>
+    <string name="infoOzono">Hola texto vacio predeterminado</string>
+
 
 </resources>
