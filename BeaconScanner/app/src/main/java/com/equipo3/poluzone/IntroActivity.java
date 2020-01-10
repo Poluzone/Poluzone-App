@@ -57,7 +57,7 @@ public class IntroActivity extends AppIntro2 {
 
         // Permissions
         // Ask for CAMERA permission on the second slide
-        askForPermissions(new String[]{Manifest.permission.CAMERA}, 2);
+        askForPermissions(new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE }, 2);
         // Ask for LOCALIZATION permission on the third slide
         askForPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 3);
     }
