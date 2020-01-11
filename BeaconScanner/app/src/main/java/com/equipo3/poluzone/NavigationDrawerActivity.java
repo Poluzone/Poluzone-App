@@ -140,8 +140,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     public TileOverlay mOverlay;
     List<WeightedLatLng> list = new ArrayList<>();
 
-    Polyline polyline = null;
+    Polyline[] polyline = null;
     Marker markerDestino = null;
+    int longitud = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,8 +245,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         NavController navController;
         if (tipoUser.equals("Conductor")) {
             navController = Navigation.findNavController(this, R.id.nav_host_fragmentc);
-        }
-        else {
+        } else {
             navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         }
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
@@ -401,8 +401,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     case R.id.coFilter:
                         if (item.isChecked()) {
                             showOnMap[0] = true;
-                        }
-                        else{
+                        } else {
                             showOnMap[0] = false;
                             // borrar esas medidas
                         }
@@ -411,8 +410,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     case R.id.noxFilter:
                         if (item.isChecked()) {
                             showOnMap[1] = true;
-                        }
-                        else{
+                        } else {
                             showOnMap[1] = false;
                         }
                         refrescarHeatMap();
@@ -420,8 +418,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     case R.id.azufreFilter:
                         if (item.isChecked()) {
                             showOnMap[2] = true;
-                        }
-                        else{
+                        } else {
                             showOnMap[2] = false;
                         }
                         refrescarHeatMap();
@@ -429,8 +426,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     case R.id.ozonoFilter:
                         if (item.isChecked()) {
                             showOnMap[3] = true;
-                        }
-                        else{
+                        } else {
                             showOnMap[3] = false;
                         }
                         refrescarHeatMap();
@@ -459,6 +455,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         mostrarMedidasDeEsteTipoDeGas(5);
         addHeatMap(list);
     }
+
     // -----------------------------------------------------------------------
     // -> alarmaQueSuenaCadaMinuto ->
     // Crea el handler para el timer de hayqueactualizarmediciones
@@ -487,7 +484,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
             receptorBLE.BTAdapter.startLeScan(receptorBLE.callbackLeScan);
             Log.d("pruebas", "alarmaminuto");
             // Sólo se hace si está conectado al beacon y si se ha movido
-         //   receptorBLE.localizadorGPS.obtenerMiPosicionGPS();
+            //   receptorBLE.localizadorGPS.obtenerMiPosicionGPS();
             Location posicionAnterior = receptorBLE.posicion;
             if (receptorBLE.ultimaTramaEncontrada != null && receptorBLE.localizadorGPS.meHeMovido(posicionAnterior))
                 hayQueActualizarMedicionesYEnviarlasAlServidor();
@@ -582,7 +579,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
             length = medidas.getJSONArray("medidas").length();
 
             // Dibujamos marcadores para cada una de las medidas
-            for (int i = 0; i<length; i++) {
+            for (int i = 0; i < length; i++) {
 
                 //Log.d("pruebas", medidas.getJSONArray("medidas").getJSONObject(i).toString());
 
@@ -638,21 +635,18 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         if (!list.isEmpty()) {
             mProvider.setWeightedData(list);
             mOverlay.clearTileCache();
-        }
-        else {
+        } else {
             mOverlay.remove();
         }
     }
 
     /**
      * Lista -> addHeatMap()
-     *
-     *   Creación del mapa de calor, introduciendo una lista de valores, dichos contienen
+     * <p>
+     * Creación del mapa de calor, introduciendo una lista de valores, dichos contienen
      * colecciones formadas por las coordenadas y el valor de cada una de ellas.
      *
-     * @param l
-     *
-     * - Matthew Conde Oltra -
+     * @param l - Matthew Conde Oltra -
      */
 
     public void addHeatMap(List<WeightedLatLng> l) {
@@ -712,7 +706,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     public boolean onMarkerClick(Marker marker) {
                         if (marker.getPosition().equals(place.getLatLng()))
                             // No hace nada mas
-                        return true;
+                            return true;
                             // Hace el click de siempre (para estaciones oficiales)
                         else return false;
                     }
@@ -733,23 +727,24 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                 DateTime now = new DateTime();
                 try {
                     DirectionsResult result = DirectionsApi.newRequest(getGeoContext())
-                            .mode(TravelMode.WALKING).origin(new com.google.maps.model.LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))
-                            .destination(new com.google.maps.model.LatLng(place.getLatLng().latitude, place.getLatLng().longitude)).departureTime(now)
+                            .mode(TravelMode.DRIVING).origin(new com.google.maps.model.LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))
+                            .destination(new com.google.maps.model.LatLng(place.getLatLng().latitude, place.getLatLng().longitude)).departureTime(now).alternatives(true)
                             .await();
                     Log.d("pruebas", result.toString());
 
                     // Calculamos la mejor ruta
-                   // calcularMejorRuta(result);
-                    addPolyline(result, map);
+                    // calcularMejorRuta(result);
+                    int[] ponderacionRutas = calcularMejorRuta(result);
+                    addPolyline(result, map, ponderacionRutas);
                 } catch (ApiException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                }/* catch (JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
-                }*/
+                }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
@@ -769,33 +764,77 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                 .setWriteTimeout(1, TimeUnit.SECONDS);
     }
 
-    private void addPolyline(DirectionsResult results, GoogleMap mMap) {
+    private void addPolyline(DirectionsResult results, GoogleMap mMap, int[] valoresContaminacionRutas) {
         // Quitamos la ruta anterior
-        if (polyline != null) polyline.remove();
-        List<LatLng> decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.getEncodedPath());
-        // Pintamos la ruta en el mapa
-        polyline = mMap.addPolyline(new PolylineOptions().addAll(decodedPath)
-                // Añadimos estilo a la ruta
-            .color(Color.parseColor("#F88E52")).startCap(new RoundCap()).jointType(JointType.ROUND).width(20).endCap(new RoundCap()));
+        for(int i = 0; i < longitud; i++) {
+            if (polyline != null) polyline[i].remove();
+        }
+        longitud = results.routes.length;
+        polyline = new Polyline[results.routes.length];
+        Log.d("pruebasaaaaaa", results.routes.length + "");
+
+        // Mostramos todas las rutas
+        for (int i = 0; i < valoresContaminacionRutas.length; i++) {
+            List<LatLng> decodedPath = PolyUtil.decode(results.routes[i].overviewPolyline.getEncodedPath());
+            Log.d("prubeas", valoresContaminacionRutas[i]+"");
+            if (valoresContaminacionRutas[i] == 0) {
+                // Pintamos la ruta en el mapa
+                polyline[i] = mMap.addPolyline(new PolylineOptions().addAll(decodedPath)
+                        // Añadimos estilo a la ruta
+                        .color(Color.parseColor("#7AFA6B")).startCap(new RoundCap()).jointType(JointType.ROUND).width(20).endCap(new RoundCap()));
+            } else if (valoresContaminacionRutas[i] < 10) {
+                // Pintamos la ruta en el mapa
+                polyline[i] = mMap.addPolyline(new PolylineOptions().addAll(decodedPath)
+                        // Añadimos estilo a la ruta
+                        .color(Color.parseColor("#FFB252")).startCap(new RoundCap()).jointType(JointType.ROUND).width(20).endCap(new RoundCap()));
+            } else {
+                // Pintamos la ruta en el mapa
+                polyline[i] = mMap.addPolyline(new PolylineOptions().addAll(decodedPath)
+                        // Añadimos estilo a la ruta
+                        .color(Color.parseColor("#EB4737")).startCap(new RoundCap()).jointType(JointType.ROUND).width(20).endCap(new RoundCap()));
+            }
+
+        }
     }
 
-    private void calcularMejorRuta(DirectionsResult result) throws JSONException {
-        for (int i = 1; i < result.routes[0].overviewPolyline.decodePath().size() - 1; i++) {
-            com.google.maps.model.LatLng puntoRuta = result.routes[0].overviewPolyline.decodePath().get(i);
-            for (int j = 0; j < medidas.getJSONArray("medidas").length(); j++) {
-                JSONObject medida = medidas.getJSONArray("medidas").getJSONObject(i);
-                if (Double.parseDouble(medida.getString("Valor")) > 0) {
-                    float[] results = new float[1];
-                    LatLng puntoContaminacion = new LatLng(Double.parseDouble(medida.getString("Latitud")), Double.parseDouble(medida.getString("Longitud")));
-                    Location.distanceBetween(puntoRuta.lat, puntoRuta.lng, puntoContaminacion.latitude, puntoContaminacion.longitude, results);
-                   // if (results[0] < 200) {
-                        // Quitar el waypoint de la ruta
-                        result.routes[0].overviewPolyline.decodePath().get(i).lat = result.routes[0].overviewPolyline.decodePath().get(i).lat + 0.01;
-                        result.routes[0].overviewPolyline.decodePath().get(i).lng = result.routes[0].overviewPolyline.decodePath().get(i).lng + 0.01;
-                   // }
-                }
-            }
-        }
+    private int[] calcularMejorRuta(DirectionsResult result) throws JSONException {
+        int[] valorRutas = new int[result.routes.length];
+        for (int a = 0; a < result.routes.length; a++) {
+            for (int i = 1; i < result.routes[a].overviewPolyline.decodePath().size() - 1; i++) {
+                com.google.maps.model.LatLng puntoRuta = result.routes[a].overviewPolyline.decodePath().get(i);
+                for (int j = 0; j < medidas.getJSONArray("medidas").length(); j++) {
+                    JSONObject medida = medidas.getJSONArray("medidas").getJSONObject(j);
+
+                    // Si el valor de la medida es mayor a 162 (peligroso)
+                    if (Double.parseDouble(medida.getString("Valor")) > 162) {
+                        float[] results = new float[1];
+                        LatLng puntoContaminacion = new LatLng(Double.parseDouble(medida.getString("Latitud")), Double.parseDouble(medida.getString("Longitud")));
+                        Location.distanceBetween(puntoRuta.lat, puntoRuta.lng, puntoContaminacion.latitude, puntoContaminacion.longitude, results);
+                        Log.d("distancia", results[0]+"");
+                        // Si la distancia es menor de 30 metros
+                        if (results[0] < 30) {
+                            // Indicar ruta contaminada
+                            valorRutas[a] = valorRutas[a] + 2;
+                        }
+                    }//if
+
+                    // Si el valor de la medida es mayor a 67 (medio)
+                    else if (Double.parseDouble(medida.getString("Valor")) > 67) {
+                        float[] results = new float[1];
+                        LatLng puntoContaminacion = new LatLng(Double.parseDouble(medida.getString("Latitud")), Double.parseDouble(medida.getString("Longitud")));
+                        Location.distanceBetween(puntoRuta.lat, puntoRuta.lng, puntoContaminacion.latitude, puntoContaminacion.longitude, results);
+
+                        Log.d("distancia", results[0]+"");
+                        // Si la distancia es menor de 30 metros
+                        if (results[0] < 30) {
+                            // Indicar ruta contaminada
+                            valorRutas[a]++;
+                        }
+                    }//else if
+                }//for que recorre medidas
+            }//for que recorre puntos de la ruta
+        }//for que recorre rutas
+        return valorRutas;
     }
 
 }
