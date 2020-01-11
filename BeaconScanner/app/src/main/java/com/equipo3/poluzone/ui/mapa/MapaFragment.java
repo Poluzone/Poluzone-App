@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -154,6 +155,10 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
 
         navigation = (NavigationDrawerActivity) getParentFragment().getActivity();
         navigation.servidorFake.callback = this;
+
+        // Cambiar icono hamburguesa TODO: Encontrar hamburguesa pequeña para cambiar
+       /* Toolbar toolbar = (Toolbar) navigation.findViewById(R.id.toolbarc);
+        toolbar.setNavigationIcon(R.drawable.baseline_menu_black_48);*/
 
         long primeraFecha = 0;
         long fechaActual = 0;

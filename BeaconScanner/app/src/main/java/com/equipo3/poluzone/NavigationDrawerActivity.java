@@ -660,7 +660,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         final int ALT_HEATMAP_RADIUS = 28;
 
         // Opacidad alternativa
-        final double ALT_HEATMAP_OPACITY = 0.3;
+        final double ALT_HEATMAP_OPACITY = 0.5;
 
         //Gradiente alternativo (green -> red) 5 niveles
         final int[] COLORS = {
