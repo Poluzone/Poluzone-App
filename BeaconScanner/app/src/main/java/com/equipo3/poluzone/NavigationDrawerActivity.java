@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -686,6 +687,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     }
 
 
+    // Cuando ha seleccionado un destino de la ruta
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -693,14 +695,24 @@ public class NavigationDrawerActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
                 // Cogemos la información del searchbar
-                Place place = Autocomplete.getPlaceFromIntent(data);
+                final Place place = Autocomplete.getPlaceFromIntent(data);
 
                 // Añadimos un markador con la búsqueda
-                map.addMarker(new MarkerOptions().position(place.getLatLng()))/*.title(place.getName()).snippet(place.getName())).showInfoWindow()*/;
+                Marker marker = map.addMarker(new MarkerOptions().position(place.getLatLng()))/*.title(place.getName()).snippet(place.getName())).showInfoWindow()*/;
+
+                // Hacemos que no se pueda hacer clic a este marker
+                GoogleMap.OnMarkerClickListener onMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        if (marker.getPosition().equals(place.getLatLng()))
+                        return true;
+                        else return false;
+                    }
+                };
+                map.setOnMarkerClickListener(onMarkerClickListener);
 
                 // Movemos la cámara hacia el markador
                 map.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
-                Log.i("pruebas", "Place: " + place.getName() + ", " + place.getId());
 
                 // Cogemos la localización actual
                 LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
