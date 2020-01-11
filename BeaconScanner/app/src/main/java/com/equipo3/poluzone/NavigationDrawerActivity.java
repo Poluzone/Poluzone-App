@@ -20,14 +20,20 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.equipo3.poluzone.ui.mapa.MapaFragment;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.navigation.NavigationView;
 import com.google.maps.android.heatmaps.Gradient;
@@ -136,6 +142,13 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         servidorFake = new ServidorFake(this);
 
         NavController navController;
+
+        // Places sdk
+        // Initialize Places.
+        Places.initialize(this, getString(R.string.google_maps_key));
+
+        // Create a new Places client instance.
+        PlacesClient placesClient = Places.createClient(this);
 
         // Para los usuarios conductor
         if (tipoUser.equals("Conductor")) {
@@ -302,13 +315,16 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     case R.id.routes:
                         // Set the fields to specify which types of place data to
                         // return after the user has made a selection.
-                        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+                        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
                         // Start the autocomplete intent.
                         Intent intent = new Autocomplete.IntentBuilder(
-                                AutocompleteActivityMode.FULLSCREEN, fields)
+                                AutocompleteActivityMode.OVERLAY, fields)
+                                .setCountry("ES")
+                                .setTypeFilter(TypeFilter.ADDRESS)
                                 .build(getApplicationContext());
 
                         startActivityForResult(intent, 1);
+
                         // cerrar el fab con animacion cuando pulsas
                         speedDialView.close();
                         return true;
@@ -653,26 +669,23 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     }
 
 
-    //--------------------------------------------------------------------------
-    //En el caso de tener que redondear la imagen de perfil. No está comprobada la funcionalidad de este método porque todavía no ha surgido el problema
-    //--------------------------------------------------------------------------
-    /*void redondearImagen (){
-
-        //extraemos el drawable en un bitmap
-        Drawable originalDrawable = getResources().getDrawable(R.drawable.perfil);
-        Bitmap originalBitmap = ((BitmapDrawable) originalDrawable).getBitmap();
-
-        //creamos el drawable redondeado
-        RoundedBitmapDrawable roundedDrawable =
-                RoundedBitmapDrawableFactory.create(getResources(), originalBitmap);
-
-        //asignamos el CornerRadius
-        roundedDrawable.setCornerRadius(originalBitmap.getHeight());
-
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
-
-        imageView.setImageDrawable(roundedDrawable);
-
-    }*/
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                map.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getName()).);
+                map.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
+                Log.i("pruebas", "Place: " + place.getName() + ", " + place.getId());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i("pruebas", status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
 
 }

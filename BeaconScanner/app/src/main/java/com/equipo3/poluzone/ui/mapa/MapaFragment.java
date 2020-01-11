@@ -170,34 +170,6 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        // Initialize Places.
-        Places.initialize(navigation, getString(R.string.google_maps_key));
-
-        // Create a new Places client instance.
-        PlacesClient placesClient = Places.createClient(navigation);
-
-        // Initialize the AutocompleteSupportFragment.
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-
-        // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-
-        // Set up a PlaceSelectionListener to handle the response.
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-            }
-
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
-            }
-        });
     }
 
     @Override
@@ -255,109 +227,9 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             navigation.medidas = medidas;
             navigation.mostrarTodosLosGases();
         }
-         /*   MarkerOptions option = new MarkerOptions();
-            int length;
-            LatLng coords;
-            double latitud;
-            double longitud;
-            double valor;
-            List<WeightedLatLng> list = new ArrayList<WeightedLatLng>();
-
-            try {
-                //Recogemos el tamaño del array con las medidas en JSON
-                length = medidas.getJSONArray("medidas").length();
-
-                // Dibujamos marcadores para cada una de las medidas
-                for (int i = 0; i<length; i++) {
-                    // Observamos las medidas en el logcat
-                    Log.d("MAPA", medidas.getJSONArray("medidas").getJSONObject(i).toString());
-                    //Guardamos cada una de las medidas en una variable auxiliar
-                    JSONObject medida = medidas.getJSONArray("medidas").getJSONObject(i);
-
-                    /*CO = 0
-                    NOX = 1
-                    SO2 = 2
-                    Ozono = 3 */
-
-        // CO
-           /*         if (navigation.showOnMap[0] && medida.getInt("IdTipoMedida") == 2) {
-                        Log.d("pruebas", "valor showOnMap 0 "+ navigation.showOnMap[0]);
-                        //Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
-                        //Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
-                        // Guardamos la latitud de cada una cogiendo de la medida
-                        latitud = Double.parseDouble(medida.getString("Latitud"));
-                        longitud = Double.parseDouble(medida.getString("Longitud"));
-                        coords = new LatLng(latitud, longitud);
-
-                        //Log.d(TAG, "Coords: "+coords.toString());
-                        // Guardamos el valor de la medida
-                        valor = Double.parseDouble(medida.getString("Valor"));
-                        list.add(new WeightedLatLng(coords, valor));
-                        Log.d(TAG, "Valor: " + medida.getString("Valor"));
-                        //Configuración del marcador
-                        option.position(coords).title("UPV").draggable(true).
-                                snippet("Contaminación:" + valor).
-                                icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
-                        //map.addMarker(option);
-                    }
-
-                    // NOX
-                    if (navigation.showOnMap[1] && medida.getInt("IdTipoMedida") == 3) {
-                        Log.d("pruebas", "valor showOnMap 1 "+ navigation.showOnMap[1]);
-                        //Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
-                        //Log.d(TAG, "Longitud: "+medida.getString("Longitud"));
-                        // Guardamos la latitud de cada una cogiendo de la medida
-                        latitud = Double.parseDouble(medida.getString("Latitud"));
-                        longitud = Double.parseDouble(medida.getString("Longitud"));
-                        coords = new LatLng(latitud, longitud);
-
-                        //Log.d(TAG, "Coords: "+coords.toString());
-                        // Guardamos el valor de la medida
-                        valor = Double.parseDouble(medida.getString("Valor"));
-                        list.add(new WeightedLatLng(coords, valor));
-                        Log.d(TAG, "Valor: " + medida.getString("Valor"));
-                        //Configuración del marcador
-                        option.position(coords).title("UPV").draggable(true).
-                                snippet("Contaminación:" + valor).
-                                icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
-                        //map.addMarker(option);
-                    }
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            if (!list.isEmpty()) {
-                Log.d(TAG, list.toString());
-                addHeatMap(list);
-            }
-
-        }*/
         else {
             Log.d("MAPA", "Las medidas no existen.");
         }
-    }
-
-    /**
-     * Lista -> addHeatMap()
-     * <p>
-     * Creación del mapa de calor, introduciendo una lista de valores, dichos contienen
-     * colecciones formadas por las coordenadas y el valor de cada una de ellas.
-     *
-     * @param l - Matthew Conde Oltra -
-     */
-
-    public void addHeatMap(List<WeightedLatLng> l) {
-        // Creación del mapa de calor con sus coordenadas(latlng) y los valores de cada uno
-        mProvider = new HeatmapTileProvider.Builder()
-                .weightedData(l)
-                .radius(ALT_HEATMAP_RADIUS)
-                .gradient(HEATMAP_GRADIENT)
-                .opacity(ALT_HEATMAP_OPACITY)
-                .build();
-        // Agregando superposición al mapa
-        mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
     }
 
     /**
