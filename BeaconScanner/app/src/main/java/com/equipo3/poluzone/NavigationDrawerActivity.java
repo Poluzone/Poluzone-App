@@ -1,5 +1,6 @@
 package com.equipo3.poluzone;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 
@@ -25,6 +26,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.navigation.NavigationView;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
@@ -47,6 +51,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 // -----------------------------------------------------------------------
@@ -295,9 +300,15 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                         boolean open = showFilterMenu(findViewById(R.id.filter));
                         return true; // cierra el fab sin animacion
                     case R.id.routes:
-                        // info action
-                        //startInfoActivity();
-                        //presentActivity(findViewById(R.id.info));
+                        // Set the fields to specify which types of place data to
+                        // return after the user has made a selection.
+                        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+                        // Start the autocomplete intent.
+                        Intent intent = new Autocomplete.IntentBuilder(
+                                AutocompleteActivityMode.FULLSCREEN, fields)
+                                .build(getApplicationContext());
+
+                        startActivityForResult(intent, 1);
                         // cerrar el fab con animacion cuando pulsas
                         speedDialView.close();
                         return true;
