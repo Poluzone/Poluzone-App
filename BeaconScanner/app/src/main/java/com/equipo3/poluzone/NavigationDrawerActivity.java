@@ -1,11 +1,14 @@
 package com.equipo3.poluzone;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 
 
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -25,7 +28,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.libraries.places.api.Places;
@@ -36,9 +41,15 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.navigation.NavigationView;
+import com.google.maps.DirectionsApi;
+import com.google.maps.GeoApiContext;
+import com.google.maps.android.PolyUtil;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.TravelMode;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
@@ -53,12 +64,15 @@ import android.widget.TextView;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
+import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 // -----------------------------------------------------------------------
 // NavigationDrawerActivity.java
@@ -315,7 +329,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     case R.id.routes:
                         // Set the fields to specify which types of place data to
                         // return after the user has made a selection.
-                        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
+                        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS);
                         // Start the autocomplete intent.
                         Intent intent = new Autocomplete.IntentBuilder(
                                 AutocompleteActivityMode.OVERLAY, fields)
@@ -674,10 +688,40 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
+
+                // Cogemos la información del searchbar
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                map.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getName()).);
+
+                // Añadimos un markador con la búsqueda
+                map.addMarker(new MarkerOptions().position(place.getLatLng()))/*.title(place.getName()).snippet(place.getName())).showInfoWindow()*/;
+
+                // Movemos la cámara hacia el markador
                 map.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                 Log.i("pruebas", "Place: " + place.getName() + ", " + place.getId());
+
+                // Cogemos la localización actual
+                LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+                String locationProvider = LocationManager.NETWORK_PROVIDER;
+                // I suppressed the missing-permission warning because this wouldn't be executed in my
+                // case without location services being enabled
+                @SuppressLint("MissingPermission") android.location.Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+                
+                // Hacemos un request de rutas
+                DateTime now = new DateTime();
+                try {
+                    DirectionsResult result = DirectionsApi.newRequest(getGeoContext())
+                            .mode(TravelMode.WALKING).origin(new com.google.maps.model.LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))
+                            .destination(new com.google.maps.model.LatLng(place.getLatLng().latitude, place.getLatLng().longitude)).departureTime(now)
+                            .await();
+                    Log.d("pruebas", result.toString());
+                    addPolyline(result, map);
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
@@ -686,6 +730,20 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                 // The user canceled the operation.
             }
         }
+    }
+
+    private GeoApiContext getGeoContext() {
+        GeoApiContext geoApiContext = new GeoApiContext();
+        return geoApiContext.setQueryRateLimit(3)
+                .setApiKey(getString(R.string.google_maps_key))
+                .setConnectTimeout(1, TimeUnit.SECONDS)
+                .setReadTimeout(1, TimeUnit.SECONDS)
+                .setWriteTimeout(1, TimeUnit.SECONDS);
+    }
+
+    private void addPolyline(DirectionsResult results, GoogleMap mMap) {
+        List<LatLng> decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.getEncodedPath());
+        mMap.addPolyline(new PolylineOptions().addAll(decodedPath));
     }
 
 }
