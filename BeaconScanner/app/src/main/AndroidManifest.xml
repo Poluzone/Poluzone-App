@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.equipo3.poluzone">
 
     <!--
@@ -47,7 +48,8 @@
 
         <activity
             android:name="com.equipo3.poluzone.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps"
+            ></activity>
         <activity
             android:name="com.equipo3.poluzone.NavigationDrawerActivity"
             android:label="@string/title_activity_navigation_drawer"

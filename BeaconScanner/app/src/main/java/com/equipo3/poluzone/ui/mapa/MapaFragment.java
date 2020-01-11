@@ -1,7 +1,7 @@
 /**
  * Autor: Matthew Conde Oltra
  * Fecha: 28-11-2019
- *
+ * <p>
  * Fichero creación del mapa, modificación de opciones del fragment del mapa,
  * del XML correspondiente.
  */
@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ import com.equipo3.poluzone.CustomInfoWindowAdapter;
 import com.equipo3.poluzone.NavigationDrawerActivity;
 import com.equipo3.poluzone.R;
 import com.github.mikephil.charting.data.DataSet;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -42,6 +44,10 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
@@ -53,9 +59,13 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+
+// Add an import statement for the client library.
+import com.google.android.libraries.places.api.Places;
 
 
 public class MapaFragment extends Fragment implements OnMapReadyCallback, Callback {
@@ -146,7 +156,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
         navigation.servidorFake.callback = this;
 
         long primeraFecha = 0;
-        long fechaActual= 0;
+        long fechaActual = 0;
 
         navigation.servidorFake.getTodasLasMedidasPorFecha(primeraFecha, fechaActual);
         navigation.servidorFake.getEstacionesOficiales();
@@ -160,7 +170,36 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        // Initialize Places.
+        Places.initialize(navigation, getString(R.string.google_maps_key));
+
+        // Create a new Places client instance.
+        PlacesClient placesClient = Places.createClient(navigation);
+
+        // Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         navigation.map = googleMap;
@@ -180,10 +219,10 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             Log.e(TAG, "No se ha encontrado el estilo. Error: ", e);
         }
         /******************************************************************************
-        *               ----- Configuración inicial del mapa -----
-        *  Eliminamos el compas de la visualización del mapa, y los botones que
-        * aparecen en el mapa al darle a un marker. A parte añadimos la funcionalidad
-        * de que se aleje del mapa al darle a la vez dos veces seguidas con dos dedos.
+         *               ----- Configuración inicial del mapa -----
+         *  Eliminamos el compas de la visualización del mapa, y los botones que
+         * aparecen en el mapa al darle a un marker. A parte añadimos la funcionalidad
+         * de que se aleje del mapa al darle a la vez dos veces seguidas con dos dedos.
          *****************************************************************************/
         navigation.map.getUiSettings().setCompassEnabled(false);
         navigation.map.getUiSettings().setMapToolbarEnabled(false);
@@ -204,15 +243,13 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
      * Función callback que recibe todas las medidas de la BBDD del servidor.
      *
      * @param resultado
-     * @param medidas
-     *
-     *  - Matthew Conde Oltra -
+     * @param medidas   - Matthew Conde Oltra -
      */
     @Override
     public void callbackMedidas(boolean resultado, JSONObject medidas) {
         Log.d("MAPA", "Estamos en el callback medidas");
 
-        if(resultado) {
+        if (resultado) {
             Log.d("MAPA", "Tenemos las medidas.");
             //Log.d("MAPA", medidas.toString());
             navigation.medidas = medidas;
@@ -242,7 +279,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     SO2 = 2
                     Ozono = 3 */
 
-                    // CO
+        // CO
            /*         if (navigation.showOnMap[0] && medida.getInt("IdTipoMedida") == 2) {
                         Log.d("pruebas", "valor showOnMap 0 "+ navigation.showOnMap[0]);
                         //Log.d(TAG, "Latitud: "+medida.getString("Latitud"));
@@ -297,25 +334,21 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             }
 
         }*/
-        else
-        {
+        else {
             Log.d("MAPA", "Las medidas no existen.");
         }
     }
 
     /**
      * Lista -> addHeatMap()
-     *
-     *   Creación del mapa de calor, introduciendo una lista de valores, dichos contienen
+     * <p>
+     * Creación del mapa de calor, introduciendo una lista de valores, dichos contienen
      * colecciones formadas por las coordenadas y el valor de cada una de ellas.
      *
-     * @param l
-     *
-     * - Matthew Conde Oltra -
+     * @param l - Matthew Conde Oltra -
      */
 
-    public void addHeatMap(List<WeightedLatLng> l)
-    {
+    public void addHeatMap(List<WeightedLatLng> l) {
         // Creación del mapa de calor con sus coordenadas(latlng) y los valores de cada uno
         mProvider = new HeatmapTileProvider.Builder()
                 .weightedData(l)
@@ -332,15 +365,12 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
      * Función callback que recibe todas las medidas de la BBDD del servidor.
      *
      * @param resultado
-     * @param estaciones
-     *
-     *  - Matthew Conde Oltra -
+     * @param estaciones - Matthew Conde Oltra -
      */
     @Override
     public void callbackEstaciones(boolean resultado, JSONObject estaciones) {
         Log.d("MAPA", "Estamos en el callback estaciones");
-        if(resultado)
-        {
+        if (resultado) {
             Log.d("MAPA", "Tenemos las estaciones.");
             //Log.d("MAPA", estaciones.toString());
             MarkerOptions option = new MarkerOptions();
@@ -367,8 +397,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                 length = estaciones.getJSONArray("estaciones").length();
 
                 // Dibujamos marcadores para cada una de las medidas
-                for (int i = 0; i<length; i++)
-                {
+                for (int i = 0; i < length; i++) {
                     // Observamos las medidas en el logcat
                     //Log.d("MAPA", estaciones.getJSONArray("estaciones").getJSONObject(i).toString());
                     //Guardamos cada una de las medidas en una variable auxiliar
@@ -376,18 +405,17 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
                     JSONObject medida;
                     // Guardamos el valor de la estacion
                     nombre = estacion.getString("Nombre");
-                 //   Log.d(TAG, "Nombre: "+nombre);
+                    //   Log.d(TAG, "Nombre: "+nombre);
 
-                    if(estacion.getInt("ID")==50)
-                    {
+                    if (estacion.getInt("ID") == 50) {
                         medida = estacion.getJSONObject("Medidas");
-                  //      Log.d(TAG, medida.toString());
-                        so2 = "SO2: "+medida.getString("s02")+"ppm";
-                        co = "CO: "+medida.getString("co")+"ppm";
-                        no = "NO: "+medida.getString("no")+"ppm";
-                        no2 = "NO2: "+medida.getString("no2")+"ppm";
-                        nox = "NOX: "+medida.getString("nox")+"ppm";
-                        o3 = "O3: "+medida.getString("o3")+"ppm";
+                        //      Log.d(TAG, medida.toString());
+                        so2 = "SO2: " + medida.getString("s02") + "ppm";
+                        co = "CO: " + medida.getString("co") + "ppm";
+                        no = "NO: " + medida.getString("no") + "ppm";
+                        no2 = "NO2: " + medida.getString("no2") + "ppm";
+                        nox = "NOX: " + medida.getString("nox") + "ppm";
+                        o3 = "O3: " + medida.getString("o3") + "ppm";
 
                         // Añadimos el texto a la ventana de infoWindowAdapter
                         infoWindow.n = nombre;
@@ -422,11 +450,8 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
             }
 
 
-
             //addHeatMap();
-        }
-        else
-        {
+        } else {
             Log.d("MAPA", "Las estaciones no existen.");
         }
     }
