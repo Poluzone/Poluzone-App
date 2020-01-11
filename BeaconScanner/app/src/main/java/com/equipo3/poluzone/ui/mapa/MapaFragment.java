@@ -175,6 +175,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Callba
     @Override
     public void onMapReady(GoogleMap googleMap) {
         navigation.map = googleMap;
+        navigation.map.setMyLocationEnabled(true);
         LatLng pp = new LatLng(38.996100, -0.166439);
 
         try {

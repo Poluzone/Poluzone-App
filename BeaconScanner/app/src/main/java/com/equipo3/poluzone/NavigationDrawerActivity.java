@@ -27,10 +27,13 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.libraries.places.api.Places;
@@ -705,7 +708,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                 // I suppressed the missing-permission warning because this wouldn't be executed in my
                 // case without location services being enabled
                 @SuppressLint("MissingPermission") android.location.Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-                
+
                 // Hacemos un request de rutas
                 DateTime now = new DateTime();
                 try {
@@ -743,7 +746,10 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
     private void addPolyline(DirectionsResult results, GoogleMap mMap) {
         List<LatLng> decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.getEncodedPath());
-        mMap.addPolyline(new PolylineOptions().addAll(decodedPath));
+        // Pintamos la ruta en el mapa
+        mMap.addPolyline(new PolylineOptions().addAll(decodedPath)
+                // Añadimos estilo a la ruta
+            .color(Color.parseColor("#F88E52")).startCap(new RoundCap()).jointType(JointType.ROUND).width(20).endCap(new RoundCap()));
     }
 
 }
