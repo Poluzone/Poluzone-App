@@ -140,6 +140,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     public TileOverlay mOverlay;
     List<WeightedLatLng> list = new ArrayList<>();
 
+    Polyline polyline = null;
+    Marker markerDestino = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -697,21 +700,26 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                 // Cogemos la información del searchbar
                 final Place place = Autocomplete.getPlaceFromIntent(data);
 
+                // Quitamos el marker anterior
+                if (markerDestino != null) markerDestino.remove();
+
                 // Añadimos un markador con la búsqueda
-                Marker marker = map.addMarker(new MarkerOptions().position(place.getLatLng()))/*.title(place.getName()).snippet(place.getName())).showInfoWindow()*/;
+                markerDestino = map.addMarker(new MarkerOptions().position(place.getLatLng()))/*.title(place.getName()).snippet(place.getName())).showInfoWindow()*/;
 
                 // Hacemos que no se pueda hacer clic a este marker
                 GoogleMap.OnMarkerClickListener onMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         if (marker.getPosition().equals(place.getLatLng()))
+                            // No hace nada mas
                         return true;
+                            // Hace el click de siempre (para estaciones oficiales)
                         else return false;
                     }
                 };
                 map.setOnMarkerClickListener(onMarkerClickListener);
 
-                // Movemos la cámara hacia el markador
+                // Movemos la cámara hacia el marcador
                 map.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
 
                 // Cogemos la localización actual
@@ -729,12 +737,17 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                             .destination(new com.google.maps.model.LatLng(place.getLatLng().latitude, place.getLatLng().longitude)).departureTime(now)
                             .await();
                     Log.d("pruebas", result.toString());
+
+                    // Calculamos la mejor ruta
+                    calcularMejorRuta(result);
                     addPolyline(result, map);
                 } catch (ApiException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
@@ -757,11 +770,30 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     }
 
     private void addPolyline(DirectionsResult results, GoogleMap mMap) {
+        // Quitamos la ruta anterior
+        if (polyline != null) polyline.remove();
         List<LatLng> decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.getEncodedPath());
         // Pintamos la ruta en el mapa
-        mMap.addPolyline(new PolylineOptions().addAll(decodedPath)
+        polyline = mMap.addPolyline(new PolylineOptions().addAll(decodedPath)
                 // Añadimos estilo a la ruta
             .color(Color.parseColor("#F88E52")).startCap(new RoundCap()).jointType(JointType.ROUND).width(20).endCap(new RoundCap()));
+    }
+
+    private void calcularMejorRuta(DirectionsResult result) throws JSONException {
+        for (int i = 0; i < result.routes[0].overviewPolyline.decodePath().size(); i++) {
+            com.google.maps.model.LatLng puntoRuta = result.routes[0].overviewPolyline.decodePath().get(i);
+            for (int j = 0; j < medidas.getJSONArray("medidas").length(); j++) {
+                JSONObject medida = medidas.getJSONArray("medidas").getJSONObject(i);
+                if (Double.parseDouble(medida.getString("Valor")) > 0) {
+                    float[] results = new float[1];
+                    LatLng puntoContaminacion = new LatLng(Double.parseDouble(medida.getString("Latitud")), Double.parseDouble(medida.getString("Longitud")));
+                    Location.distanceBetween(puntoRuta.lat, puntoRuta.lng, puntoContaminacion.latitude, puntoContaminacion.longitude, results);
+                    if (results[0] < 200) {
+                        // Quitar el waypoint de la ruta
+                    }
+                }
+            }
+        }
     }
 
 }
