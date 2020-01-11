@@ -739,7 +739,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     Log.d("pruebas", result.toString());
 
                     // Calculamos la mejor ruta
-                    calcularMejorRuta(result);
+                   // calcularMejorRuta(result);
                     addPolyline(result, map);
                 } catch (ApiException e) {
                     e.printStackTrace();
@@ -747,9 +747,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                } catch (JSONException e) {
+                }/* catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
@@ -780,7 +780,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     }
 
     private void calcularMejorRuta(DirectionsResult result) throws JSONException {
-        for (int i = 0; i < result.routes[0].overviewPolyline.decodePath().size(); i++) {
+        for (int i = 1; i < result.routes[0].overviewPolyline.decodePath().size() - 1; i++) {
             com.google.maps.model.LatLng puntoRuta = result.routes[0].overviewPolyline.decodePath().get(i);
             for (int j = 0; j < medidas.getJSONArray("medidas").length(); j++) {
                 JSONObject medida = medidas.getJSONArray("medidas").getJSONObject(i);
@@ -788,9 +788,11 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     float[] results = new float[1];
                     LatLng puntoContaminacion = new LatLng(Double.parseDouble(medida.getString("Latitud")), Double.parseDouble(medida.getString("Longitud")));
                     Location.distanceBetween(puntoRuta.lat, puntoRuta.lng, puntoContaminacion.latitude, puntoContaminacion.longitude, results);
-                    if (results[0] < 200) {
+                   // if (results[0] < 200) {
                         // Quitar el waypoint de la ruta
-                    }
+                        result.routes[0].overviewPolyline.decodePath().get(i).lat = result.routes[0].overviewPolyline.decodePath().get(i).lat + 0.01;
+                        result.routes[0].overviewPolyline.decodePath().get(i).lng = result.routes[0].overviewPolyline.decodePath().get(i).lng + 0.01;
+                   // }
                 }
             }
         }
