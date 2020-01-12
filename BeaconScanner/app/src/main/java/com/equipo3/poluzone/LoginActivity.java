@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity implements Callback {
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
 
-    private CircularProgressView progressView;
+    private CircularProgressView progressView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +67,15 @@ public class LoginActivity extends AppCompatActivity implements Callback {
                     startActivity(i);
                 }
             });
+            progressView = (CircularProgressView) findViewById(R.id.progress_view);
+
         }
 
         // Si no es la primera vez
         else {
             servidorFake = new ServidorFake(this);
+
+            progressView = (CircularProgressView) findViewById(R.id.progress_view);
 
             // Primero comprobamos si ya hizo login anteriormente
             // Recogemos las preferencias de la app
@@ -104,8 +108,6 @@ public class LoginActivity extends AppCompatActivity implements Callback {
 
                 TextView registrateaqui = findViewById(R.id.registrateaqui);
                 botonLogearse = findViewById(R.id.botonLogin);
-
-                progressView = (CircularProgressView) findViewById(R.id.progress_view);
 
                 final TextInputLayout inputPassLayout = findViewById(R.id.texto_password_layout);
                 final TextInputEditText inputEmail = findViewById(R.id.texto_email);
@@ -308,12 +310,12 @@ public class LoginActivity extends AppCompatActivity implements Callback {
     // Es la ruedecita de carga que se muestra si mostrar = true
     // ---------------------------------------------------------------------------
     private void mostrarProgress(Boolean mostrar) {
-        if (mostrar) {
+        if (mostrar && progressView != null) {
             progressView.resetAnimation();
             progressView.setVisibility(View.VISIBLE);
             botonLogearse.setTextColor(getResources().getColor(R.color.colorAccent));
             progressView.startAnimation();
-        } else {
+        } else if (progressView != null) {
             progressView.resetAnimation();
             progressView.setVisibility(View.INVISIBLE);
             progressView.stopAnimation();
