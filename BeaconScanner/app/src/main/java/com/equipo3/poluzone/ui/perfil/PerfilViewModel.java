@@ -1,3 +1,10 @@
+// -----------------------------------------------------------------------
+// PerfilViewModel.java
+// Equipo 3
+// Autor: Iván Romero Ruíz
+// Fecha: 10/2019
+// CopyRight:
+// -----------------------------------------------------------------------
 package com.equipo3.poluzone.ui.perfil;
 
 import androidx.lifecycle.LiveData;

@@ -1,10 +1,10 @@
-/**
- * Autor: Matthew Conde Oltra
- * Fecha: 28-11-2019
- * <p>
- * Fichero creación del mapa, modificación de opciones del fragment del mapa,
- * del XML correspondiente.
- */
+// -----------------------------------------------------------------------
+// MapaFragment.java
+// Equipo 3
+// Autor: Matthew Conde Oltra
+// Fecha: 28-11-2019
+// CopyRight:
+// -----------------------------------------------------------------------
 
 package com.equipo3.poluzone.ui.mapa;
 

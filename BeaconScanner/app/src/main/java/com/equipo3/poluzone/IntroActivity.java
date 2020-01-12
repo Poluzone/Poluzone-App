@@ -1,3 +1,10 @@
+// -----------------------------------------------------------------------
+// IntroActivity.java
+// Equipo 3
+// Autor: Emilia Rosa van der Heide
+// Fecha: 9/2019
+// CopyRight:
+// -----------------------------------------------------------------------
 package com.equipo3.poluzone;
 
 import android.Manifest;

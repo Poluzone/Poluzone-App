@@ -1,3 +1,10 @@
+// -----------------------------------------------------------------------
+// InfoFragment.java
+// Equipo 3
+// Autor: Emilia Rosa van der Heide
+// Fecha: 11/2019
+// CopyRight:
+// -----------------------------------------------------------------------
 package com.equipo3.poluzone.ui.info;
 
 import androidx.lifecycle.ViewModelProviders;

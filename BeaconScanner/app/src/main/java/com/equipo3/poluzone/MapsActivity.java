@@ -1,9 +1,10 @@
-/**
- * Fichero MapsActivity crea el mapa.
- *
- *
- * - Matthew Conde Oltra -
- */
+// -----------------------------------------------------------------------
+// MapsActivity.java
+// Equipo 3
+// Autor: Matthew Conde Oltra
+// Fecha: 10/2019
+// CopyRight:
+// -----------------------------------------------------------------------
 package com.equipo3.poluzone;
 
 import androidx.fragment.app.FragmentActivity;

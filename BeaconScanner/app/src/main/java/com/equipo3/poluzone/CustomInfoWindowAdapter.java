@@ -1,3 +1,10 @@
+// -----------------------------------------------------------------------
+// CustomInfoWindowAdapter.java
+// Equipo 3
+// Autor: Matthew Conde Oltra
+// Fecha: 11/2019
+// CopyRight:
+// -----------------------------------------------------------------------
 package com.equipo3.poluzone;
 
 import android.view.LayoutInflater;
