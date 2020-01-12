@@ -1,3 +1,10 @@
+// -----------------------------------------------------------------------
+// SesionViewModel.java
+// Equipo 3
+// Autor: Emilia Rosa van der Heide
+// Fecha: 11/2019
+// CopyRight:
+// -----------------------------------------------------------------------
 package com.equipo3.poluzone.ui.sesion;
 
 import androidx.lifecycle.LiveData;
