@@ -1,6 +1,8 @@
 package com.equipo3.poluzone;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,7 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
     CheckBox calidad_media;
     CheckBox calidad_mala;
     SwipeRefreshLayout refreshLayout;
+    private SharedPreferences loginPreferences;
 
 
 
@@ -119,9 +122,11 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
             }
         });
 
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        int idUser = loginPreferences.getInt("idUsuario", 15);
+
         servidorFake = new ServidorFake(this);
-        long hasta = 1575741203368L;
-        servidorFake.getMedidasPorUsuario(0,hasta,15);
+        servidorFake.getMedidasPorUsuario(20, idUser );
     }
 
 
@@ -136,6 +141,7 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
                 medida.setMedida(Float.parseFloat(medidas.getString("Valor")));
                 medida.setTipoMedida(Integer.parseInt(medidas.getString("IdTipoMedida")));
                 medida.setIdMedida(Integer.parseInt(medidas.getString("IdMedida")));
+                medida.setTiempo(Long.parseLong(medidas.getString("Tiempo")));
                 mValores.add(medida);
 
             }
@@ -148,7 +154,7 @@ public class MainMisMedidas extends AppCompatActivity implements CallbackMisMedi
 
         mAdapter = new AdapterRecyclerViewMisMedidas(mValores ,this);
         mAdapter.notifyDataSetChanged();
-        //mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
 
     }
 

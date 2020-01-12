@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AdapterRecyclerViewMisMedidas extends RecyclerView.Adapter<AdapterRecyclerViewMisMedidas.ViewHolder> {
 
@@ -33,6 +34,8 @@ public class AdapterRecyclerViewMisMedidas extends RecyclerView.Adapter<AdapterR
 
         public ViewHolder(View itemView){
             super(itemView);
+
+
             //itemLayout = itemView.findViewById(R.id.item_layout);
             fechaMedida = itemView.findViewById(R.id.fechamedida);
             valorMedida = itemView.findViewById(R.id.valormedida);
@@ -73,7 +76,19 @@ public class AdapterRecyclerViewMisMedidas extends RecyclerView.Adapter<AdapterR
         }
 
          holder.valorMedida.setText(df.format(ex.getMedida()));
-         //holder.tipoMedida.setText(Integer.toString(ex.getTipoMedida()));
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(ex.getTiempo());
+
+        int mYear = calendar.get(Calendar.YEAR);
+        int mMonth = calendar.get(Calendar.MONTH);
+        int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+        Integer.toString(mYear);
+        Integer.toString(mDay);
+        Integer.toString(mMonth);
+
+         holder.fechaMedida.setText(mDay +"/"+"01"+"/"+mYear);
          holder.idMedida.setText("ID: "+Integer.toString(ex.getIdMedida()));
 
 
