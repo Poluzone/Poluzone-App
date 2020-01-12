@@ -664,10 +664,10 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                 Color.rgb(255, 0, 0) // red
         };
         final float[] START_POINTS = {
-                0.0f,  //0-50 //transparent
-                0.005f, //51-100 //green
-                0.01f, //101-150 //yellow
-                0.015f, //151-200 //red
+                0.0f,  //0-40 //transparent (0/200)
+                0.2f, //40-67 //green (40/200)
+                0.335f, //67-167 //yellow (67/200)
+                0.81f, //167-200 //red (167/200)
         };
 
         final Gradient HEATMAP_GRADIENT = new Gradient(COLORS, START_POINTS);
