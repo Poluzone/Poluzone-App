@@ -33,7 +33,7 @@ public class InfoFragment extends Fragment {
 
         // acceder speed dial
         speedDialView = getParentFragment().getActivity().findViewById(R.id.fab);
-        speedDialView.show();
+        speedDialView.hide();
 
         return root;
     }
